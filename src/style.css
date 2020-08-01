@@ -5,5 +5,13 @@ html, body, main
   
 .full-height 
 {
+    overflow: hidden;
     height: 100%;
+}
+
+#adventure-log
+{
+    min-height: 90%;
+    max-height: 90%;
+    overflow-y: auto;
 }
