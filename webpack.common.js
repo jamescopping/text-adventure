@@ -6,9 +6,6 @@ module.exports = {
     entry: {
         app: './src/index.js',
     },
-    devServer: {
-        contentBase: './docs',
-    },
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
