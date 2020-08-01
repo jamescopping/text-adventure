@@ -47,6 +47,10 @@ function adventureLog() {
 
 (() => {
   document.body.appendChild(adventurePage());
+
+
+
+
 })();
 
 
