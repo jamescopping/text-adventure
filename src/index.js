@@ -13,9 +13,22 @@ function adventurePage() {
   container.appendChild(adventureLog());
   container.appendChild(commandArea());
   container.appendChild(suggestionBox());
+  container.appendChild(warningAlert());
   main.appendChild(container);
 
   return main;
+}
+
+function warningAlert() {
+
+  const warningAlert = document.createElement("div");
+  warningAlert.className = "alert position-fixed alert-warning alert-dismissible fade show";
+  warningAlert.setAttribute("role", "alert");
+  warningAlert.id = "warningAlert";
+  warningAlert.innerHTML = `<p id="warningAlertText"><strong>Holy guacamole!</strong> You should check in on some of those fields below.</p>`;
+  warningAlert.style.display = "none";
+  return warningAlert;
+
 }
 
 function commandArea() {
@@ -28,8 +41,10 @@ function commandArea() {
   inputGroup.className = "input-group input-group-lg";
   const placeholder = "Type your command or /help for the list of commands you can do";
 
-  inputGroup.innerHTML += `<input type="text" id="command-input" placeholder="${placeholder}" class="form-control shadow-none" autocomplete="off"></input>`;
-  inputGroup.innerHTML += `<div class="input-group-append">
+  inputGroup.innerHTML +=
+    `<input type="text" id="command-input" placeholder="${placeholder}" class="form-control shadow-none" autocomplete="off"></input>`;
+  inputGroup.innerHTML +=
+    `<div class="input-group-append">
     <input class="btn btn-secondary" type="submit" id="command-submit"></input>
   </div>`;
 
@@ -60,7 +75,6 @@ function suggestionBox() {
 }
 
 
-
 (() => {
   document.body.appendChild(adventurePage());
 
@@ -68,67 +82,139 @@ function suggestionBox() {
   const commandInput = document.getElementById("command-input");
   const commandSubmit = document.getElementById("command-submit");
   const suggestionBox = document.getElementById("suggestion-box");
-  const commandText = document.getElementById("command-text")
-
+  const commandText = document.getElementById("command-text");
+  const warningAlert = document.getElementById("warningAlert");
 
   insertIntoAdventureLog(generateLog("Hello This is a text adventure game, currently work in progress!"));
 
-
-  const commandList = ["inventory", "stats", "goto", "look", "investigate", "talkto", "pickup", "attack", "loot", "cast"];
-  let entityList = [{ "name": "barry" }, { "name": "jonny" }, { "name": "harry" }, { "name": "james" }, { "name": "billy" }, { "name": "duck" }, { "name": "bluekey" }];
+  const commandList = ["/help", "/save", "inventory", "stats", "goto", "look", "investigate", "talkto", "pickup", "attack", "loot", "cast"];
+  let entityList = ["barry", "jonny", "harry", "james", "billy", "duck", "bluekey"];
   let suggestions = [];
+  let previousCommands = [];
 
-  commandInput.addEventListener('input', (event) => {
-    let value = commandInput.value;
-    if (value !== "") {
+  const validKeys = (keycode) => {
+    return (keycode > 47 && keycode < 58) || // number keys
+      (keycode == 32) || // spacebar & return key(s) (if you want to allow carriage returns)
+      (keycode > 64 && keycode < 91) || // letter keys
+      (keycode > 95 && keycode < 112) || // numpad keys
+      (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+      (keycode > 218 && keycode < 223); // [\]' (in order)
+  }
 
-      if (value.includes(" ") && value.split(" ")[1] !== null) {
-        let entityPart = value.split(" ")[1];
-        console.log(entityPart);
-        suggestions = entityList.filter((entityRef) => {
-          return entityRef.name.startsWith(commandInput.value.toLowerCase());
-        });
-      } else {
-        suggestions = commandList.filter((command) => {
-          return command.startsWith(commandInput.value.toLowerCase());
-        });
-      }
-      if (suggestions.length === 0) {
-        suggestions.push("no such command/obj ref");
-      }
-      suggestionBox.innerHTML = "";
-      suggestions.forEach(element => {
-        const suggestion = document.createElement("p");
-        suggestion.className = "dropdown-item";
-        suggestion.innerHTML = element;
-        suggestionBox.appendChild(suggestion);
-      });
-      suggestionBox.style.display = "block";
-
-      commandText.textContent = value;
-
-      let topOffset = commandInput.getBoundingClientRect().top;
-      let leftOffset = commandInput.getBoundingClientRect().left;
-      let suggestionBoxHeight = suggestionBox.getBoundingClientRect().height;
-
-
-
-      suggestionBox.style.top = `${topOffset - suggestionBoxHeight - 1}px`;
-      suggestionBox.style.left = `${leftOffset + 25 + commandText.clientWidth}px`;
-
+  commandSubmit.onclick = submitCommandInput;
+  commandInput.addEventListener('keydown', (event) => {
+    event.preventDefault();
+    if (validKeys(event.keyCode)) {
+      commandInput.value += event.key;
+      handleTextCommandInput(commandInput.value);
     } else {
-      suggestionBox.style.display = "none";
-
+      switch (event.key) {
+        case "Enter":
+          submitCommandInput();
+          break;
+        case "ArrowUp":
+          console.log("arrow up");
+          break;
+        case "ArrowDown":
+          console.log("arrow down");
+          break;
+        case "ArrowRight":
+          console.log("arrow right");
+          break;
+        case "ArrowLeft":
+          console.log("arrow left");
+          break;
+        case "Tab":
+          console.log("tab");
+          break;
+        case "Backspace":
+          let value = commandInput.value;
+          if (value.length > 0) {
+            commandInput.value = value.substring(0, value.length - 1);
+            handleTextCommandInput(commandInput.value);
+          }
+          break;
+      }
     }
-
   });
 
+  document.querySelector("#warningAlert").addEventListener("click", () => {
+    warningAlert.style.display = "none";
+  });
+
+  function submitCommandInput() {
+
+    if (suggestions[0] !== "[Error]") {
+      validateCommand(splitCommand(commandInput.value));
+      commandInput.value = "";
+      suggestionBox.style.display = "none";
+    } else {
+      commandInput.classList.add("is-invalid");
+    }
+  }
+
+  function handleTextCommandInput(value) {
+    if (value !== "") {
+      commandInput.classList.remove("is-invalid");
+      if (value.includes(" ")) {
+        let command = splitCommand(value);
+
+        if (commandList.includes(command.action)) {
+          switch (command.action) {
+            default:
+              suggestions = entityList.filter((entityRef) => {
+                return entityRef.startsWith(command.operand);
+              });
+              break;
+          }
+          if (suggestions.length === 0) {
+            suggestions.push("no such entity");
+          }
+        } else {
+          suggestions[0] = "[Error]";
+        }
+      } else {
+        suggestions = commandList.filter((command) => {
+          return command.startsWith(value.toLowerCase());
+        });
+        if (suggestions.length === 0) {
+          suggestions[0] = "[Error]";
+          suggestions.push("Command does NOT exist");
+        }
+      }
+
+      commandText.textContent = value;
+      updateSuggestionBox();
+      displaySuggestionBox();
+    } else {
+      suggestionBox.style.display = "none";
+    }
+  }
+
+  function updateSuggestionBox() {
+    suggestionBox.innerHTML = "";
+    suggestions.forEach(element => {
+      const suggestion = document.createElement("p");
+      suggestion.className = "dropdown-item";
+      suggestion.innerHTML = element;
+      suggestionBox.appendChild(suggestion);
+    });
+  }
+
+  function displaySuggestionBox() {
+    suggestionBox.style.display = "block";
+    let topOffset = commandInput.getBoundingClientRect().top;
+    let leftOffset = commandInput.getBoundingClientRect().left;
+    let suggestionBoxHeight = suggestionBox.getBoundingClientRect().height;
+    suggestionBox.style.top = `${topOffset - suggestionBoxHeight - 1}px`;
+    suggestionBox.style.left = `${leftOffset + 25 + commandText.clientWidth}px`;
+  }
 
   function generateLog(text) {
     const log = document.createElement("p");
     log.className = "text-monospace text-break lead";
-
-    log.innerHTML += `<strong class="font-weight-bolder">\> </strong>`;
+    log.innerHTML +=
+      `<strong class="font-weight-bolder">\> </strong>`;
     log.innerHTML += text;
     return log;
   }
@@ -136,6 +222,32 @@ function suggestionBox() {
   function insertIntoAdventureLog(element) {
     adventureLog.appendChild(element);
     adventureLog.scrollTop = adventureLog.scrollHeight;
+  }
+
+  function validateCommand(command) {
+    switch (command.action) {
+      case "":
+        document.getElementById("warningAlertText").innerText = "you have to enter something in the input box!";
+        warningAlert.style.display = "block";
+        break
+      case "/help":
+        help();
+        break;
+      default:
+        insertIntoAdventureLog(generateLog(`${command.action} ${command.operand} [this command is yet to be implemented!]`));
+        break;
+    }
+  }
+
+  function help() {
+    commandList.forEach(element => {
+      insertIntoAdventureLog(generateLog(`${element} `));
+    });
+  }
+
+  function splitCommand(string) {
+    string = string.toLowerCase();
+    return { action: string.split(" ")[0], operand: string.split(" ")[1] };
   }
 })();
 

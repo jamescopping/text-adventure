@@ -29,3 +29,8 @@ html, body, main
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+
+.alert
+{
+    bottom: 100px;
+}
