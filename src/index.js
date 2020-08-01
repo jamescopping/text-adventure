@@ -12,6 +12,7 @@ function adventurePage() {
 
   container.appendChild(adventureLog());
   container.appendChild(commandArea());
+  container.appendChild(suggestionBox());
   main.appendChild(container);
 
   return main;
@@ -38,11 +39,24 @@ function commandArea() {
 }
 
 function adventureLog() {
-
   const log = document.createElement("div");
   log.id = "adventure-log";
   log.className = "text-light shadow p-3 mx-3 bg-secondary border border-light rounded";
+
+
+  const commandText = document.createElement("div");
+  commandText.style = "none";
+  commandText.id = "command-text";
+
+  log.appendChild(commandText);
   return log;
+}
+
+function suggestionBox() {
+  const suggestionBox = document.createElement("div");
+  suggestionBox.id = "suggestion-box";
+  suggestionBox.className = "position-absolute dropdown-menu dropright text-light rounded-0 border border-secondary border-bottom-0";
+  return suggestionBox;
 }
 
 
@@ -53,30 +67,60 @@ function adventureLog() {
   const adventureLog = document.getElementById("adventure-log");
   const commandInput = document.getElementById("command-input");
   const commandSubmit = document.getElementById("command-submit");
+  const suggestionBox = document.getElementById("suggestion-box");
+  const commandText = document.getElementById("command-text")
 
 
   insertIntoAdventureLog(generateLog("Hello This is a text adventure game, currently work in progress!"));
 
 
   const commandList = ["inventory", "stats", "goto", "look", "investigate", "talkto", "pickup", "attack", "loot", "cast"];
-
-
+  let entityList = [{ "name": "barry" }, { "name": "jonny" }, { "name": "harry" }, { "name": "james" }, { "name": "billy" }, { "name": "duck" }, { "name": "bluekey" }];
+  let suggestions = [];
 
   commandInput.addEventListener('input', (event) => {
+    let value = commandInput.value;
+    if (value !== "") {
+
+      if (value.includes(" ") && value.split(" ")[1] !== null) {
+        let entityPart = value.split(" ")[1];
+        console.log(entityPart);
+        suggestions = entityList.filter((entityRef) => {
+          return entityRef.name.startsWith(commandInput.value.toLowerCase());
+        });
+      } else {
+        suggestions = commandList.filter((command) => {
+          return command.startsWith(commandInput.value.toLowerCase());
+        });
+      }
+      if (suggestions.length === 0) {
+        suggestions.push("no such command/obj ref");
+      }
+      suggestionBox.innerHTML = "";
+      suggestions.forEach(element => {
+        const suggestion = document.createElement("p");
+        suggestion.className = "dropdown-item";
+        suggestion.innerHTML = element;
+        suggestionBox.appendChild(suggestion);
+      });
+      suggestionBox.style.display = "block";
+
+      commandText.textContent = value;
+
+      let topOffset = commandInput.getBoundingClientRect().top;
+      let leftOffset = commandInput.getBoundingClientRect().left;
+      let suggestionBoxHeight = suggestionBox.getBoundingClientRect().height;
 
 
 
+      suggestionBox.style.top = `${topOffset - suggestionBoxHeight - 1}px`;
+      suggestionBox.style.left = `${leftOffset + 25 + commandText.clientWidth}px`;
 
+    } else {
+      suggestionBox.style.display = "none";
 
+    }
 
-
-
-    const autocompleteList = commandList.filter((command) => {
-      return command.startsWith(commandInput.value.toLowerCase());
-    });
-    autocompleteList.forEach((command) => {
-      insertIntoAdventureLog(generateLog(command));
-    });
   });
 
 

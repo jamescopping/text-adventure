@@ -15,3 +15,17 @@ html, body, main
     max-height: 90%;
     overflow-y: auto;
 }
+
+#command-text
+{
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+}
+.form-control:focus{
+    border-color: #cccccc;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
