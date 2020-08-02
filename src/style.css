@@ -16,7 +16,7 @@ html, body, main
     overflow-y: auto;
 }
 
-#command-text
+#command-text-width
 {
     position: absolute;
     visibility: hidden;
