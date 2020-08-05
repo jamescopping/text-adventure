@@ -1,6 +1,7 @@
 import { log } from "../controller/adventureLogController";
-import { commandList } from "./definitions";
 import { Dice } from "./dice";
+
+export const CommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast'].sort();
 
 export class Command {
 
@@ -25,7 +26,7 @@ export class Command {
 
     static help(commandName = "") {
         if (commandName === "" || commandName === undefined) {
-            commandList.forEach(element => {
+            CommandList.forEach(element => {
                 log(`${element} `);
             });
         } else {
@@ -35,7 +36,7 @@ export class Command {
                     log("The /help command lists all the commands that can be executed. You can also do /help [command] for more info on that specific command.");
                     break;
                 case "/roll":
-                    log("The /roll command lets you roll a number of certain sided dice to produce a sum of the results.");
+                    log("The /roll command lets you roll a number of certain sided dice to produce a sum of the results. Usage: [number of dice]d[number of sides].");
                     break;
                 case "/save":
                     log("The /save command saves the current state of the game in your cookies or whatever.");

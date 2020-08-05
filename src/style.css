@@ -35,3 +35,28 @@ html, body, main
 {
     bottom: 100px;
 }
+
+.suggestion-menu{
+    background-color: #cccccc;
+    font-weight: bolder;
+}
+
+.suggestion-menu p:hover{
+    background-color: gray;
+}
+
+.suggestion-menu p{
+    cursor: pointer;
+    margin: 0;
+    padding: .3rem;
+    border-bottom: #130e4227 3px dotted;
+}
+
+.suggestion-menu .selected{
+    background-color: rgba(91, 189, 255, 0.829);
+}
+
+.suggestion-menu .selected:hover{
+    background-color: rgba(91, 189, 255, 0.829);
+}
+

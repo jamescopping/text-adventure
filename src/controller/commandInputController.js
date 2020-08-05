@@ -1,13 +1,12 @@
-import { updateContentSuggestionBox, hideSuggestionBox } from "../controller/suggestionBoxController";
+import { updateContentSuggestionBox, hideSuggestionBox, selectNextSuggestion, isSuggestionSelected, getSelectedSuggestionText } from "../controller/suggestionBoxController";
 import { log } from "../controller/adventureLogController";
 import { triggerAlert } from "../controller/alertController";
 
-import { Command } from "../game/command";
-import { commandList, OperandTypeDictionary, SpellList, ItemList } from "../game/definitions";
+import { Command, CommandList } from "../game/command";
+import { OperandTypeDictionary, SpellList, ItemList } from "../game/definitions";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
-import { alertText } from "./alertController";
 
 export let commandTextWidth, commandInput;
 let commandSubmit;
@@ -58,10 +57,13 @@ const setInvalidClass = state => { (state) ? commandInput.classList.add("is-inva
 */
 const specialKeyInput = () => {
     let command;
-    hideSuggestionBox();
     switch (event.key) {
         case "Enter":
-            submitCommandInput();
+            if (isSuggestionSelected()) {
+                autocompleteFromSelection();
+            } else {
+                submitCommandInput();
+            }
             break;
         case "ArrowUp":
             commandInput.value = prevCommand.prev().toString();
@@ -78,11 +80,13 @@ const specialKeyInput = () => {
             console.log(getCaretPosition(commandInput));
             break;
         case "Tab":
-            console.log("tab");
-
-
-
-
+            if (commandInput.value === "") {
+                console.log("test");
+                suggestion.setList(CommandList);
+                commandTextWidth.textContent = commandInput.value;
+                updateContentSuggestionBox();
+            }
+            selectNextSuggestion();
             break;
         case "Backspace":
             let value = commandInput.value;
@@ -100,16 +104,14 @@ const handleTextCommandInput = value => {
         suggestion.setList([]);
         operand.setProperty("");
         operand.setType(OperandTypeDictionary.COMMAND);
+        suggestion.index = -1;
         if (hasSpace(value)) {  //if there is a space in the string then do checks on the second word
             let command = new Command(value);
-            if (commandList.includes(command.action)) {
+            if (CommandList.includes(command.action)) {
                 if (command.action === "/help") {
                     operand.setType(OperandTypeDictionary.COMMAND);
-                    suggestion.populateList(commandList, command.operand);
-                } else if (command.action === "/roll") {
-                    suggestion.getList().push("[number of dice]d[number of sides]");
+                    suggestion.populateList(CommandList, command.operand);
                 } else {
-                    let property = "";
                     switch (command.action) {
                         case "cast":
                             operand.setType(OperandTypeDictionary.SPELL);
@@ -126,7 +128,7 @@ const handleTextCommandInput = value => {
                 }
             }
         } else {
-            suggestion.populateList(commandList, value);
+            suggestion.populateList(CommandList, value);
         }
         if (suggestion.generateError()) setInvalidClass(true);
         commandTextWidth.textContent = value;
@@ -134,6 +136,18 @@ const handleTextCommandInput = value => {
     } else {
         hideSuggestionBox();
     }
+}
+
+export const autocompleteFromSelection = () => {
+    let autocompleteText = getSelectedSuggestionText();
+    if (!hasSpace(commandInput.value)) {
+        commandInput.value = autocompleteText + " ";
+    } else {
+        let command = new Command(commandInput.value);
+        command.operand = autocompleteText;
+        commandInput.value = command.toString();
+    }
+    handleTextCommandInput(commandInput.value);
 }
 
 const hasSpace = string => string.includes(" ");

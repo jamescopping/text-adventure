@@ -1,6 +1,6 @@
 export const loadSuggestionBox = () => {
   const suggestionBox = document.createElement("div");
   suggestionBox.id = "suggestion-box";
-  suggestionBox.className = "position-absolute dropdown-menu dropright text-light rounded-0 border border-secondary border-bottom-0";
+  suggestionBox.className = "position-absolute suggestion-menu";
   return suggestionBox;
 }

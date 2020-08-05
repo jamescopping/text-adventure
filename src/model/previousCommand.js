@@ -27,7 +27,7 @@ export const prevCommand = {
                 this.list.shift();
             }
         }
-        this.index = this.list.length;
+        //this.index = this.list.length;
     },
     compareLastCommand: function (command) { return command === this.list[this.size() - 1]; },
     getCurrentCommand: function () {

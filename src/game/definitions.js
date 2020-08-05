@@ -1,5 +1,3 @@
-export const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast'].sort();
-
 export const OperandTypeDictionary = {
     COMMAND: 'command',
     OJECT: 'object',

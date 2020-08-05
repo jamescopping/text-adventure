@@ -13,7 +13,6 @@ export const suggestion = {
             array.forEach(element => { if (element.hasOwnProperty(property) && element[property].startsWith(compareString)) filteredArray.push(element) });
             this.setList(filteredArray);
         }
-
     },
 
     generateError() {
