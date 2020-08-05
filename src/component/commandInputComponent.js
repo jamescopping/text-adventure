@@ -1,4 +1,4 @@
-export function loadCommandInput() {
+export const loadCommandInput = () => {
 
     const footer = document.createElement('footer');
     footer.className = "footer p-3";

@@ -1,5 +1,6 @@
 import { log } from "../controller/adventureLogController";
 import { commandList } from "./definitions";
+import { Dice } from "./dice";
 
 export class Command {
 
@@ -9,13 +10,17 @@ export class Command {
         this.operand = (split.operand === undefined) ? "" : split.operand;
     }
 
-    toString() {
-        return `${this.action} ${(this.operand === "") ? "" : this.operand}`;
-    }
+    toString() { return `${this.action} ${(this.operand === "") ? "" : this.operand}`; }
 
     static splitCommand(string) {
         string = string.toLowerCase();
         return { action: string.split(" ")[0], operand: string.split(" ")[1] };
+    }
+
+    static async roll(rollString) {
+        let { total, dice } = await Dice.rollFromString(rollString);
+        log(`/roll ${rollString} [${dice}] - total sum => ${total}`);
+
     }
 
     static help(commandName = "") {
@@ -24,13 +29,16 @@ export class Command {
                 log(`${element} `);
             });
         } else {
-            //"/help", "/save", "inventory", "stats", "goto", "look", "investigate", "talkto", "pickup", "attack", "loot", "cast"
+            //"/help",, "/roll" "/save", "inventory", "stats", "goto", "look", "investigate", "talkto", "pickup", "attack", "loot", "cast"
             switch (commandName) {
                 case "/help":
-                    log("The /help command lists all the commands that can be executed. You can also do /help [command] for more info on that specific command");
+                    log("The /help command lists all the commands that can be executed. You can also do /help [command] for more info on that specific command.");
+                    break;
+                case "/roll":
+                    log("The /roll command lets you roll a number of certain sided dice to produce a sum of the results.");
                     break;
                 case "/save":
-                    log("The /save command saves the current state of the game in your cookies or whatever");
+                    log("The /save command saves the current state of the game in your cookies or whatever.");
                     break;
                 case "inventory":
                     log("The inventory command displays all the items that are in your chacater's backpack and equiped on your character.");

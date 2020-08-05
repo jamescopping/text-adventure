@@ -1,41 +1,33 @@
 let alertElement, alertText;
 let alertType;
 
-export function initAlert() {
+export const initAlert = () => {
     alertElement = findAlertElement();
     alertText = findAlertTextElement();
     alertType = "alert-primary";
     bindEventListeners();
 }
 
-function findAlertElement() {
-    return document.getElementById("alert");
-}
+const findAlertElement = () => document.getElementById("alert");
 
-function findAlertTextElement() {
-    return document.getElementById("alert");
-}
+const findAlertTextElement = () => document.getElementById("alert");
 
-function bindEventListeners() {
+const bindEventListeners = () => {
     alertElement.addEventListener("click", () => {
         hideAlert();
     });
 }
 
-export function triggerAlert(newType, text) {
+export const triggerAlert = (newType, text) => {
     changeAlertType(newType);
     alertText.innerHTML = text;
     showAlert();
 }
 
-function showAlert() {
-    alertElement.style.display = "block";
-}
-function hideAlert() {
-    alertElement.style.display = "none";
-}
+const showAlert = () => alertElement.style.display = "block";
+const hideAlert = () => alertElement.style.display = "none";
 
-export function changeAlertType(newType) {
+export const changeAlertType = newType => {
     alertElement.classList.replace(alertType, newType);
     alertType = newType;
 }

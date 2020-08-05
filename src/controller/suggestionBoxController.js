@@ -1,36 +1,28 @@
 import { commandTextWidth, commandInput } from "../controller/commandInputController";
 
 import { suggestion } from "../model/suggestion";
+import { operand } from "../model/operand";
 
 let suggestionBox;
 
-export function initSuggestionBox() {
+export const initSuggestionBox = () => {
     suggestionBox = findSuggestionBoxElement();
 }
 
-function findSuggestionBoxElement() {
-    return document.getElementById("suggestion-box");
-}
+const findSuggestionBoxElement = () => document.getElementById("suggestion-box");
+export const hideSuggestionBox = () => suggestionBox.style.display = "none";
+export const showSuggestionBox = () => suggestionBox.style.display = "block";
 
-export function hideSuggestionBox() {
-    suggestionBox.style.display = "none";
-}
-
-export function showSuggestionBox() {
-    suggestionBox.style.display = "block";
-}
-
-
-export function updateContentSuggestionBox() {
+export const updateContentSuggestionBox = () => {
     suggestionBox.innerHTML = "";
-    if (!suggestion.isListEmpty()) {
+    if (!suggestion.isError()) {
         suggestion.list.forEach(element => {
             const suggestionItem = document.createElement("p");
             suggestionItem.className = "dropdown-item";
-            suggestionItem.innerHTML = element;
+            suggestionItem.innerHTML = (operand.isPropertySet()) ? element[operand.getProperty()] : element;
             suggestionBox.appendChild(suggestionItem);
         });
-    } else if (suggestion.error !== "") {
+    } else {
         const suggestionError = document.createElement("p");
         suggestionError.className = "bg-danger";
         suggestionError.innerHTML = suggestion.error;
@@ -39,7 +31,7 @@ export function updateContentSuggestionBox() {
     updatePositionSuggestionBox();
 }
 
-function updatePositionSuggestionBox() {
+const updatePositionSuggestionBox = () => {
     showSuggestionBox();
     let topOffset = commandInput.getBoundingClientRect().top;
     let leftOffset = commandInput.getBoundingClientRect().left;

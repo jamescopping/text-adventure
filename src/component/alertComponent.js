@@ -1,5 +1,5 @@
 
-export function loadAlert() {
+export const loadAlert = () => {
     const alert = document.createElement("div");
     alert.className = "alert position-fixed alert-primary alert-dismissible fade show";
     alert.setAttribute("role", "alert");

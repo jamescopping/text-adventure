@@ -9,8 +9,10 @@ import { initCommandInput } from "./controller/commandInputController";
 import { log, initAdventreLog } from "./controller/adventureLogController";
 import { initAlert } from "./controller/alertController";
 import { initSuggestionBox } from './controller/suggestionBoxController';
+import { Player } from './game/player';
+import { Dice, DiceType } from './game/dice';
 
-function buildPage() {
+const buildPage = () => {
   const main = document.createElement("main");
   main.setAttribute("role", "main");
   main.className = "bg-dark p-3";
@@ -41,6 +43,5 @@ function buildPage() {
 
   //start of the game
   log("Hello This is a text adventure game, currently work in progress! type '/help' to see a list of commands.");
-
 
 })();

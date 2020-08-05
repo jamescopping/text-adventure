@@ -1,14 +1,12 @@
 let adventureLog;
 
-export function initAdventreLog() {
+export const initAdventreLog = () => {
     adventureLog = findAdventureLogElement();
 }
 
-function findAdventureLogElement() {
-    return document.getElementById("adventure-log");
-}
+const findAdventureLogElement = () => document.getElementById("adventure-log");
 
-function generateLog(text) {
+const generateLog = text => {
     const log = document.createElement("p");
     log.className = "text-monospace text-break lead";
     log.innerHTML +=
@@ -17,11 +15,9 @@ function generateLog(text) {
     return log;
 }
 
-function insertIntoAdventureLog(element) {
+const insertIntoAdventureLog = element => {
     adventureLog.appendChild(element);
     adventureLog.scrollTop = adventureLog.scrollHeight;
 }
 
-export function log(text) {
-    insertIntoAdventureLog(generateLog(text));
-}
+export const log = text => insertIntoAdventureLog(generateLog(text));
