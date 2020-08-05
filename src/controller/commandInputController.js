@@ -42,12 +42,10 @@ const bindEventListeners = () => {
             commandInput.value += event.key;
             handleTextCommandInput(commandInput.value);
         } else {
-            specialKeyInput();
+            specialKeyInput(event);
         }
     });
 }
-
-const setInvalidClass = state => { (state) ? commandInput.classList.add("is-invalid") : commandInput.classList.remove("is-invalid"); }
 
 /*  
     Function handles special key input (anything that is not a normal chacacter)
@@ -55,9 +53,14 @@ const setInvalidClass = state => { (state) ? commandInput.classList.add("is-inva
     selecting, using arrows to view previous commands. Tab to auto commplete from
     suggestion box pupup.
 */
-const specialKeyInput = () => {
+const specialKeyInput = event => {
     let command;
+    console.log(event.key);
     switch (event.key) {
+
+        case "Escape":
+            hideSuggestionBox();
+            break;
         case "Enter":
             if (isSuggestionSelected()) {
                 autocompleteFromSelection();
@@ -100,11 +103,7 @@ const specialKeyInput = () => {
 
 const handleTextCommandInput = value => {
     if (value !== "") {
-        setInvalidClass(false);
-        suggestion.setList([]);
-        operand.setProperty("");
-        operand.setType(OperandTypeDictionary.COMMAND);
-        suggestion.index = -1;
+        resetToDefaults();
         if (hasSpace(value)) {  //if there is a space in the string then do checks on the second word
             let command = new Command(value);
             if (CommandList.includes(command.action)) {
@@ -150,8 +149,6 @@ export const autocompleteFromSelection = () => {
     handleTextCommandInput(commandInput.value);
 }
 
-const hasSpace = string => string.includes(" ");
-
 const validateCommand = command => {
     let save = false;
     switch (command.action) {
@@ -188,6 +185,14 @@ const saveCommand = command => {
     prevCommand.addCommand(command);
 }
 
+const resetToDefaults = () => {
+    setInvalidClass(false);
+    suggestion.setList([]);
+    suggestion.index = -1;
+    operand.setProperty("");
+    operand.setType(OperandTypeDictionary.COMMAND);
+}
+
 const getCaretPosition = el => {
     var caretOffset = 0, sel;
     if (typeof window.getSelection !== "undefined") {
@@ -200,3 +205,6 @@ const getCaretPosition = el => {
     }
     return caretOffset;
 }
+
+const hasSpace = string => string.includes(" ");
+const setInvalidClass = state => { (state) ? commandInput.classList.add("is-invalid") : commandInput.classList.remove("is-invalid"); }
