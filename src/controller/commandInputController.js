@@ -110,6 +110,8 @@ const handleTextCommandInput = value => {
                 if (command.action === "/help") {
                     operand.setType(OperandTypeDictionary.COMMAND);
                     suggestion.populateList(CommandList, command.operand);
+                } if (command.action === "/roll") {
+                    suggestion.getList().push("!Usage: [number]d[dice type]");
                 } else {
                     switch (command.action) {
                         case "cast":
