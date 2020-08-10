@@ -26,7 +26,7 @@ export const findCommandTextWidthElement = () => document.getElementById("comman
 const bindEventListeners = () => {
     const validKeys = (keycode) => {
         return (keycode > 47 && keycode < 58) || // number keys
-            (keycode == 32) || // spacebar & return key(s) (if you want to allow carriage returns)
+            //(keycode == 32) || // spacebar & return key(s) (if you want to allow carriage returns)
             (keycode > 64 && keycode < 91) || // letter keys
             (keycode > 95 && keycode < 112) || // numpad keys
             (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
@@ -55,11 +55,17 @@ const bindEventListeners = () => {
 */
 const specialKeyInput = event => {
     let command;
-    console.log(event.key);
     switch (event.key) {
-
         case "Escape":
             hideSuggestionBox();
+            break;
+        case " ":
+            if (isSuggestionSelected()) {
+                autocompleteFromSelection();
+            } else {
+                commandInput.value += " ";
+                handleTextCommandInput(commandInput.value);
+            }
             break;
         case "Enter":
             if (isSuggestionSelected()) {
@@ -75,16 +81,13 @@ const specialKeyInput = event => {
             commandInput.value = prevCommand.next().toString();
             break;
         case "ArrowRight":
-            console.log("arrow right");
-            console.log(getCaretPosition(commandInput));
+            // console.log(getCaretPosition(commandInput));
             break;
         case "ArrowLeft":
-            console.log("arrow left");
-            console.log(getCaretPosition(commandInput));
+            // console.log(getCaretPosition(commandInput));
             break;
         case "Tab":
             if (commandInput.value === "") {
-                console.log("test");
                 suggestion.setList(CommandList);
                 commandTextWidth.textContent = commandInput.value;
                 updateContentSuggestionBox();
@@ -110,7 +113,7 @@ const handleTextCommandInput = value => {
                 if (command.action === "/help") {
                     operand.setType(OperandTypeDictionary.COMMAND);
                     suggestion.populateList(CommandList, command.operand);
-                } if (command.action === "/roll") {
+                } else if (command.action === "/roll") {
                     suggestion.getList().push("!Usage: [number]d[dice type]");
                 } else {
                     switch (command.action) {
@@ -190,8 +193,8 @@ const saveCommand = command => {
 const resetToDefaults = () => {
     setInvalidClass(false);
     suggestion.setList([]);
-    suggestion.index = -1;
     operand.setProperty("");
+    suggestion.index = -1;
     operand.setType(OperandTypeDictionary.COMMAND);
 }
 

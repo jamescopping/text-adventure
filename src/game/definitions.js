@@ -57,18 +57,22 @@ export const DamageType = {
 
 
 import { DiceType } from "./dice";
+
 export const SpellList = [
     {
-        name: 'firebolt',
+        name: 'fire_bolt',
         spelltype: SpellType.DAMAGE,
         damageType: DamageType.FIRE,
         baseManaCost: 25,
         diceType: DiceType.D6,
         numberOfDice: 2,
-        bonus: 4
+        bonus: 4,
+        effect: {
+
+        }
     },
     {
-        name: 'magicmissile',
+        name: 'magic_missile',
         spelltype: SpellType.DAMAGE,
         damageType: DamageType.FORCE,
         baseManaCost: 5,
@@ -77,6 +81,13 @@ export const SpellList = [
         bonus: 2
     },
 ];
+
+
+export const EffectList = [
+
+
+];
+
 
 export const DebuffList = [
     {

@@ -27,7 +27,7 @@ export const prevCommand = {
                 this.list.shift();
             }
         }
-        //this.index = this.list.length;
+        this.index = this.list.length;
     },
     compareLastCommand: function (command) { return command === this.list[this.size() - 1]; },
     getCurrentCommand: function () {
@@ -35,7 +35,7 @@ export const prevCommand = {
         if (this.index >= 0 && this.index < this.list.length) {
             return new Command(this.list[this.index]);
         } else {
-            console.warn(`List Error{index: ${this.index}, list: ${this.list}}`);
+            return "";
         }
     }
 };

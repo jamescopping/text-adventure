@@ -15,9 +15,9 @@ const generateLog = text => {
     return log;
 }
 
-const insertIntoAdventureLog = element => {
-    adventureLog.appendChild(element);
+const insertIntoAdventureLog = text => {
+    adventureLog.appendChild(generateLog(text));
     adventureLog.scrollTop = adventureLog.scrollHeight;
 }
 
-export const log = text => insertIntoAdventureLog(generateLog(text));
+export const log = text => insertIntoAdventureLog(text);

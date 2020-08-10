@@ -16,6 +16,7 @@ export const suggestion = {
     },
 
     generateError() {
+
         if (this.isListEmpty()) {
             this.setError(`[Error] No such ${operand.getType()}`);
             return true;
@@ -29,7 +30,7 @@ export const suggestion = {
     isError: function () { return this.error !== ""; },
 
     setError: function (newError) { this.error = newError; },
-    setList: function (newList) { this.list = newList; },
+    setList: function (newList) { this.list = [...newList]; },
     getError: function () { return this.error; },
     getList: function () { return this.list; },
 };

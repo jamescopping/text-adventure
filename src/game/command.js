@@ -1,7 +1,7 @@
 import { log } from "../controller/adventureLogController";
 import { Dice } from "./dice";
 
-export const CommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast'].sort();
+export const CommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
 
 export class Command {
 

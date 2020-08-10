@@ -15,7 +15,6 @@ export const initSuggestionBox = () => {
             autocompleteFromSelection();
         }
     });
-
 }
 
 const findSuggestionBoxElement = () => document.getElementById("suggestion-box");
@@ -60,7 +59,9 @@ export const selectNextSuggestion = () => {
     }
     removeSelectedClass();
     let nextSelected = suggestionBox.children[suggestion.index];
-    nextSelected.classList.add("selected");
+    if (nextSelected !== null) {
+        nextSelected.classList.add("selected");
+    }
 }
 
 export const isSuggestionSelected = () => {

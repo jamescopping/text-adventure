@@ -4,7 +4,6 @@ export class Resource {
         this.type = type;
         this.currentValue = currentValue;
         this.maxValue = maxValue;
-        console.log(this.toString());
     }
 
     add(addition) {
