@@ -21,8 +21,11 @@ export class Player {
             }
         ]);
         this.spells = [SpellList.FIREBOLT.name];
+
+        this.inventory = [];
     }
 
+    getInventoryList() { return this.inventory }
     toString() { return `Name: ${this.name}, Age: ${this.age}, Health: ${this.stats.getResourceOfType(ResourceType.HEALTH).toString()}` }
 
 }

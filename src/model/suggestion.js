@@ -1,22 +1,16 @@
 import { operand } from "./operand";
+import { ListUtil } from "../game/util/listUtil";
 
 export const suggestion = {
     list: [],
     index: -1,
     error: "",
 
-    populateList: function (array, compareString, property = "") {
-        if (property === "") {
-            this.setList(array.filter(element => element.startsWith(compareString)));
-        } else {
-            let filteredArray = [];
-            array.forEach(element => { if (element.hasOwnProperty(property) && element[property].startsWith(compareString)) filteredArray.push(element) });
-            this.setList(filteredArray);
-        }
+    populateList: function (list, compareString, property = "") {
+        this.setList(ListUtil.filterListStartsWith(list, compareString, property));
     },
 
     generateError() {
-
         if (this.isListEmpty()) {
             this.setError(`[Error] No such ${operand.getType()}`);
             return true;

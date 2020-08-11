@@ -13,12 +13,16 @@ export class Dice {
 
     static rollDice(diceType) { return Math.floor(Math.random() * diceType) + 1; }
 
-    static async rollFromString(string) {
+    /**
+     * Rolls three eight sided dice and returns an object of the total and the in individual dice 
+     * @param {string} rollString 
+     */
+    static async rollFromString(rollString) {
         const regex = new RegExp("(\d+d{1}\d+){1}");
-        if (regex.test(string)) return;
-        let rollString = string.match(/(\d+d{1}\d+){1}/g);
-        if (rollString === null || rollString === undefined) return { total: "error string ont valid", dice: [] };
-        let rollArray = rollString[0].split("d");
+        if (regex.test(rollString)) return;
+        let rollStringReg = rollString.match(/(\d+d{1}\d+){1}/g);
+        if (rollStringReg === null || rollStringReg === undefined) return { total: "error string ont valid", dice: [] };
+        let rollArray = rollStringReg[0].split("d");
         return this.rollNDice(parseInt(rollArray[0]), parseInt(rollArray[1]));
     }
 }
