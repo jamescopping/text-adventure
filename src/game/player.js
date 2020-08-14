@@ -1,6 +1,7 @@
 import { Stats } from "./stats";
 import { ResourceType } from "./resource";
-import { SpellList } from "./definitions";
+import { Inventory } from "./inventory";
+import { ItemMap } from "./definitions";
 export class Player {
     constructor(name, age) {
         this.name = name;
@@ -20,9 +21,17 @@ export class Player {
                 maxValue: 999
             }
         ]);
-        this.spells = [SpellList.FIREBOLT.name];
+        this.spells = ["fire_bolt", "magic_missile"];
+        this.inventory = new Inventory([], 100);
+        this.test();
+    }
 
-        this.inventory = [];
+    test() {
+        this.inventory.addItems(["key#1", "key#2", "dinner-plate", "sword"]);
+
+        this.inventory.getList().forEach(item => {
+            console.log(ItemMap.get(item).name);
+        })
     }
 
     getInventoryList() { return this.inventory }

@@ -1,7 +1,8 @@
 import { log } from "../controller/adventureLogController";
 import { Dice } from "./dice";
 
-export const CommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
+const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
+export const CommandSet = new Set([...commandList]);
 
 export class Command {
 
@@ -26,7 +27,7 @@ export class Command {
 
     static help(commandName = "") {
         if (commandName === "" || commandName === undefined) {
-            CommandList.forEach(element => {
+            CommandSet.forEach(element => {
                 log(`${element} `);
             });
         } else {

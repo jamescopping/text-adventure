@@ -8,13 +8,7 @@ export class ListUtil {
      * @param {String} property of an object to comare against 
      * @returns {Array} filteredArray
      */
-    static filterListStartsWith(list, compareString, property = "") {
-        if (property === "") {
-            return list.filter(element => element.startsWith(compareString));
-        } else {
-            let filteredArray = [];
-            list.forEach(element => { if (element.hasOwnProperty(property) && element[property].startsWith(compareString)) filteredArray.push(element) });
-            return filteredArray;
-        }
+    static filterListStartsWith(list, compareString) {
+        return list.filter(element => element.startsWith(compareString));
     }
 }

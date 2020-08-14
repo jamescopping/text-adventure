@@ -2,8 +2,8 @@ import { updateContentSuggestionBox, hideSuggestionBox, selectNextSuggestion, is
 import { log } from "../controller/adventureLogController";
 import { triggerAlert } from "../controller/alertController";
 
-import { Command, CommandList } from "../game/command";
-import { OperandTypeDictionary, SpellList, ItemList } from "../game/definitions";
+import { Command, CommandSet } from "../game/command";
+import { OperandType } from "../game/definitions";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
@@ -88,7 +88,7 @@ const specialKeyInput = event => {
             break;
         case "Tab":
             if (commandInput.value === "") {
-                suggestion.setList(CommandList);
+                suggestion.setList([...CommandSet]);
                 commandTextWidth.textContent = commandInput.value;
                 updateContentSuggestionBox();
             }
@@ -109,30 +109,26 @@ const handleTextCommandInput = value => {
         resetToDefaults();
         if (hasSpace(value)) {  //if there is a space in the string then do checks on the second word
             let command = new Command(value);
-            if (CommandList.includes(command.action)) {
+            if (CommandSet.has(command.action)) {
                 if (command.action === "/help") {
-                    operand.setType(OperandTypeDictionary.COMMAND);
-                    suggestion.populateList(CommandList, command.operand);
+                    operand.setType(OperandType.COMMAND);
+                    suggestion.populateList(operand.getList(), command.operand);
                 } else if (command.action === "/roll") {
                     suggestion.getList().push("!Usage: [number]d[dice type]");
                 } else {
                     switch (command.action) {
                         case "cast":
-                            operand.setType(OperandTypeDictionary.SPELL);
-                            operand.setList(SpellList);
-                            operand.setProperty("name");
+                            operand.setType(OperandType.SPELL);
                             break;
                         case "pickup":
-                            operand.setType(OperandTypeDictionary.ITEM);
-                            operand.setList(ItemList);
-                            operand.setProperty("name");
+                            operand.setType(OperandType.ITEM);
                             break;
                     }
-                    suggestion.populateList(operand.getList(), command.operand, operand.getProperty());
+                    suggestion.populateList(operand.getList(), command.operand);
                 }
             }
         } else {
-            suggestion.populateList(CommandList, value);
+            suggestion.populateList(operand.getList(), value);
         }
         if (suggestion.generateError()) setInvalidClass(true);
         commandTextWidth.textContent = value;
@@ -192,10 +188,8 @@ const saveCommand = command => {
 
 const resetToDefaults = () => {
     setInvalidClass(false);
-    suggestion.setList([]);
-    operand.setProperty("");
+    operand.setType(OperandType.COMMAND);
     suggestion.index = -1;
-    operand.setType(OperandTypeDictionary.COMMAND);
 }
 
 const getCaretPosition = el => {

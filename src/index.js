@@ -10,7 +10,10 @@ import { log, initAdventreLog } from "./controller/adventureLogController";
 import { initAlert } from "./controller/alertController";
 import { initSuggestionBox } from './controller/suggestionBoxController';
 import { Player } from './game/player';
-import { Dice, DiceType } from './game/dice';
+import { FileUtil } from './game/util/fileUtil';
+import { JSONUtil } from './game/util/jsonUtil';
+import { SpellMap } from './game/definitions';
+
 
 const buildPage = () => {
   const main = document.createElement("main");
@@ -37,11 +40,9 @@ const buildPage = () => {
   initAdventreLog();
   initAlert();
 
-
-  //let entityList = ["barry", "jonny", "harry", "james", "billy", "duck", "bluekey"];
-
-
   //start of the game
   log("Hello This is a text adventure game, currently work in progress! type '/help' to see a list of commands. Use the [Tab] key to select available commands and then press [Enter] key or [Click] to autocomplete the phrase. You can also use [Up/Down] arrow keys to run previously entered commands.");
+
+  const player = new Player("james", 21);
 
 })();

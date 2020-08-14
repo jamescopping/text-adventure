@@ -1,0 +1,20 @@
+[
+    {
+        "name": "fire_bolt",
+        "spelltype": "damage",
+        "damageType": "fire",
+        "baseManaCost": 25,
+        "diceType": "D6",
+        "numberOfDice": 2,
+        "bonus": 4
+    },
+    {
+        "name": "magic_missile",
+        "spelltype": "damage",
+        "damageType": "froce",
+        "baseManaCost": 5,
+        "diceType": "D4",
+        "numberOfDice": 1,
+        "bonus": 2
+    }
+]

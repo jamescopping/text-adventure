@@ -6,8 +6,8 @@ export const suggestion = {
     index: -1,
     error: "",
 
-    populateList: function (list, compareString, property = "") {
-        this.setList(ListUtil.filterListStartsWith(list, compareString, property));
+    populateList: function (list, compareString) {
+        this.setList(ListUtil.filterListStartsWith(list, compareString));
     },
 
     generateError() {

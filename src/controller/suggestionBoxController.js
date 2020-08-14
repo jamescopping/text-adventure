@@ -26,7 +26,7 @@ export const updateContentSuggestionBox = () => {
     if (!suggestion.isError()) {
         suggestion.list.forEach(element => {
             const suggestionItem = document.createElement("p");
-            suggestionItem.innerHTML = (operand.isPropertySet()) ? element[operand.getProperty()] : element;
+            suggestionItem.innerHTML = element;
             if (suggestionItem.innerHTML.includes("!Usage")) {
                 suggestionItem.classList.add("no-select");
             }

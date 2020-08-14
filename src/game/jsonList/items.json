@@ -1,0 +1,30 @@
+[
+    {
+        "name": "key#1",
+        "description": "This is a key that looks like it is used in a dark oak wood door, with a small rusted knob"
+    },
+    {
+        "name": "key#2",
+        "description": "A shiny silver key that is ornately decorated with leaves"
+    },
+    {
+        "name": "key#3",
+        "description": "An emerald greed key that is slightly translucent"
+    },
+    {
+        "name": "key#4",
+        "description": "A key... well not actully a key per se, it is a banana but you could try and use it as a key and that would be quite funny"
+    },
+    {
+        "name": "magicbox",
+        "description": "Small box that is sealed shut with some kind of magic, who knows that's inside"
+    },
+    {
+        "name": "sword",
+        "description": "Just as sword, stabby stab"
+    },
+    {
+        "name": "chainmailshirt",
+        "description": "Chain mail is a type of armour consisting of small metal rings linked together in a pattern to form a mesh. It was generally in common military use between the 3rd century BC and the 14th century AD. A coat of this armour is often referred to as a hauberk, and sometimes a byrnie."
+    }
+]
