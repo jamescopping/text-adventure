@@ -7,6 +7,7 @@ import { OperandType } from "../game/definitions";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
+import { game } from "../game/game";
 
 export let commandTextWidth, commandInput;
 let commandSubmit;
@@ -26,7 +27,7 @@ export const findCommandTextWidthElement = () => document.getElementById("comman
 const bindEventListeners = () => {
     const validKeys = (keycode) => {
         return (keycode > 47 && keycode < 58) || // number keys
-            //(keycode == 32) || // spacebar & return key(s) (if you want to allow carriage returns)
+            //(keycode == 32) || // space-bar & return key(s) (if you want to allow carriage returns)
             (keycode > 64 && keycode < 91) || // letter keys
             (keycode > 95 && keycode < 112) || // numpad keys
             (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
@@ -48,10 +49,10 @@ const bindEventListeners = () => {
 }
 
 /*  
-    Function handles special key input (anything that is not a normal chacacter)
-    repllicates the functionally of an input box, like pressing enter, deleting,
-    selecting, using arrows to view previous commands. Tab to auto commplete from
-    suggestion box pupup.
+    Function handles special key input (anything that is not a normal character)
+    replicates the functionally of an input box, like pressing enter, deleting,
+    selecting, using arrows to view previous commands. Tab to auto complete from
+    suggestion box popup.
 */
 const specialKeyInput = event => {
     let command;
@@ -162,6 +163,10 @@ const validateCommand = command => {
             break;
         case "/roll":
             Command.roll(command.operand);
+            save = true;
+            break;
+        case "/save":
+            Command.save(game);
             save = true;
             break;
         default:

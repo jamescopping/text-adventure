@@ -1,5 +1,6 @@
 import { log } from "../controller/adventureLogController";
 import { Dice } from "./dice";
+import { Game } from "./game";
 
 const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
 export const CommandSet = new Set([...commandList]);
@@ -22,7 +23,11 @@ export class Command {
     static async roll(rollString) {
         let { total, dice } = await Dice.rollFromString(rollString);
         log(`/roll ${rollString} [${dice}] - total sum => ${total}`);
+    }
 
+    static async save(game) {
+        game.savePlayer();
+        log(`/save ${game.player}`);
     }
 
     static help(commandName = "") {

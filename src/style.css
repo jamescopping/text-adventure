@@ -1,62 +1,58 @@
-html, body, main
-{
-    height: 100%;
-}
-  
-.full-height 
-{
-    overflow: hidden;
-    height: 100%;
+html,
+body,
+main {
+  height: 100%;
 }
 
-#adventure-log
-{
-    min-height: 90%;
-    max-height: 90%;
-    overflow-y: auto;
-    overflow-x: hidden;
+.full-height {
+  overflow: hidden;
+  height: 100%;
 }
 
-#command-text-width
-{
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space: nowrap;
-}
-.form-control:focus{
-    border-color: #cccccc;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+#adventure-log {
+  min-height: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.alert
-{
-    bottom: 100px;
+#command-text-width {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: nowrap;
+}
+.form-control:focus {
+  border-color: #cccccc;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
-.suggestion-menu{
-    background-color: #cccccc;
-    font-weight: bolder;
+.alert {
+  bottom: 100px;
 }
 
-.suggestion-menu p:hover{
-    background-color: gray;
+.suggestion-menu {
+  background-color: #cccccc;
+  font-weight: bolder;
 }
 
-.suggestion-menu p{
-    cursor: pointer;
-    margin: 0;
-    padding: .3rem;
-    border-bottom: #130e4227 3px dotted;
+.suggestion-menu p:hover {
+  background-color: gray;
 }
 
-.suggestion-menu .selected{
-    background-color: rgba(91, 189, 255, 0.829);
+.suggestion-menu p {
+  cursor: pointer;
+  margin: 0;
+  padding: 0.3rem;
+  border-bottom: #130e4227 3px dotted;
 }
 
-.suggestion-menu .selected:hover{
-    background-color: rgba(91, 189, 255, 0.829);
+.suggestion-menu .selected {
+  background-color: rgba(91, 189, 255, 0.829);
 }
 
+.suggestion-menu .selected:hover {
+  background-color: rgba(91, 189, 255, 0.829);
+}

@@ -6,6 +6,7 @@ export const initAlert = () => {
     alertText = findAlertTextElement();
     alertType = "alert-primary";
     bindEventListeners();
+
 }
 
 const findAlertElement = () => document.getElementById("alert");
