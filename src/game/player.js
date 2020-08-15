@@ -27,7 +27,7 @@ export class Player {
     ]);
     this.knownSpells = ["fire_bolt", "magic_missile"];
     this.inventory = new Inventory(
-      ["key#1", "key#1", "key#1", "key#1", "key#2"],
+      ["key#1", "key#2"],
       100
     );
   }

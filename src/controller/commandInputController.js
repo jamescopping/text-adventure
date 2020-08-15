@@ -55,7 +55,8 @@ const bindEventListeners = () => {
     suggestion box popup.
 */
 const specialKeyInput = event => {
-    let command;
+    const [selStart, selEnd] = getCaretPosition(commandInput);
+
     switch (event.key) {
         case "Escape":
             hideSuggestionBox();
@@ -80,12 +81,6 @@ const specialKeyInput = event => {
             break;
         case "ArrowDown":
             commandInput.value = prevCommand.next().toString();
-            break;
-        case "ArrowRight":
-            // console.log(getCaretPosition(commandInput));
-            break;
-        case "ArrowLeft":
-            // console.log(getCaretPosition(commandInput));
             break;
         case "Tab":
             if (commandInput.value === "") {
@@ -129,6 +124,7 @@ const handleTextCommandInput = value => {
                 }
             }
         } else {
+            operand.setType(OperandType.COMMAND);
             suggestion.populateList(operand.getList(), value);
         }
         if (suggestion.generateError()) setInvalidClass(true);
@@ -193,21 +189,14 @@ const saveCommand = command => {
 
 const resetToDefaults = () => {
     setInvalidClass(false);
-    operand.setType(OperandType.COMMAND);
+    operand.setType();
     suggestion.index = -1;
 }
 
 const getCaretPosition = el => {
-    var caretOffset = 0, sel;
-    if (typeof window.getSelection !== "undefined") {
-        var range = window.getSelection().getRangeAt(0);
-        var selected = range.toString().length;
-        var preCaretRange = range.cloneRange();
-        preCaretRange.selectNodeContents(el);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        caretOffset = preCaretRange.toString().length - selected;
-    }
-    return caretOffset;
+    let startPos = el.selectionStart;
+    let endPos = el.selectionEnd;
+    return [startPos, endPos];
 }
 
 const hasSpace = string => string.includes(" ");
