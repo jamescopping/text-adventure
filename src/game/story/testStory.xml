@@ -4,11 +4,10 @@
     <scenes>
         <scene>
             <name>forest_opening</name>
-            <description>
-                    You wake up, heavy eyes lift to reveal amber leaved branches swaying in the wind.\n
-                         Your hands dig into the dirt as you pull yourself up off the cold ground.\n
-                         Dusting yourself off, you rap your jacket around you as a bitter gale passes you.\n
-                         Looking around you and see trees in all directions lit dimly from the setting sun. 
+            <description>You wake up, heavy eyes lift to reveal amber leaved branches swaying in the wind.
+                         Your hands dig into the dirt as you pull yourself up off the cold ground.
+                         Dusting yourself off, you rap your jacket around you as a bitter gale passes you.
+                         Looking around you and see trees in all directions lit dimly from the setting sun.
             </description>
             <paths>
                 <path>
