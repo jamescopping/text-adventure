@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story>
+    <!-- Scenes -->
+    <scenes>
+        <scene>
+            <name>forest_opening</name>
+            <description>
+                    You wake up, heavy eyes lift to reveal amber leaved branches swaying in the wind.\n
+                         Your hands dig into the dirt as you pull yourself up off the cold ground.\n
+                         Dusting yourself off, you rap your jacket around you as a bitter gale passes you.\n
+                         Looking around you and see trees in all directions lit dimly from the setting sun. 
+            </description>
+            <paths>
+                <path>
+                    <sceneName>forest_grove</sceneName>
+                    <description>north</description>
+                </path>
+            </paths>
+            <items>
+                <item>
+                    <name>weird_note#1</name>
+                </item>
+            </items>
+            <objects>
+                <object>tree_stump</object>
+            </objects>
+        </scene>
+
+
+        <scene>
+            <name>forest_grove</name>
+            <description>
+                    You come across a grove in the forest, the trees break away for long grass. \n
+                    There are some [brown_mushroom]'s growing up against an old tree stump. \n
+                    You think you can see a cave off to the east. 
+            </description>
+            <paths>
+                <path>
+                    <sceneName>forest_cave</sceneName>
+                    <description>east</description>
+                </path>
+            </paths>
+            <items>
+                <item>
+                    <name>brown_mushroom</name>
+                    <quantity>3</quantity>
+                </item>
+            </items>
+            <objects>
+                <object>tree_stump</object>
+            </objects>
+            <mobs></mobs>
+        </scene>
+
+        <scene>
+            <name>forest_cave</name>
+            <paths>
+                <path>
+                    <sceneName></sceneName>
+                    <description></description>
+                </path>
+            </paths>
+            <items></items>
+            <objects></objects>
+            <mobs></mobs>
+        </scene>
+    </scenes>
+
+    <!-- Spells -->
+    <spells>
+        <spell>
+            <name>fire_bolt</name>
+            <spellType>damage</spellType>
+            <damageType>fire</damageType>
+            <baseManaCost>25</baseManaCost>
+            <diceType>D6</diceType>
+            <numberOfDice>2</numberOfDice>
+            <bonus>4</bonus>
+        </spell>
+        <spell>
+            <name>magic_missile</name>
+            <spellType>damage</spellType>
+            <damageType>force</damageType>
+            <baseManaCost>5</baseManaCost>
+            <diceType>D4</diceType>
+            <numberOfDice>1</numberOfDice>
+            <bonus>2</bonus>
+        </spell>
+    </spells>
+
+    <!-- Items -->
+    <items>
+        <item>
+            <name>brown_mushroom</name>
+            <description>Small brown mushroom that might might be used as an ingredient</description>
+        </item>
+        <item>
+            <name>weird_note#1</name>
+            <description>Note reads: "good luck... j xxx"</description>
+        </item>
+    </items>
+
+    <!-- Objects-->
+    <objects>
+        <object>
+            <name>tree_stump</name>
+        </object>
+    </objects>
+
+    <!-- Mobs-->
+    <mobs>
+        <mob>
+            <name>james_the_guide</name>
+            <type>npc</type>
+            <dialog></dialog>
+        </mob>
+    </mobs>
+</story>

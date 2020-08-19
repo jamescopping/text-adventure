@@ -1,6 +1,6 @@
 export class Scene {
     constructor() {
-        this.id = ""
+        this.id = "";
         this.description = "";
         this.goto = [];
         this.itemList = [];

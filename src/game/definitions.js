@@ -2,7 +2,7 @@ import { JSONUtil } from "./util/jsonUtil";
 
 export const OperandType = {
     COMMAND: "command",
-    OJECT: "object",
+    OBJECT: "object",
     CHARACTER: "character",
     ITEM: "item",
     SPELL: "spell",
@@ -21,7 +21,7 @@ export const DamageType = {
     BLUDGEONING: "bludgeoning",
     COLD: "cold",
     FIRE: "fire",
-    FORCE: "froce",
+    FORCE: "force",
     LIGHTNING: "lightning",
     NECROTIC: "necrotic",
     PIERCING: "piercing",
