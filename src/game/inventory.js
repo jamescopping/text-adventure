@@ -1,4 +1,5 @@
 import { ItemMap } from "./definitions";
+import { Story } from "./story";
 export class Inventory {
   constructor(itemList, maxWeight) {
     this.list = [...itemList];
@@ -8,7 +9,7 @@ export class Inventory {
   getList() { return this.list }
   listSize() { return this.list.length }
   addItems(itemNameList) { itemNameList.forEach(itemName => this.addItem(itemName)) }
-  addItem(itemName) { if (ItemMap.has(itemName)) this.list.push(itemName); }
+  addItem(itemName) { if (Story.getItemMap().has(itemName)) this.list.push(itemName); }
 
   getItemAtIndex(index) {
     if (this.listSize() > 0 && (index <= this.listSize() && index >= 0)) {

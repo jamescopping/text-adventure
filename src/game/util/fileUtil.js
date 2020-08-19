@@ -12,20 +12,7 @@ export class FileUtil {
   }
 
 
-  static readXMLFile(file) {
-    let request;
-    if (window.XMLHttpRequest) {
-      request = new XMLHttpRequest();
-    } else {    // IE 5/6
-      request = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    request.open("GET", file, false)
-    request.setRequestHeader("Content-Type", "text/xml");
-    request.send(null);
-    return request.responseXML;
-  }
-
-  static toXML(string) {
-    return new DOMParser().parseFromString(string, "text/xml");
+  static stringToXML(text) {
+    return new DOMParser().parseFromString(text, "text/xml");
   }
 }

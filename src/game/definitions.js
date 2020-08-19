@@ -1,5 +1,3 @@
-import { JSONUtil } from "./util/jsonUtil";
-
 export const OperandType = {
     COMMAND: "command",
     OBJECT: "object",
@@ -30,8 +28,3 @@ export const DamageType = {
     RADIANT: "radiant",
     SLASHING: "slashing"
 }
-
-export const SpellMap = new Map(JSONUtil.jsonObjArrayToMap(require("./jsonList/spells.json"), "name"));
-export const DebuffMap = new Map(JSONUtil.jsonObjArrayToMap(require("./jsonList/debuffs.json"), "name"));
-export const BuffMap = new Map(JSONUtil.jsonObjArrayToMap(require("./jsonList/buffs.json"), "name"));
-export const ItemMap = new Map(JSONUtil.jsonObjArrayToMap(require("./jsonList/items.json"), "name"));

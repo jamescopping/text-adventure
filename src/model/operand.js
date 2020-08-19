@@ -1,5 +1,6 @@
-import { OperandType, ItemMap, SpellMap } from "../game/definitions";
+import { OperandType } from "../game/definitions";
 import { CommandSet } from "../game/command";
+import { Story } from "../game/story";
 export const operand = {
     list: [],
     type: "",
@@ -8,13 +9,13 @@ export const operand = {
         this.type = newType
         switch (this.type) {
             case OperandType.SPELL:
-                this.setList([...SpellMap.keys()]);
+                this.setList([...(Story.getSpellMap().keys())]);
                 break;
             case OperandType.ITEM:
-                this.setList([...ItemMap.keys()]);
+                this.setList([...(Story.getItemMap().keys())]);
                 break;
             case OperandType.COMMAND:
-                this.setList([...CommandSet.values()]);
+                this.setList([...(CommandSet.values())]);
                 break;
             default:
                 this.setList([]);

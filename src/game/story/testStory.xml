@@ -18,11 +18,11 @@
             </paths>
             <items>
                 <item>
-                    <name>weird_note#1</name>
+                    <itemName>weird_note#1</itemName>
                 </item>
             </items>
             <objects>
-                <object>tree_stump</object>
+                <objectName>tree_stump</objectName>
             </objects>
         </scene>
 
@@ -42,12 +42,13 @@
             </paths>
             <items>
                 <item>
-                    <name>brown_mushroom</name>
+                    <nameName>brown_mushroom</nameName>
                     <quantity>3</quantity>
                 </item>
             </items>
             <objects>
-                <object>tree_stump</object>
+                <objectName>tree_stump</objectName>
+                <objectName>wooden_chest</objectName>
             </objects>
             <mobs></mobs>
         </scene>
@@ -105,6 +106,9 @@
         <object>
             <name>tree_stump</name>
         </object>
+        <object>
+            <name>wooden_chest</name>
+        </object>
     </objects>
 
     <!-- Mobs-->
@@ -112,7 +116,7 @@
         <mob>
             <name>james_the_guide</name>
             <type>npc</type>
-            <dialog></dialog>
+            <dialog>This is a test</dialog>
         </mob>
     </mobs>
 </story>
