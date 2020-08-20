@@ -1,7 +1,11 @@
 import { log } from "../controller/adventureLogController";
 import { Dice } from "./dice";
+import { game } from "./game";
+import { Story } from "./story";
+import { triggerAlert } from "../controller/alertController";
 
-const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'goto', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
+
+const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
 export const CommandSet = new Set([...commandList]);
 
 export class Command {
@@ -19,12 +23,58 @@ export class Command {
         return { action: string.split(" ")[0], operand: string.split(" ")[1] };
     }
 
+    static look() {
+        log(game.currentScene.getDescription());
+    }
+
+    static path(direction) {
+        game.changeScene(direction);
+    }
+
+    static pickup(itemName) {
+        //TODO remove item from the scene
+        if (itemName !== "") {
+            let sceneItem = game.getCurrentScene().pickupItem(itemName);
+            if (sceneItem !== null) {
+                game.getPlayer().pickupItem(sceneItem);
+                return true;
+            } else {
+                triggerAlert("warning", `Item [${itemName}] does not exist in this scene`);
+                return false;
+            }
+        }
+    }
+
+    static drop(itemName) {
+        let item = game.getPlayer().getInventory().removeItem(itemName);
+        if (item !== null) {
+            game.getCurrentScene().getItems().push(itemName);
+            log(`Item [${itemName}] removed from inventory`);
+            return true;
+        } else {
+            log(`Item [${itemName}] can't be removed from your inventory`);
+        }
+        return false;
+    }
+
+    static investigate(itemName) {
+        if (game.getPlayer().getInventory().hasItem(itemName)) {
+            let item = Story.getItemMap().get(itemName);
+            log(item["description"]);
+        }
+    }
+
+    static inventory() {
+        const list = game.getPlayer().getInventory().getList().sort();
+        log(`Inventory: ${list}`);
+    }
+
     static async roll(rollString) {
         let { total, dice } = await Dice.rollFromString(rollString);
         log(`/roll ${rollString} [${dice}] - total sum => ${total}`);
     }
 
-    static async save(game) {
+    static async save() {
         game.savePlayer();
         log(`/save ${game.player}`);
     }
@@ -52,8 +102,8 @@ export class Command {
                 case "stats":
                     log("The stats command displays your character's current health-points, stamina and mana levels. A long with the current level and values for Strength, Dexterity and Wisdom.");
                     break;
-                case "goto":
-                    log("Usage: goto [north, east, south, west] or [defined Object], object will be described in the prompt and appear as an option when available. Moves the character to that destination if possible.");
+                case "path":
+                    log("Usage: path [north, east, south, west] or [defined Object], object will be described in the prompt and appear as an option when available. Moves the character to that destination if possible.");
                     break;
                 case "look":
                     log("Usage: look [north, east, south, west] or [defined Object], object will be described in the prompt and appear as an option when available. The character is provided with information based on a perception check.");

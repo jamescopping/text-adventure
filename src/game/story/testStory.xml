@@ -4,6 +4,7 @@
     <scenes>
         <scene>
             <name>forest_opening</name>
+            <startScene>true</startScene>
             <description>You wake up, heavy eyes lift to reveal amber leaved branches swaying in the wind.
                          Your hands dig into the dirt as you pull yourself up off the cold ground.
                          Dusting yourself off, you wrap your jacket around you as a bitter gale passes you.
@@ -12,7 +13,7 @@
             <paths>
                 <path>
                     <sceneName>forest_grove</sceneName>
-                    <description>north</description>
+                    <direction>north_path</direction>
                 </path>
             </paths>
             <items>
@@ -21,48 +22,50 @@
                 </item>
             </items>
             <objects>
-                <objectName>tree_stump</objectName>
+                <object>
+                    <objectName>tree_stump</objectName>
+                </object>
             </objects>
         </scene>
-
-
         <scene>
             <name>forest_grove</name>
             <description>
-                    You come across a grove in the forest, the trees break away for long grass. \n
-                    There are some [brown_mushroom]'s growing up against an old tree stump. \n
+                    You come across a grove in the forest, the trees break away for long grass.
+                    There are some [brown_mushroom]'s growing up against an old tree stump.
                     You think you can see a cave off to the east. 
             </description>
             <paths>
                 <path>
-                    <sceneName>forest_cave</sceneName>
-                    <description>east</description>
+                    <sceneName>forest_cave_entrance</sceneName>
+                    <direction>east_towards_cave</direction>
                 </path>
             </paths>
             <items>
                 <item>
-                    <nameName>brown_mushroom</nameName>
+                    <itemName>brown_mushroom</itemName>
                     <quantity>3</quantity>
                 </item>
             </items>
             <objects>
-                <objectName>tree_stump</objectName>
-                <objectName>wooden_chest</objectName>
+                <object>
+                    <objectName>tree_stump</objectName>
+                </object>
+                <object>
+                    <objectName>wooden_chest</objectName>
+                </object>
             </objects>
-            <mobs></mobs>
         </scene>
 
+
         <scene>
-            <name>forest_cave</name>
+            <name>forest_cave_entrance</name>
+            <description>Dark cave...</description>
             <paths>
                 <path>
-                    <sceneName></sceneName>
-                    <description></description>
+                    <sceneName>forest_grove</sceneName>
+                    <direction>west_back_out_cave</direction>
                 </path>
             </paths>
-            <items></items>
-            <objects></objects>
-            <mobs></mobs>
         </scene>
     </scenes>
 
@@ -93,10 +96,17 @@
         <item>
             <name>brown_mushroom</name>
             <description>Small brown mushroom that might might be used as an ingredient</description>
+            <rarity>common</rarity>
         </item>
         <item>
             <name>weird_note#1</name>
             <description>Note reads: "good luck... j xxx"</description>
+            <rarity>quest</rarity>
+        </item>
+        <item>
+            <name>blue_crystal</name>
+            <description>The crystal glows dimly as you pass it over in your hands</description>
+            <rarity>quest</rarity>
         </item>
     </items>
 

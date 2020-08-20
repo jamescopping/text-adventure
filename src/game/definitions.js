@@ -1,9 +1,11 @@
-export const OperandType = {
+export const OperandList = {
     COMMAND: "command",
     OBJECT: "object",
-    CHARACTER: "character",
+    MOB: "mob",
     ITEM: "item",
-    SPELL: "spell",
+    PATH: "path",
+    INVENTORY: "inventory",
+    KNOWN_SPELL: "known_spell",
 }
 
 export const SpellType = {

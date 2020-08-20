@@ -1,12 +1,7 @@
-import {
-  Stats
-} from "./stats";
-import {
-  ResourceType
-} from "./resource";
-import {
-  Inventory
-} from "./inventory";
+import { Stats } from "./stats";
+import { ResourceType } from "./resource";
+import { Inventory } from "./inventory";
+import { log } from "../controller/adventureLogController";
 
 export class Player {
   constructor() {
@@ -25,17 +20,17 @@ export class Player {
       maxValue: 999,
     },
     ]);
-    this.knownSpells = ["fire_bolt", "magic_missile"];
-    this.inventory = new Inventory(
-      ["key#1", "key#2"],
-      100
-    );
+    this.knownSpells = ["fire_bolt"];
+    this.inventory = new Inventory(["blue_crystal"], 100);
   }
 
-
-  toString() {
-    return `Health: ${this.stats
-      .getResourceOfType(ResourceType.HEALTH)
-      .toString()}`;
+  pickupItem(item) {
+    this.getInventory().addItem(item);
+    log(`[${item}] added to your inventory`);
   }
+
+  getInventory() { return this.inventory }
+  getKnownSpells() { return this.knownSpells }
+
+  toString() { return `Health: ${this.stats.getResourceOfType(ResourceType.HEALTH).toString()}`; }
 }
