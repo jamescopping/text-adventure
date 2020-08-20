@@ -190,6 +190,7 @@ const saveCommand = command => {
 const resetToDefaults = () => {
     setInvalidClass(false);
     operand.setType();
+    suggestion.setList([]);
     suggestion.index = -1;
 }
 

@@ -4,7 +4,6 @@ import { DomUtil } from "./util/domUtil.js";
 export class Story {
 
     constructor() {
-        console.log("story constructor");
     }
 
     static loadStoryAssetsFromXML(fileName) {
@@ -26,11 +25,11 @@ export class Story {
 
     }
 
-    static getSceneMap() { return Story.sceneMap; }
-    static getItemMap() { return Story.itemMap; }
-    static getObjectMap() { return Story.objectMap; }
-    static getMobMap() { return Story.mobMap; }
-    static getSpellMap() { return Story.spellMap; }
+    static getSceneMap() { return Story.sceneMap }
+    static getItemMap() { return Story.itemMap }
+    static getObjectMap() { return Story.objectMap }
+    static getMobMap() { return Story.mobMap }
+    static getSpellMap() { return Story.spellMap }
 }
 
 Story.sceneMap = new Map();
