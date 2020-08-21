@@ -7,8 +7,20 @@ export class Inventory {
 
   getList() { return this.list }
   listSize() { return this.list.length }
-  addItems(itemNameList) { itemNameList.forEach(itemName => this.addItem(itemName)) }
-  addItem(itemName) { if (Story.getItemMap().has(itemName)) this.list.push(itemName) }
+  addItems(itemObjList) { itemObjList.forEach(itemObj => this.addItem(itemObj)) }
+  addItem(newItemObj) {
+    if (Story.getItemMap().has(newItemObj["name"])) {
+      let itemAlreadyIn = false;
+      for (let index = 0; index < this.list.length; index++) {
+        if (this.list[index]["name"] === newItemObj["name"]) {
+          this.list[index]["quantity"] += newItemObj["quantity"];
+          itemAlreadyIn = true;
+          break;
+        }
+      }
+      if (!itemAlreadyIn) this.list.push(newItemObj);
+    }
+  }
 
   getItemAtIndex(index) {
     if (this.listSize() > 0 && (index <= this.listSize() && index >= 0)) {
@@ -18,7 +30,9 @@ export class Inventory {
   }
 
   getIndex(itemName) {
-    return this.list.indexOf(itemName);
+    let itemIndex = -1;
+    this.list.forEach((itemObj, index) => { if (itemName === itemObj["name"]) itemIndex = index });
+    return itemIndex;
   }
 
   getItem(itemName) {
@@ -27,17 +41,16 @@ export class Inventory {
   }
 
   removeItem(itemName) {
-    let itemIndex = -1;
-    if (this.hasItem(itemName)) {
-      itemIndex = this.getIndex(itemName);
-      if (itemIndex === -1) return null;
-      if (this.getItemRarity(itemName) === "quest") return null;
-    }
+    let itemIndex = this.getIndex(itemName);
+    if (itemIndex === -1) return null;
+    if (this.getItemRarity(itemName) === "quest") return null;
     return this.list.splice(itemIndex, 1)[0];
   }
 
   hasItem(itemName) {
-    return this.list.includes(itemName);
+    let foundItem = false;
+    this.list.forEach(itemObj => { if (itemName == itemObj["name"]) foundItem = true; });
+    return foundItem;
   }
 
   getItemRarity(itemName) {

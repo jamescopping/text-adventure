@@ -4,7 +4,6 @@ import { game } from "./game";
 import { Story } from "./story";
 import { triggerAlert } from "../controller/alertController";
 
-
 const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
 export const CommandSet = new Set([...commandList]);
 
@@ -24,11 +23,29 @@ export class Command {
     }
 
     static look() {
-        log(game.currentScene.getDescription());
+        log(`You look around the <${game.getCurrentScene().getName()}> and you find...`);
+        const sceneItems = game.getCurrentScene().getItems();
+        if (sceneItems === undefined || sceneItems.length === 0) {
+            log("nothing...");
+        } else {
+            sceneItems.forEach(itemObj => {
+                let outString = "";
+                if (itemObj["quantity"] > 1) outString += `(${itemObj["quantity"]}) x `;
+                outString += `[${itemObj["name"]}] ${itemObj["description"]}`;
+                log(outString);
+            });
+        }
     }
 
     static path(direction) {
-        game.changeScene(direction);
+        if (direction !== "") {
+            if (game.changeScene(direction)) {
+                log(`You chose path ${direction}`);
+                game.getCurrentScene().init();
+            } else {
+                alert("alert-warning", `<strong>Path ${direction}</strong> not found`);
+            }
+        }
     }
 
     static pickup(itemName) {
@@ -39,20 +56,21 @@ export class Command {
                 game.getPlayer().pickupItem(sceneItem);
                 return true;
             } else {
-                triggerAlert("warning", `Item [${itemName}] does not exist in this scene`);
+                triggerAlert("alert-warning", `Item [${itemName}] does not exist in this scene`);
                 return false;
             }
         }
     }
 
     static drop(itemName) {
-        let item = game.getPlayer().getInventory().removeItem(itemName);
-        if (item !== null) {
-            game.getCurrentScene().getItems().push(itemName);
-            log(`Item [${itemName}] removed from inventory`);
+        if (itemName === "") return false;
+        let itemObj = game.getPlayer().getInventory().removeItem(itemName);
+        if (itemObj !== null) {
+            game.getCurrentScene().getItems().push({ name: itemObj["name"], quantity: itemObj["quantity"], description: "dropped by player" });
+            log(`Item [${itemObj["name"]}] x (${itemObj["quantity"]}) dropped from inventory`);
             return true;
         } else {
-            log(`Item [${itemName}] can't be removed from your inventory`);
+            log(`Item [${itemObj["name"]}] can't be dropped from your inventory`);
         }
         return false;
     }
@@ -60,13 +78,23 @@ export class Command {
     static investigate(itemName) {
         if (game.getPlayer().getInventory().hasItem(itemName)) {
             let item = Story.getItemMap().get(itemName);
-            log(item["description"]);
+            console.log(item);
+            log(`You investigate [${item["name"]}]: ${item["description"]}`);
         }
     }
 
     static inventory() {
-        const list = game.getPlayer().getInventory().getList().sort();
-        log(`Inventory: ${list}`);
+        const itemObjList = game.getPlayer().getInventory().getList();
+        let outString = "";
+        for (let index = 0; index < itemObjList.length; index++) {
+            const itemObj = itemObjList[index];
+            console.log(itemObj);
+            if (itemObj["quantity"] > 1) outString += `(${itemObj["quantity"]}) x `;
+            outString += `[${itemObj["name"]}]`;
+
+            if (index !== itemObjList.length - 1) outString += ", ";
+        }
+        log(outString);
     }
 
     static async roll(rollString) {
@@ -129,7 +157,6 @@ export class Command {
             }
         }
     }
-
 }
 
 

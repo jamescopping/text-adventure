@@ -7,7 +7,6 @@ import { OperandList } from "../game/definitions";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
-import { game } from "../game/game";
 
 export let commandTextWidth, commandInput;
 let commandSubmit;
@@ -162,7 +161,7 @@ const handleTextCommandInput = value => {
 export const autocompleteFromSelection = () => {
     let autocompleteText = getSelectedSuggestionText();
     if (!hasSpace(commandInput.value)) {
-        commandInput.value = autocompleteText + " ";
+        commandInput.value = autocompleteText;
     } else {
         let command = new Command(commandInput.value);
         command.operand = autocompleteText;

@@ -23,6 +23,13 @@ main {
   width: auto;
   white-space: nowrap;
 }
+
+
+.item-text{
+  cursor: pointer;
+  color: black;
+}
+
 .form-control:focus {
   border-color: #cccccc;
   -webkit-box-shadow: none;

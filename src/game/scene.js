@@ -2,7 +2,6 @@ import { Story } from "./story";
 import { log } from "../controller/adventureLogController";
 export class Scene {
     constructor() {
-        this.isLoaded = false
         this.name = "";
         this.description = "";
         this.paths = {};
@@ -21,28 +20,41 @@ export class Scene {
     }
 
     pickupItem(itemName) {
-        const index = this.items.indexOf(itemName);
-        if (index === -1) return null;
-        return this.items.splice(this.items.indexOf(itemName), 1)[0];
+        let itemIndex = - 1;
+        this.items.forEach((itemObj, index) => { if (itemObj["name"] === itemName) itemIndex = index; return; });
+        if (itemIndex === -1) return null;
+        return this.items.splice(itemIndex, 1)[0];
     }
 
     loadScene(sceneKey) {
         let scene = Scene.getScene(sceneKey);
         if (scene.name !== "" || scene.name !== undefined) {
-            this.isLoaded = true;
             this.name = scene.hasOwnProperty("name") ? scene.name : "";
             this.description = scene.hasOwnProperty("description") ? scene.description : "";
-            this.items = scene.hasOwnProperty("items") ? scene.items.map(element => element["itemName"]) : [];
             this.objects = scene.hasOwnProperty("objects") ? scene.objects.map(element => element["objectName"]) : [];
             this.mobs = scene.hasOwnProperty("mobs") ? scene.mobs.map(element => element["mobName"]) : [];
+
+            this.items = [];
+            if (scene.hasOwnProperty("items")) {
+                scene.items.forEach(element => {
+                    let itemObj = {
+                        name: element["itemName"],
+                        quantity: parseInt(element["quantity"]),
+                        description: element["description"]
+                    };
+                    this.items.push(itemObj);
+                });
+            }
+
             this.paths = {};
             if (scene.hasOwnProperty("paths")) {
                 scene.paths.forEach(element => {
                     this.paths[element["direction"]] = element["sceneName"];
                 });
             }
+            return true;
         } else {
-            this.constructor();
+            return false;
         }
     }
 
@@ -63,9 +75,6 @@ export class Scene {
         return scene;
     }
 
-
-
-    isSceneLoaded() { return this.isLoaded }
     getName() { return this.name }
     getDescription() { return this.description }
     getItems() { return this.items }

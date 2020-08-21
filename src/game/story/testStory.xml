@@ -19,6 +19,18 @@
             <items>
                 <item>
                     <itemName>weird_note#1</itemName>
+                    <description>on the floor next to you</description>
+                    <quantity>1</quantity>
+                </item>
+                <item>
+                    <itemName>rotten_apple</itemName>
+                    <description>hanging from tree</description>
+                    <quantity>10</quantity>
+                </item>
+                <item>
+                    <itemName>brown_mushroom</itemName>
+                    <description>growing on the floor next to the tree</description>
+                    <quantity>2</quantity>
                 </item>
             </items>
             <objects>
@@ -31,8 +43,7 @@
             <name>forest_grove</name>
             <description>
                     You come across a grove in the forest, the trees break away for long grass.
-                    There are some [brown_mushroom]'s growing up against an old tree stump.
-                    You think you can see a cave off to the east. 
+                    You think you can see a cave entrance of to the east. 
             </description>
             <paths>
                 <path>
@@ -43,7 +54,13 @@
             <items>
                 <item>
                     <itemName>brown_mushroom</itemName>
+                    <description>growing on the [tree_stump]</description>
                     <quantity>3</quantity>
+                </item>
+                <item>
+                    <itemName>rotten_apple</itemName>
+                    <description>hanging from tree</description>
+                    <quantity>10</quantity>
                 </item>
             </items>
             <objects>
@@ -107,6 +124,11 @@
             <name>blue_crystal</name>
             <description>The crystal glows dimly as you pass it over in your hands</description>
             <rarity>quest</rarity>
+        </item>
+        <item>
+            <name>rotten_apple</name>
+            <description>ewww smelly</description>
+            <rarity>common</rarity>
         </item>
     </items>
 

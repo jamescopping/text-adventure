@@ -21,12 +21,17 @@ export class Player {
     },
     ]);
     this.knownSpells = ["fire_bolt"];
-    this.inventory = new Inventory(["blue_crystal"], 100);
+    this.inventory = new Inventory([{ name: "blue_crystal", quantity: 1 }], 100);
   }
 
-  pickupItem(item) {
-    this.getInventory().addItem(item);
-    log(`[${item}] added to your inventory`);
+  pickupItem(itemObj) {
+    this.getInventory().addItem(itemObj);
+    let outString = "";
+    if (itemObj["quantity"] > 1) {
+      outString += `(${itemObj["quantity"]}) x `;
+    }
+    outString += `[${itemObj["name"]}] added to your inventory`;
+    log(outString);
   }
 
   getInventory() { return this.inventory }
