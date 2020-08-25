@@ -24,6 +24,18 @@ main {
   white-space: nowrap;
 }
 
+.response-text{
+  color: #45f535;
+}
+.response-text:hover{
+  cursor: pointer;
+  color: #59a752;
+}
+
+.mob-text{
+  cursor: pointer;
+  color: blue;
+}
 
 .item-text{
   cursor: pointer;

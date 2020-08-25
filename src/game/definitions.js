@@ -6,6 +6,7 @@ export const OperandList = {
     PATH: "path",
     INVENTORY: "inventory",
     KNOWN_SPELL: "known_spell",
+    RESPONSE: "response",
 }
 
 export const SpellType = {
@@ -14,7 +15,6 @@ export const SpellType = {
     BUFF: "buff",
     DEBUFF: "debuff"
 }
-
 
 export const DamageType = {
     ACID: "acid",

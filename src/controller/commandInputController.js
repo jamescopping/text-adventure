@@ -2,14 +2,14 @@ import { updateContentSuggestionBox, hideSuggestionBox, selectNextSuggestion, is
 import { log } from "../controller/adventureLogController";
 import { triggerAlert } from "../controller/alertController";
 
-import { Command, CommandSet } from "../game/command";
+import { Command, CommandMap } from "../game/command";
 import { OperandList } from "../game/definitions";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
+import { game } from "../game/game";
 
-export let commandTextWidth, commandInput;
-let commandSubmit;
+export let commandTextWidth, commandInput, commandSubmit;
 
 export const initCommandInput = () => {
     commandInput = findCommandInputElement();
@@ -85,7 +85,7 @@ const specialKeyInput = event => {
             break;
         case "Tab":
             if (commandInput.value === "") {
-                suggestion.setList([...CommandSet]);
+                suggestion.setList(CommandMap.get(game.getGameMode()));
                 commandTextWidth.textContent = commandInput.value;
                 updateContentSuggestionBox();
             }
@@ -106,7 +106,7 @@ const handleTextCommandInput = value => {
         resetToDefaults();
         if (hasSpace(value)) {  //if there is a space in the string then do checks on the second word
             let command = new Command(value);
-            if (CommandSet.has(command.action)) {
+            if (CommandMap.get(game.getGameMode()).includes(command.action)) {
                 if (command.action === "/help") {
                     operand.setType(OperandList.COMMAND);
                     suggestion.populateList(operand.getList(), command.operand);
@@ -140,6 +140,9 @@ const handleTextCommandInput = value => {
                             break;
                         case "path":
                             operand.setType(OperandList.PATH);
+                            break;
+                        case "response":
+                            operand.setType(OperandList.RESPONSE);
                             break;
 
                     }
@@ -208,10 +211,18 @@ const validateCommand = command => {
             break;
         case "inventory":
             if (Command.inventory()) save = true;
-
+            break;
+        case "talkto":
+            if (Command.talkto(command.operand)) save = true;
+            break;
+        case "bye":
+            if (Command.bye()) save = true;
+            break;
+        case "response":
+            if (Command.response(command.operand)) save = true;
             break;
         default:
-            log(`${command.action} ${command.operand} [this command is yet to be implemented!]`);
+            log(`${command.action} ${command.operand} !this command is yet to be implemented!`);
             save = true;
             break;
     }

@@ -1,11 +1,17 @@
-import { log } from "../controller/adventureLogController";
+import { log, clearResponseClass } from "../controller/adventureLogController";
 import { Dice } from "./dice";
-import { game } from "./game";
+import { game, GameMode } from "./game";
 import { Story } from "./story";
 import { triggerAlert } from "../controller/alertController";
 
-const commandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
-export const CommandSet = new Set([...commandList]);
+const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
+const dialogCommandList = ['bye', 'response'].sort();
+const combatCommandList = ['flee', 'attack', 'cast', 'use'].sort();
+export const CommandMap = new Map();
+
+CommandMap.set(GameMode.ADVENTURE, adventureCommandList);
+CommandMap.set(GameMode.DIALOG, dialogCommandList);
+CommandMap.set(GameMode.COMBAT, combatCommandList);
 
 export class Command {
 
@@ -78,7 +84,6 @@ export class Command {
     static investigate(itemName) {
         if (game.getPlayer().getInventory().hasItem(itemName)) {
             let item = Story.getItemMap().get(itemName);
-            console.log(item);
             log(`You investigate [${item["name"]}]: ${item["description"]}`);
         }
     }
@@ -88,13 +93,37 @@ export class Command {
         let outString = "";
         for (let index = 0; index < itemObjList.length; index++) {
             const itemObj = itemObjList[index];
-            console.log(itemObj);
             if (itemObj["quantity"] > 1) outString += `(${itemObj["quantity"]}) x `;
             outString += `[${itemObj["name"]}]`;
-
             if (index !== itemObjList.length - 1) outString += ", ";
         }
         log(outString);
+    }
+
+    static talkto(mob) {
+        if (game.getCurrentScene().getMobs().includes(mob)) {
+            const foundMob = Story.getMobMap().get(mob);
+            if (foundMob["type"] === "npc") {
+                game.loadDialog(foundMob);
+                game.changeGameMode(GameMode.DIALOG);
+                game.getDialog().start();
+            } else {
+                log("You probably shouldn't talk to them");
+            }
+        }
+    }
+
+    static response(responseIndex) {
+        let nextStatementId = game.getDialog().getResponses().get(responseIndex);
+        if (nextStatementId === undefined || nextStatementId === null) return false;
+        clearResponseClass();
+
+        return game.getDialog().logStatement(nextStatementId);
+    }
+
+    static bye() {
+        game.changeGameMode(GameMode.ADVENTURE);
+        log(`You finish your conversation and walk away...`);
     }
 
     static async roll(rollString) {
@@ -109,11 +138,12 @@ export class Command {
 
     static help(commandName = "") {
         if (commandName === "" || commandName === undefined) {
-            CommandSet.forEach(element => {
-                log(`${element} `);
+            CommandMap.forEach(list => {
+                console.log(list);
+                list.forEach(command => log(command));
             });
+
         } else {
-            //"/help",, "/roll" "/save", "inventory", "stats", "goto", "look", "investigate", "talkto", "pickup", "attack", "loot", "cast"
             switch (commandName) {
                 case "/help":
                     log("The /help command lists all the commands that can be executed. You can also do /help [command] for more info on that specific command.");

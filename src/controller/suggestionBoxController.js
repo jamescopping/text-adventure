@@ -1,7 +1,5 @@
 import { commandTextWidth, commandInput, autocompleteFromSelection } from "../controller/commandInputController";
-
 import { suggestion } from "../model/suggestion";
-import { operand } from "../model/operand";
 
 let suggestionBox;
 

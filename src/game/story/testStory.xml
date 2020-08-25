@@ -38,6 +38,11 @@
                     <objectName>tree_stump</objectName>
                 </object>
             </objects>
+            <mobs>
+                <mob>
+                    <mobName>james_the_guide</mobName>
+                </mob>
+            </mobs>
         </scene>
         <scene>
             <name>forest_grove</name>
@@ -147,7 +152,74 @@
         <mob>
             <name>james_the_guide</name>
             <type>npc</type>
-            <dialog>This is a test</dialog>
+            <description>Old strange man, but he's kinda hot though so he's got that going for him, kinda silverfox type thing going on</description>
+            <dialog>
+                <statement>
+                    <id>1</id>
+                    <text>Hello, my name is james.</text>
+                    <responses>
+                        <response>
+                            <text>Okay, what am I doing here?</text>
+                            <nextStatementId>2</nextStatementId>
+                        </response>
+                    </responses>
+
+                </statement>
+                <statement>
+                    <id>2</id>
+                    <text>Haha... that is a good question, I'm not sure though I just sort of appeared... same as you.</text>
+                    <responses>
+                        <response>
+                            <text>Can you tell me a joke?</text>
+                            <nextStatementId>3</nextStatementId>
+                        </response>
+                        <response>
+                            <text>Well well well if it isn't the Spanish inquisition....</text>
+                            <nextStatementId>5</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>3</id>
+                    <text>What's brown and sticky?</text>
+                    <responses>
+                        <response>
+                            <text>I dunno what's 'brown and sticky'?</text>
+                            <nextStatementId>4</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>4</id>
+                    <text>A Stick...</text>
+                    <responses>
+                        <response>
+                            <text>ha...ha...   anyway.... weirdo</text>
+                            <nextStatementId>1</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>5</id>
+                    <text>Our chief weapon is surprise... surprise and fear... fear and surprise... our two weapons are fear and surprise... and ruthless efficiency... Our three weapons are fear, surprise, and ruthless efficiency... and an almost fanatical devotion to the Pope...</text>
+                    <responses>
+                        <response>
+                            <text>And now for something completely different</text>
+                            <nextStatementId>6</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>6</id>
+                    <text>Beep Boop I am a robot...</text>
+                    <responses>
+                        <response>
+                            <text>Fine... lets hear that joke again...</text>
+                            <nextStatementId>3</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+            </dialog>
         </mob>
     </mobs>
 </story>

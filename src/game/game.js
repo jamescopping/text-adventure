@@ -3,12 +3,22 @@ import { Player } from "./player";
 import { JSONUtil } from "./util/jsonUtil";
 import { Story } from "./story";
 import { Scene } from "./scene";
+import { Dialog } from "./dialog";
 
+export const GameMode = {
+    ADVENTURE: "adventure",
+    COMBAT: "combat",
+    DIALOG: "dialog"
+}
 
 export class Game {
     constructor() {
+        this.mode = GameMode.ADVENTURE;
         this.player = new Player();
         this.currentScene = new Scene();
+        this.dialog = new Dialog();
+
+
         this.loadPlayer();
         Story.loadStoryAssetsFromXML("./story/testStory.xml");
         this.currentScene.loadScene();
@@ -26,9 +36,11 @@ export class Game {
         if (this.currentScene.loadScene(sceneName)) return true;
         return false;
     }
-
     getCurrentScene() { return this.currentScene }
-
+    changeGameMode(newMode) { this.mode = newMode; }
+    getGameMode() { return this.mode }
+    loadDialog(npc) { this.dialog.init(npc) }
+    getDialog() { return this.dialog }
     getPlayer() { return this.player }
     loadPlayer() { if (localStorage.getItem("player") !== null) JSONUtil.loadFromJSON(this.player, localStorage.getItem("player")) }
     savePlayer() { localStorage.setItem("player", JSON.stringify(this.player)); console.log(JSON.stringify(this.player)) }

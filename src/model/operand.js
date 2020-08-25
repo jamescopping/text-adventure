@@ -1,6 +1,7 @@
 import { OperandList } from "../game/definitions";
-import { CommandSet } from "../game/command";
+import { CommandMap } from "../game/command";
 import { game } from "../game/game";
+import { getResponseMap } from "../controller/adventureLogController";
 export const operand = {
     list: [],
     type: "",
@@ -27,7 +28,11 @@ export const operand = {
                 this.setList(Object.keys(game.getCurrentScene().getPaths()));
                 break;
             case OperandList.COMMAND:
-                this.setList([...(CommandSet.keys())]);
+                this.setList(CommandMap.get(game.getGameMode()));
+                break;
+            case OperandList.RESPONSE:
+                game.getDialog().setResponses(getResponseMap());
+                this.setList([...game.getDialog().getResponses().keys()]);
                 break;
             default:
                 this.setList([]);
