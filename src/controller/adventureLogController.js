@@ -6,7 +6,6 @@ let adventureLog;
 export const initAdventureLog = () => {
   adventureLog = findAdventureLogElement();
 
-
   adventureLog.addEventListener('click', event => {
     let element = event.target;
     if (element.tagName === "SPAN" && element.className.includes("item-text")) {
@@ -54,8 +53,13 @@ export const getResponseMap = () => {
   return responseMap;
 }
 
-export const clearResponseClass = () => {
-  document.querySelectorAll("span.response-text").forEach(element => {
-    element.className = element.className.replace(/\bresponse-text\b/g, "");
-  })
+export const clearResponseClass = selectedIndex => {
+  console.log(selectedIndex);
+  document.querySelectorAll("span.response-text").forEach((element, index) => {
+    if (parseInt(selectedIndex) === index + 1) {
+      element.className = element.className.replace(/\bresponse-text\b/g, "selected-response");
+    } else {
+      element.className = element.className.replace(/\bresponse-text\b/g, "");
+    }
+  });
 }

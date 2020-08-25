@@ -76,15 +76,20 @@ export class Command {
             log(`Item [${itemObj["name"]}] x (${itemObj["quantity"]}) dropped from inventory`);
             return true;
         } else {
-            log(`Item [${itemObj["name"]}] can't be dropped from your inventory`);
+            triggerAlert("alert-warning", `Item [${itemObj["name"]}] can't be dropped from your inventory`);
+            return false;
         }
-        return false;
+
     }
 
     static investigate(itemName) {
         if (game.getPlayer().getInventory().hasItem(itemName)) {
             let item = Story.getItemMap().get(itemName);
             log(`You investigate [${item["name"]}]: ${item["description"]}`);
+            return true;
+        } else {
+            triggerAlert("alert-warning", `Item [${itemName}] is not in your inventory`);
+            return false;
         }
     }
 
@@ -97,7 +102,14 @@ export class Command {
             outString += `[${itemObj["name"]}]`;
             if (index !== itemObjList.length - 1) outString += ", ";
         }
-        log(outString);
+        if (outString !== "") {
+            log(outString);
+            return true;
+        } else {
+            triggerAlert("alert-warning", `Inventory is empty`);
+            return false;
+        }
+
     }
 
     static talkto(mob) {
@@ -115,10 +127,13 @@ export class Command {
 
     static response(responseIndex) {
         let nextStatementId = game.getDialog().getResponses().get(responseIndex);
-        if (nextStatementId === undefined || nextStatementId === null) return false;
-        clearResponseClass();
-
-        return game.getDialog().logStatement(nextStatementId);
+        if (nextStatementId === undefined || nextStatementId === null) {
+            triggerAlert("alert-warning", `Invalid response`);
+            return false;
+        } else {
+            clearResponseClass(responseIndex);
+            return game.getDialog().logStatement(nextStatementId);
+        }
     }
 
     static bye() {

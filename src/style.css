@@ -27,6 +27,11 @@ main {
 .response-text{
   color: #45f535;
 }
+
+.selected-response{
+  color: #da668c;
+}
+
 .response-text:hover{
   cursor: pointer;
   color: #59a752;
