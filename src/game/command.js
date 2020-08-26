@@ -1,4 +1,4 @@
-import { log, clearResponseClass } from "../controller/adventureLogController";
+import { log, clearResponseClass, clearPathClass } from "../controller/adventureLogController";
 import { Dice } from "./dice";
 import { game, GameMode } from "./game";
 import { Story } from "./story";
@@ -29,15 +29,15 @@ export class Command {
     }
 
     static look() {
-        log(`You look around the <${game.getCurrentScene().getName()}> and you find...`);
+        log(`You look around the ${game.getCurrentScene().getName()} and you find...`);
         const sceneItems = game.getCurrentScene().getItems();
         if (sceneItems === undefined || sceneItems.length === 0) {
             log("nothing...");
         } else {
             sceneItems.forEach(itemObj => {
                 let outString = "";
-                if (itemObj["quantity"] > 1) outString += `(${itemObj["quantity"]}) x `;
-                outString += `[${itemObj["name"]}] ${itemObj["description"]}`;
+                if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
+                outString += `[*${itemObj["name"]}*] ${itemObj["description"]}`;
                 log(outString);
             });
         }
@@ -46,10 +46,11 @@ export class Command {
     static path(direction) {
         if (direction !== "") {
             if (game.changeScene(direction)) {
+                clearPathClass(direction);
                 log(`You chose path ${direction}`);
                 game.getCurrentScene().init();
             } else {
-                alert("alert-warning", `<strong>Path ${direction}</strong> not found`);
+                triggerAlert("alert-warning", `<strong>Path ${direction}</strong> not found`);
             }
         }
     }
@@ -98,7 +99,7 @@ export class Command {
         let outString = "";
         for (let index = 0; index < itemObjList.length; index++) {
             const itemObj = itemObjList[index];
-            if (itemObj["quantity"] > 1) outString += `(${itemObj["quantity"]}) x `;
+            if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
             outString += `[${itemObj["name"]}]`;
             if (index !== itemObjList.length - 1) outString += ", ";
         }

@@ -28,7 +28,7 @@ export class Player {
     this.getInventory().addItem(itemObj);
     let outString = "";
     if (itemObj["quantity"] > 1) {
-      outString += `(${itemObj["quantity"]}) x `;
+      outString += `${itemObj["quantity"]} x `;
     }
     outString += `[${itemObj["name"]}] added to your inventory`;
     log(outString);

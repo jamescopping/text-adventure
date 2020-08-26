@@ -37,14 +37,53 @@ main {
   color: #59a752;
 }
 
-.mob-text{
-  cursor: pointer;
-  color: blue;
+.object-text{
+  color: #ffda0a;
 }
 
-.item-text{
+.object-text:hover{
   cursor: pointer;
-  color: black;
+  color: #c2aa22;
+}
+
+.mob-text{
+  color: #009fd4;
+}
+
+/* .mob-text:hover{
+  cursor: pointer;
+  color: #009fd4;
+} */
+
+.scene-item-text{
+  color: rgb(151, 114, 11);
+}
+
+.scene-item-text:hover{
+  cursor: pointer;
+  color: rgb(110, 84, 10);
+}
+
+.inv-item-text{
+  color: rgb(192, 192, 192);
+}
+
+.inv-item-text:hover{
+  cursor: pointer;
+  color: rgb(145, 145, 145);
+}
+
+.path-text{
+  color: rgb(201, 17, 17);
+}
+
+.selected-path{
+  color: rgb(20, 218, 102);
+}
+
+.path-text:hover{
+  cursor: pointer;
+  color:  rgb(141, 13, 13);
 }
 
 .form-control:focus {

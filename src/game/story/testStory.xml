@@ -55,11 +55,15 @@
                     <sceneName>forest_cave_entrance</sceneName>
                     <direction>east_towards_cave</direction>
                 </path>
+                <path>
+                    <sceneName>forest_opening</sceneName>
+                    <direction>south_exit_grove</direction>
+                </path>
             </paths>
             <items>
                 <item>
                     <itemName>brown_mushroom</itemName>
-                    <description>growing on the [tree_stump]</description>
+                    <description>growing on the (tree_stump)</description>
                     <quantity>3</quantity>
                 </item>
                 <item>

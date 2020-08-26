@@ -17,6 +17,12 @@ export class Scene {
 
     enter() {
         log(this.getDescription());
+        //log the paths that you can choose
+        let outString = "Paths: | ";
+        Object.keys(this.paths).forEach(direction => {
+            outString += `\<-${direction}-\> | `;
+        });
+        log(outString);
     }
 
     pickupItem(itemName) {
