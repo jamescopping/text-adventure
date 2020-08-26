@@ -31,16 +31,23 @@ export class Command {
     static look() {
         log(`You look around the ${game.getCurrentScene().getName()} and you find...`);
         const sceneItems = game.getCurrentScene().getItems();
-        if (sceneItems === undefined || sceneItems.length === 0) {
-            log("nothing...");
-        } else {
-            sceneItems.forEach(itemObj => {
-                let outString = "";
-                if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
-                outString += `[*${itemObj["name"]}*] ${itemObj["description"]}`;
-                log(outString);
-            });
-        }
+        const sceneNPCs = game.getCurrentScene().getMobs();
+        let logCount = 0;
+        sceneNPCs.forEach(npc => {
+            let outString = "";
+            outString += `/**${npc}*\\ ${Story.getMobMap().get(npc).description}`;
+            log(outString);
+            logCount++;
+        });
+
+        sceneItems.forEach(itemObj => {
+            let outString = "";
+            if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
+            outString += `[*${itemObj["name"]}*] ${itemObj["description"]}`;
+            log(outString);
+            logCount++;
+        });
+        if (logCount === 0) log("nothing...");
     }
 
     static path(direction) {
@@ -74,7 +81,7 @@ export class Command {
         let itemObj = game.getPlayer().getInventory().removeItem(itemName);
         if (itemObj !== null) {
             game.getCurrentScene().getItems().push({ name: itemObj["name"], quantity: itemObj["quantity"], description: "dropped by player" });
-            log(`Item [${itemObj["name"]}] x (${itemObj["quantity"]}) dropped from inventory`);
+            log(`Item [*${itemObj["name"]}*] x ${itemObj["quantity"]} dropped from inventory`);
             return true;
         } else {
             triggerAlert("alert-warning", `Item [${itemObj["name"]}] can't be dropped from your inventory`);
@@ -110,7 +117,6 @@ export class Command {
             triggerAlert("alert-warning", `Inventory is empty`);
             return false;
         }
-
     }
 
     static talkto(mob) {

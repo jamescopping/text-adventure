@@ -16,6 +16,11 @@ export class Scene {
     }
 
     enter() {
+        //if there are mobs to fight then go into combat mode
+            
+
+
+
         log(this.getDescription());
         //log the paths that you can choose
         let outString = "Paths: | ";
@@ -23,6 +28,11 @@ export class Scene {
             outString += `\<-${direction}-\> | `;
         });
         log(outString);
+    }
+
+
+    checkForCombat() {
+        
     }
 
     pickupItem(itemName) {

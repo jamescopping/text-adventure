@@ -41,6 +41,7 @@
             <mobs>
                 <mob>
                     <mobName>james_the_guide</mobName>
+                    <status>alive</status>
                 </mob>
             </mobs>
         </scene>
@@ -92,6 +93,12 @@
                     <direction>west_back_out_cave</direction>
                 </path>
             </paths>
+
+            <mobs>
+                <mob>
+                    <mobName></mobName>
+                </mob>
+            </mobs>
         </scene>
     </scenes>
 
@@ -153,6 +160,12 @@
 
     <!-- Mobs-->
     <mobs>
+        <mob>
+            <name>small_goblin</name>
+            <type>enemy</type>
+            <description></description>
+            <dialog></dialog>
+        </mob>
         <mob>
             <name>james_the_guide</name>
             <type>npc</type>
