@@ -1,5 +1,6 @@
 import { Story } from "./story";
 import { log } from "../controller/adventureLogController";
+import { game, GameMode } from "./game";
 export class Scene {
     constructor() {
         this.name = "";
@@ -17,10 +18,19 @@ export class Scene {
 
     enter() {
         //if there are mobs to fight then go into combat mode
-            
+        if (this.checkForCombat()) {
+            this.startCombat();
+        } else {
+            this.exploreScene();
+        }
+    }
 
+    startCombat() {
+        game.changeGameMode(GameMode.COMBAT);
+    }
 
-
+    exploreScene() {
+        game.changeGameMode(GameMode.ADVENTURE);
         log(this.getDescription());
         //log the paths that you can choose
         let outString = "Paths: | ";
@@ -32,7 +42,7 @@ export class Scene {
 
 
     checkForCombat() {
-        
+        return false;
     }
 
     pickupItem(itemName) {

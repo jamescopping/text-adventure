@@ -50,10 +50,10 @@ main {
   color: #009fd4;
 }
 
-/* .mob-text:hover{
+.mob-text:hover{
   cursor: pointer;
-  color: #009fd4;
-} */
+  color: #097ea5;
+}
 
 .scene-item-text{
   color: rgb(151, 114, 11);

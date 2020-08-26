@@ -120,6 +120,7 @@ export class Command {
     }
 
     static talkto(mob) {
+        if (game.getGameMode() === GameMode.DIALOG) { this.bye(); return false; }
         if (game.getCurrentScene().getMobs().includes(mob)) {
             const foundMob = Story.getMobMap().get(mob);
             if (foundMob["type"] === "npc") {
