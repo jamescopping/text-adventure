@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
+
 import { loadCommandInput } from "./component/commandInputComponent";
 import { loadSuggestionBox } from "./component/suggestionBoxComponent";
 import { loadAdventureLog } from "./component/adventureLogComponent";
@@ -25,7 +26,7 @@ const buildPage = () => {
   main.appendChild(container);
 
   return main;
-};
+}
 
 (() => {
   document.body.appendChild(buildPage());

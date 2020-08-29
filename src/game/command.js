@@ -123,12 +123,13 @@ export class Command {
         if (game.getGameMode() === GameMode.DIALOG) { this.bye(); return false; }
         if (game.getCurrentScene().getMobs().includes(mob)) {
             const foundMob = Story.getMobMap().get(mob);
-            if (foundMob["type"] === "npc") {
+            console.log(foundMob);
+            if (foundMob.hasOwnProperty("type") && foundMob["type"] === "npc" && foundMob.hasOwnProperty("dialog") && foundMob["dialog"].length > 0) {
                 game.loadDialog(foundMob);
                 game.changeGameMode(GameMode.DIALOG);
                 game.getDialog().start();
             } else {
-                log("You probably shouldn't talk to them");
+                log("You probably shouldn't talk to them, or they just have nothing to say.");
             }
         }
     }

@@ -17,6 +17,7 @@ export class Game {
         this.mode = GameMode.ADVENTURE;
         this.player = new Player();
         this.currentScene = new Scene();
+        this.visitedScenes = new Map();
         this.dialog = new Dialog();
         this.loadPlayer();
         this.currentScene.loadScene();
@@ -31,9 +32,11 @@ export class Game {
     changeScene(direction) {
         if (!this.currentScene.getPaths().hasOwnProperty(direction)) return false;
         let sceneName = this.currentScene.getPaths()[direction];
-        if (this.currentScene.loadScene(sceneName)) return true;
-        return false;
+        this.currentScene.saveSceneState();
+        this.currentScene.loadScene(sceneName);
+        return true;
     }
+
     getCurrentScene() { return this.currentScene }
     changeGameMode(newMode) { this.mode = newMode; }
     getGameMode() { return this.mode }

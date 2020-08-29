@@ -52,17 +52,30 @@ export class Scene {
         return this.items.splice(itemIndex, 1)[0];
     }
 
-    loadScene(sceneKey) {
-        let scene = Scene.getScene(sceneKey);
-        if (scene.name !== "" || scene.name !== undefined) {
-            this.name = scene.hasOwnProperty("name") ? scene.name : "";
-            this.description = scene.hasOwnProperty("description") ? scene.description : "";
-            this.objects = scene.hasOwnProperty("objects") ? scene.objects.map(element => element["objectName"]) : [];
-            this.mobs = scene.hasOwnProperty("mobs") ? scene.mobs.map(element => element["mobName"]) : [];
+    loadVisitedScene(sceneName) {
+        Object.assign(this, Scene.getVisitedScene(sceneName));
+    }
+
+    loadScene(sceneName) {
+        if (Scene.hasSceneBeenVisited(sceneName)) {
+            console.log("has been visited");
+            this.loadVisitedScene(sceneName);
+        } else {
+            const storyScene = Scene.getStoryScene(sceneName);
+            this.initSceneDataFromStory(storyScene);
+        }
+    }
+
+    initSceneDataFromStory(storyScene) {
+        if (storyScene.name !== "" || storyScene.name !== undefined) {
+            this.name = storyScene.hasOwnProperty("name") ? storyScene.name : "";
+            this.description = storyScene.hasOwnProperty("description") ? storyScene.description : "";
+            this.objects = storyScene.hasOwnProperty("objects") ? storyScene.objects.map(element => element["objectName"]) : [];
+            this.mobs = storyScene.hasOwnProperty("mobs") ? storyScene.mobs.map(element => element["mobName"]) : [];
 
             this.items = [];
-            if (scene.hasOwnProperty("items")) {
-                scene.items.forEach(element => {
+            if (storyScene.hasOwnProperty("items")) {
+                storyScene.items.forEach(element => {
                     let itemObj = {
                         name: element["itemName"],
                         quantity: parseInt(element["quantity"]),
@@ -73,8 +86,8 @@ export class Scene {
             }
 
             this.paths = {};
-            if (scene.hasOwnProperty("paths")) {
-                scene.paths.forEach(element => {
+            if (storyScene.hasOwnProperty("paths")) {
+                storyScene.paths.forEach(element => {
                     this.paths[element["direction"]] = element["sceneName"];
                 });
             }
@@ -84,8 +97,7 @@ export class Scene {
         }
     }
 
-
-    static getScene(sceneKey) {
+    static getStoryScene(sceneKey) {
         let scene;
         if (sceneKey !== undefined) {
             scene = Story.getSceneMap().get(sceneKey);
@@ -101,6 +113,11 @@ export class Scene {
         return scene;
     }
 
+    saveSceneState() { Scene.visitedScenes.set(this.getName(), Object.assign(Object.create(this), this)); }
+    static getVisitedScenes() { return Scene.visitedScenes }
+    static hasSceneBeenVisited(sceneName) { return Scene.visitedScenes.has(sceneName) }
+    static getVisitedScene(sceneName) { return Scene.visitedScenes.get(sceneName) }
+
     getName() { return this.name }
     getDescription() { return this.description }
     getItems() { return this.items }
@@ -108,3 +125,4 @@ export class Scene {
     getObjects() { return this.objects }
     getMobs() { return this.mobs }
 }
+Scene.visitedScenes = new Map();

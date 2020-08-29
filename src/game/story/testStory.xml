@@ -96,7 +96,7 @@
 
             <mobs>
                 <mob>
-                    <mobName></mobName>
+                    <mobName>jimmy_the_smelly</mobName>
                 </mob>
             </mobs>
         </scene>
@@ -164,6 +164,12 @@
             <name>small_goblin</name>
             <type>enemy</type>
             <description></description>
+            <dialog></dialog>
+        </mob>
+        <mob>
+            <name>jimmy_the_smelly</name>
+            <type>npc</type>
+            <description>Yeah, he is very smelly, he's probably been in this cave for a while</description>
             <dialog></dialog>
         </mob>
         <mob>

@@ -38,5 +38,4 @@ Story.objectMap = new Map();
 Story.mobMap = new Map();
 Story.spellMap = new Map();
 
-
 export const story = new Story();

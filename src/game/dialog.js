@@ -7,7 +7,6 @@ export class Dialog {
         this.responses = new Map();
     }
 
-
     init(npc) {
         this.npcName = npc.name;
         this.dialog = npc.dialog;
@@ -32,6 +31,7 @@ export class Dialog {
     }
 
     getStatement(statementId) {
+        if (this.dialog === null || this.dialog === undefined || this.dialog === {}) return null;
         let foundStatement = null;
         this.dialog.forEach(statement => {
             if (parseInt(statement.id) === parseInt(statementId)) foundStatement = statement; return;
