@@ -130,6 +130,7 @@
             <name>brown_mushroom</name>
             <description>Small brown mushroom that might might be used as an ingredient</description>
             <rarity>common</rarity>
+            <type>food</type>
         </item>
         <item>
             <name>weird_note#1</name>
@@ -170,7 +171,48 @@
             <name>jimmy_the_smelly</name>
             <type>npc</type>
             <description>Yeah, he is very smelly, he's probably been in this cave for a while</description>
-            <dialog></dialog>
+            <dialog>
+                <statement>
+                    <id>1</id>
+                    <text>Oh look who it is, high and mighty. What you doin in my cave then? </text>
+                    <responses>
+                        <response>
+                            <text>Hmm, not sure really. Just looking around. What is your name?</text>
+                            <nextStatementId>2</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>2</id>
+                    <text>Harumph... my name is Jimmy if you must know</text>
+                    <responses>
+                        <response>
+                            <text>How did you end up here, in a cave?</text>
+                            <nextStatementId>3</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>3</id>
+                    <text>I used to be a soldier, but I was injured in a battle and taken captive... I escaped and ended up here.</text>
+                    <responses>
+                        <response>
+                            <text>Is there anything I can do to help?</text>
+                            <nextStatementId>4</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+                <statement>
+                    <id>4</id>
+                    <text>I used to be a soldier, but I was injured in a battle and taken captive... I escaped and ended up here.</text>
+                    <responses>
+                        <response>
+                            <text>Is there anything I can do to help?</text>
+                            <nextStatementId>4</nextStatementId>
+                        </response>
+                    </responses>
+                </statement>
+            </dialog>
         </mob>
         <mob>
             <name>james_the_guide</name>
@@ -186,7 +228,6 @@
                             <nextStatementId>2</nextStatementId>
                         </response>
                     </responses>
-
                 </statement>
                 <statement>
                     <id>2</id>
@@ -235,12 +276,7 @@
                 <statement>
                     <id>6</id>
                     <text>Beep Boop I am a robot...</text>
-                    <responses>
-                        <response>
-                            <text>Fine... lets hear that joke again...</text>
-                            <nextStatementId>3</nextStatementId>
-                        </response>
-                    </responses>
+                    <responses></responses>
                 </statement>
             </dialog>
         </mob>
