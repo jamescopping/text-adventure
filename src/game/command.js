@@ -123,7 +123,6 @@ export class Command {
         if (game.getGameMode() === GameMode.DIALOG) { this.bye(); return false; }
         if (game.getCurrentScene().getMobs().includes(mob)) {
             const foundMob = Story.getMobMap().get(mob);
-            console.log(foundMob);
             if (foundMob.hasOwnProperty("type") && foundMob["type"] === "npc" && foundMob.hasOwnProperty("dialog") && foundMob["dialog"].length > 0) {
                 game.loadDialog(foundMob);
                 game.changeGameMode(GameMode.DIALOG);
@@ -141,7 +140,9 @@ export class Command {
             return false;
         } else {
             clearResponseClass(responseIndex);
-            return game.getDialog().logStatement(nextStatementId);
+            //if the called statement has no further responses then the conversation is over  
+            if (!game.getDialog().logStatement(nextStatementId)) this.bye();
+            return true;
         }
     }
 
