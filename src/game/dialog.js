@@ -25,7 +25,7 @@ export class Dialog {
         const statement = this.getStatement(statementId);
         if (statement === null) return false;
         log(`/**${this.npcName}*\\: ${statement.text}`);
-        return logResponses(statement.responses);
+        return this.logResponses(statement.responses);
     }
 
     /**
