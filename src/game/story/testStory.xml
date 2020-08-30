@@ -127,6 +127,12 @@
     <!-- Items -->
     <items>
         <item>
+            <name>rusted_sword</name>
+            <description>Rusty old sword, looks like it has seen some battles!</description>
+            <rarity>uncommon</rarity>
+            <type>weapon</type>
+        </item>
+        <item>
             <name>brown_mushroom</name>
             <description>Small brown mushroom that might might be used as an ingredient</description>
             <rarity>common</rarity>
@@ -158,6 +164,31 @@
             <name>wooden_chest</name>
         </object>
     </objects>
+
+    <!-- Quests-->
+    <quests>
+        <quest>
+            <id>1</id>
+            <name>Find out what the hell is going on</name>
+            <description>There is a note on the floor where you woke up, pickup and investigate the [weird_note#1]</description>
+        </quest>
+        <quest>
+            <id>2</id>
+            <name>Get food</name>
+            <description>pickup 5x any single food item</description>
+        </quest>
+        <quest>
+            <id>3</id>
+            <name>Feed jimmy_the_smelly</name>
+            <description>give jimmy_the_smelly 5x any single food item</description>
+            <rewards>
+                <reward>
+                    <itemName>rusted_sword</itemName>
+                    <quantity>1</quantity>
+                </reward>
+            </rewards>
+        </quest>
+    </quests>
 
     <!-- Mobs-->
     <mobs>
@@ -208,9 +239,14 @@
                     <responses>
                         <response>
                             <text>Is there anything I can do to help?</text>
-                            <nextStatementId>4</nextStatementId>
+                            <nextStatementId>5</nextStatementId>
                         </response>
                     </responses>
+                </statement>
+                <statement>
+                    <id>5</id>
+                    <text>Can you get me some food, I'm so hungry</text>
+                    <responses></responses>
                 </statement>
             </dialog>
         </mob>
@@ -256,12 +292,7 @@
                 <statement>
                     <id>4</id>
                     <text>A Stick...</text>
-                    <responses>
-                        <response>
-                            <text>ha...ha...   anyway.... weirdo</text>
-                            <nextStatementId>1</nextStatementId>
-                        </response>
-                    </responses>
+                    <responses></responses>
                 </statement>
                 <statement>
                     <id>5</id>
