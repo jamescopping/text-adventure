@@ -58,7 +58,6 @@ export class Scene {
 
     loadScene(sceneName) {
         if (Scene.hasSceneBeenVisited(sceneName)) {
-            console.log("has been visited");
             this.loadVisitedScene(sceneName);
         } else {
             const storyScene = Scene.getStoryScene(sceneName);
