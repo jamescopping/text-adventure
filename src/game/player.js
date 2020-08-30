@@ -2,9 +2,11 @@ import { Stats } from "./stats";
 import { ResourceType } from "./resource";
 import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
+import { QuestLog } from "./quest/quest"
 
 export class Player {
   constructor() {
+    this.questLog = new QuestLog();
     this.stats = new Stats([{
       type: ResourceType.HEALTH,
       currentValue: 100,
@@ -34,6 +36,7 @@ export class Player {
     log(outString);
   }
 
+  getQuestLog() { return this.questLog }
   getInventory() { return this.inventory }
   getKnownSpells() { return this.knownSpells }
 

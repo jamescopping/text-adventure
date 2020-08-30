@@ -21,6 +21,8 @@ export class Game {
         this.dialog = new Dialog();
         this.loadPlayer();
         this.currentScene.loadScene();
+        this.player.getQuestLog().addNewQuest("1");
+        console.log(this.player.getQuestLog());
     }
 
     start() {
