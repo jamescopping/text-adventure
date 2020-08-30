@@ -16,34 +16,34 @@
                     <direction>north_path</direction>
                 </path>
             </paths>
-            <items>
-                <item>
+            <sceneItems>
+                <sceneItem>
                     <itemName>weird_note#1</itemName>
                     <description>on the floor next to you</description>
                     <quantity>1</quantity>
-                </item>
-                <item>
+                </sceneItem>
+                <sceneItem>
                     <itemName>rotten_apple</itemName>
                     <description>hanging from tree</description>
                     <quantity>10</quantity>
-                </item>
-                <item>
+                </sceneItem>
+                <sceneItem>
                     <itemName>brown_mushroom</itemName>
                     <description>growing on the floor next to the tree</description>
                     <quantity>2</quantity>
-                </item>
-            </items>
-            <objects>
-                <object>
+                </sceneItem>
+            </sceneItems>
+            <sceneObjects>
+                <sceneObject>
                     <objectName>tree_stump</objectName>
-                </object>
-            </objects>
-            <mobs>
-                <mob>
+                </sceneObject>
+            </sceneObjects>
+            <sceneMobs>
+                <sceneMob>
                     <mobName>james_the_guide</mobName>
                     <status>alive</status>
-                </mob>
-            </mobs>
+                </sceneMob>
+            </sceneMobs>
         </scene>
         <scene>
             <name>forest_grove</name>
@@ -61,26 +61,26 @@
                     <direction>south_exit_grove</direction>
                 </path>
             </paths>
-            <items>
-                <item>
+            <sceneItems>
+                <sceneItem>
                     <itemName>brown_mushroom</itemName>
                     <description>growing on the (tree_stump)</description>
                     <quantity>3</quantity>
-                </item>
-                <item>
+                </sceneItem>
+                <sceneItem>
                     <itemName>rotten_apple</itemName>
                     <description>hanging from tree</description>
                     <quantity>10</quantity>
-                </item>
-            </items>
-            <objects>
-                <object>
+                </sceneItem>
+            </sceneItems>
+            <sceneObjects>
+                <sceneObject>
                     <objectName>tree_stump</objectName>
-                </object>
-                <object>
+                </sceneObject>
+                <sceneObject>
                     <objectName>wooden_chest</objectName>
-                </object>
-            </objects>
+                </sceneObject>
+            </sceneObjects>
         </scene>
 
 
@@ -94,11 +94,11 @@
                 </path>
             </paths>
 
-            <mobs>
-                <mob>
+            <sceneMobs>
+                <sceneMob>
                     <mobName>jimmy_the_smelly</mobName>
-                </mob>
-            </mobs>
+                </sceneMob>
+            </sceneMobs>
         </scene>
     </scenes>
 
