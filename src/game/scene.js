@@ -69,12 +69,12 @@ export class Scene {
         if (storyScene.name !== "" || storyScene.name !== undefined) {
             this.name = storyScene.hasOwnProperty("name") ? storyScene.name : "";
             this.description = storyScene.hasOwnProperty("description") ? storyScene.description : "";
-            this.objects = storyScene.hasOwnProperty("objects") ? storyScene.objects.map(element => element["objectName"]) : [];
-            this.mobs = storyScene.hasOwnProperty("mobs") ? storyScene.mobs.map(element => element["mobName"]) : [];
+            this.objects = storyScene.hasOwnProperty("sceneObjects") ? storyScene.sceneObjects.map(element => element["objectName"]) : [];
+            this.mobs = storyScene.hasOwnProperty("sceneMobs") ? storyScene.sceneMobs.map(element => element["mobName"]) : [];
 
             this.items = [];
-            if (storyScene.hasOwnProperty("items")) {
-                storyScene.items.forEach(element => {
+            if (storyScene.hasOwnProperty("sceneItems")) {
+                storyScene.sceneItems.forEach(element => {
                     let itemObj = {
                         name: element["itemName"],
                         quantity: parseInt(element["quantity"]),

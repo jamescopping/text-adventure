@@ -3,9 +3,6 @@ import { DomUtil } from "./util/domUtil.js";
 
 export class Story {
 
-    constructor() {
-    }
-
     static loadStoryAssetsFromXML(fileName) {
         let xml = FileUtil.stringToXML(require("./story/testStory.xml"));
 
@@ -21,8 +18,7 @@ export class Story {
         initMap(Story.mobMap, xml.getElementsByTagName("mob"));
         initMap(Story.objectMap, xml.getElementsByTagName("object"));
         initMap(Story.spellMap, xml.getElementsByTagName("spell"));
-
-
+        initMap(Story.questMap, xml.getElementsByTagName("quest"));
     }
 
     static getSceneMap() { return Story.sceneMap }
@@ -30,6 +26,7 @@ export class Story {
     static getObjectMap() { return Story.objectMap }
     static getMobMap() { return Story.mobMap }
     static getSpellMap() { return Story.spellMap }
+    static getQuestMap() { return Story.questMap }
 }
 
 Story.sceneMap = new Map();
@@ -37,5 +34,6 @@ Story.itemMap = new Map();
 Story.objectMap = new Map();
 Story.mobMap = new Map();
 Story.spellMap = new Map();
+Story.questMap = new Map();
 
 export const story = new Story();
