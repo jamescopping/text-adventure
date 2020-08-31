@@ -1,5 +1,4 @@
 import { log } from "../controller/adventureLogController";
-
 export class Dialog {
 	constructor() {
 		this.npcName = "";

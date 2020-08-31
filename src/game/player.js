@@ -2,7 +2,7 @@ import { Stats } from "./stats";
 import { ResourceType } from "./resource";
 import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
-import { QuestLog } from "./quest/quest"
+import { QuestLog } from "./quest"
 
 export class Player {
 	constructor() {
@@ -41,4 +41,30 @@ export class Player {
 	getKnownSpells() { return this.knownSpells }
 
 	toString() { return `Health: ${this.stats.getResourceOfType(ResourceType.HEALTH).toString()}`; }
+}
+
+export const PlayerAction = {
+	PICKUP: 'pickup',
+	DROP: 'drop',
+	INVESTIGATE: 'investigate',
+	GIVE: 'give',
+	KILL: 'kill',
+	SELL: 'sell',
+	DISCOVER: 'discover',
+	USE: 'use',
+	TALKTO: 'talkto'
+}
+
+export class PlayerEvent {
+	constructor(action = null, subject = null, object = null, amount = null, ...args) {
+		this.action = action;
+		this.subject = subject;
+		this.object = object;
+		this.amount = amount;
+	}
+
+	static broadcastPlayerEvent(playerEvent) {
+		console.log(playerEvent);
+		QuestLog.receivePlayerEvent(playerEvent);
+	}
 }

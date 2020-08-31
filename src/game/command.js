@@ -3,6 +3,8 @@ import { Dice } from "./dice";
 import { game, GameMode } from "./game";
 import { Story } from "./story";
 import { triggerAlert } from "../controller/alertController";
+import { PlayerEvent, PlayerAction } from "./player";
+import { Scene } from "./scene";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
@@ -29,9 +31,10 @@ export class Command {
 	}
 
 	static look() {
-		log(`You look around the ${game.getCurrentScene().getName()} and you find...`);
-		const sceneItems = game.getCurrentScene().getItems();
-		const sceneNPCs = game.getCurrentScene().getMobs();
+		const currentScene = game.getCurrentScene();
+		log(`You look around the ${currentScene.getName()} and you find...`);
+		const sceneItems = currentScene.getItems();
+		const sceneNPCs = currentScene.getMobs();
 		let logCount = 0;
 		sceneNPCs.forEach(npc => {
 			let outString = "";
@@ -51,11 +54,20 @@ export class Command {
 	}
 
 	static path(direction) {
+		const currentScene = game.getCurrentScene();
 		if (direction !== "") {
-			if (game.changeScene(direction)) {
+			if (!currentScene.getPaths().hasOwnProperty(direction)) return false;
+			const sceneName = currentScene.getPaths()[direction];
+			const sceneVisited = Scene.hasSceneBeenVisited(sceneName);
+			if (game.changeScene(sceneName)) {
 				clearPathClass(direction);
 				log(`You chose path ${direction}`);
-				game.getCurrentScene().init();
+				currentScene.init();
+				/*	if discoverScene is false before and then true once the scene
+					has been changed then that means the scene has been visited 
+					for the first time, so a PLAYER EVENT: DISCOVER can be broadcast
+				 */
+				if (!sceneVisited) PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DISCOVER, currentScene.getName()));
 			} else {
 				triggerAlert("alert-warning", `<strong>Path ${direction}</strong> not found`);
 			}
@@ -68,6 +80,7 @@ export class Command {
 			let sceneItem = game.getCurrentScene().pickupItem(itemName);
 			if (sceneItem !== null) {
 				game.getPlayer().pickupItem(sceneItem);
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, game.getCurrentScene().getName(), sceneItem["name"], sceneItem["quantity"]));
 				return true;
 			} else {
 				triggerAlert("alert-warning", `Item [${itemName}] does not exist in this scene`);
@@ -82,9 +95,10 @@ export class Command {
 		if (itemObj !== null) {
 			game.getCurrentScene().getItems().push({ name: itemObj["name"], quantity: itemObj["quantity"], description: "dropped by player" });
 			log(`Item [*${itemObj["name"]}*] x ${itemObj["quantity"]} dropped from inventory`);
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DROP, game.getCurrentScene().getName(), itemObj["name"], itemObj["quantity"]));
 			return true;
 		} else {
-			triggerAlert("alert-warning", `Item [${itemObj["name"]}] can't be dropped from your inventory`);
+			triggerAlert("alert-warning", `Item [${itemName}] can't be dropped from your inventory`);
 			return false;
 		}
 
@@ -94,6 +108,7 @@ export class Command {
 		if (game.getPlayer().getInventory().hasItem(itemName)) {
 			let item = Story.getItemMap().get(itemName);
 			log(`You investigate [${item["name"]}]: ${item["description"]}`);
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVESTIGATE, null, item["name"], null));
 			return true;
 		} else {
 			triggerAlert("alert-warning", `Item [${itemName}] is not in your inventory`);
@@ -127,6 +142,7 @@ export class Command {
 				game.loadDialog(foundMob);
 				game.changeGameMode(GameMode.DIALOG);
 				game.getDialog().start();
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.TALKTO, foundMob["name"]))
 			} else {
 				log("You probably shouldn't talk to them, or they just have nothing to say.");
 			}

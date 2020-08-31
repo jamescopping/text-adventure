@@ -22,7 +22,6 @@ export class Game {
 		this.loadPlayer();
 		this.currentScene.loadScene();
 		this.player.getQuestLog().addNewQuest("1");
-		console.log(this.player.getQuestLog());
 	}
 
 	start() {
@@ -31,9 +30,7 @@ export class Game {
 		this.currentScene.init();
 	}
 
-	changeScene(direction) {
-		if (!this.currentScene.getPaths().hasOwnProperty(direction)) return false;
-		let sceneName = this.currentScene.getPaths()[direction];
+	changeScene(sceneName) {
 		this.currentScene.saveSceneState();
 		this.currentScene.loadScene(sceneName);
 		return true;
