@@ -7,6 +7,9 @@ export const QuestAction = {
     KILL: 'kill',
     SELL: 'sell',
     DISCOVER: 'discover',
+    USE: 'use',
+    TALKTO: 'talkto'
+
 }
 
 
@@ -21,7 +24,6 @@ export class QuestLog {
 
     addNewQuest(questId) {
         const storyQuest = QuestLog.getStoryQuest(questId);
-        console.log(storyQuest);
         if (storyQuest === null || storyQuest === undefined) return false;
         if (this.hasActiveQuest(questId) || this.hasCompletedQuest(questId)) return false;
         this.activeQuests.set(questId, storyQuest);

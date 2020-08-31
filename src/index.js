@@ -13,28 +13,28 @@ import { initSuggestionBox } from "./controller/suggestionBoxController";
 import { game } from "./game/game";
 
 const buildPage = () => {
-  const main = document.createElement("main");
-  main.setAttribute("role", "main");
-  main.className = "bg-dark p-3";
-  const container = document.createElement("div");
-  container.className = "full-height";
+	const main = document.createElement("main");
+	main.setAttribute("role", "main");
+	main.className = "bg-dark p-3";
+	const container = document.createElement("div");
+	container.className = "full-height";
 
-  container.appendChild(loadAdventureLog());
-  container.appendChild(loadCommandInput());
-  container.appendChild(loadSuggestionBox());
-  container.appendChild(loadAlert());
-  main.appendChild(container);
+	container.appendChild(loadAdventureLog());
+	container.appendChild(loadCommandInput());
+	container.appendChild(loadSuggestionBox());
+	container.appendChild(loadAlert());
+	main.appendChild(container);
 
-  return main;
+	return main;
 }
 
 (() => {
-  document.body.appendChild(buildPage());
+	document.body.appendChild(buildPage());
 
-  initSuggestionBox();
-  initCommandInput();
-  initAdventureLog();
-  initAlert();
+	initSuggestionBox();
+	initCommandInput();
+	initAdventureLog();
+	initAlert();
 
-  game.start();
+	game.start();
 })();

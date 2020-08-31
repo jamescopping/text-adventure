@@ -7,7 +7,14 @@ export class EventPhrase {
         this.amount = amount;
     }
 
+
+
+
 }
+
+
+
+
 
 /*
     format of the quest event
