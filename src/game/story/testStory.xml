@@ -1,315 +1,378 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <story>
-    <!-- Scenes -->
-    <scenes>
-        <scene>
-            <name>forest_opening</name>
-            <startScene>true</startScene>
-            <description>You wake up, heavy eyes lift to reveal amber leaved branches swaying in the wind.
-                         Your hands dig into the dirt as you pull yourself up off the cold ground.
-                         Dusting yourself off, you wrap your jacket around you as a bitter gale passes you.
-                         Looking around you and see trees in all directions lit dimly from the setting sun.
-            </description>
-            <paths>
-                <path>
-                    <sceneName>forest_grove</sceneName>
-                    <direction>north_path</direction>
-                </path>
-            </paths>
-            <sceneItems>
-                <sceneItem>
-                    <itemName>weird_note#1</itemName>
-                    <description>on the floor next to you</description>
-                    <quantity>1</quantity>
-                </sceneItem>
-                <sceneItem>
-                    <itemName>rotten_apple</itemName>
-                    <description>hanging from tree</description>
-                    <quantity>10</quantity>
-                </sceneItem>
-                <sceneItem>
-                    <itemName>brown_mushroom</itemName>
-                    <description>growing on the floor next to the tree</description>
-                    <quantity>2</quantity>
-                </sceneItem>
-            </sceneItems>
-            <sceneObjects>
-                <sceneObject>
-                    <objectName>tree_stump</objectName>
-                </sceneObject>
-            </sceneObjects>
-            <sceneMobs>
-                <sceneMob>
-                    <mobName>james_the_guide</mobName>
-                    <status>alive</status>
-                </sceneMob>
-            </sceneMobs>
-        </scene>
-        <scene>
-            <name>forest_grove</name>
-            <description>
-                    You come across a grove in the forest, the trees break away for long grass.
-                    You think you can see a cave entrance of to the east. 
-            </description>
-            <paths>
-                <path>
-                    <sceneName>forest_cave_entrance</sceneName>
-                    <direction>east_towards_cave</direction>
-                </path>
-                <path>
-                    <sceneName>forest_opening</sceneName>
-                    <direction>south_exit_grove</direction>
-                </path>
-            </paths>
-            <sceneItems>
-                <sceneItem>
-                    <itemName>brown_mushroom</itemName>
-                    <description>growing on the (tree_stump)</description>
-                    <quantity>3</quantity>
-                </sceneItem>
-                <sceneItem>
-                    <itemName>rotten_apple</itemName>
-                    <description>hanging from tree</description>
-                    <quantity>10</quantity>
-                </sceneItem>
-            </sceneItems>
-            <sceneObjects>
-                <sceneObject>
-                    <objectName>tree_stump</objectName>
-                </sceneObject>
-                <sceneObject>
-                    <objectName>wooden_chest</objectName>
-                </sceneObject>
-            </sceneObjects>
-        </scene>
+	<!-- Scenes -->
+	<scenes>
+		<scene>
+			<name>forest_opening</name>
+			<startScene>true</startScene>
+			<description>You wake up, heavy eyes lift to reveal amber leaved branches swaying in the wind.
+						 Your hands dig into the dirt as you pull yourself up off the cold ground.
+						 Dusting yourself off, you wrap your jacket around you as a bitter gale passes you.
+						 Looking around you and see trees in all directions lit dimly from the setting sun.
+			</description>
+			<paths>
+				<path>
+					<sceneName>forest_grove</sceneName>
+					<direction>north_path</direction>
+				</path>
+			</paths>
+			<sceneItems>
+				<sceneItem>
+					<itemName>weird_note#1</itemName>
+					<description>on the floor next to you</description>
+					<quantity>1</quantity>
+				</sceneItem>
+				<sceneItem>
+					<itemName>rotten_apple</itemName>
+					<description>hanging from tree</description>
+					<quantity>10</quantity>
+				</sceneItem>
+				<sceneItem>
+					<itemName>brown_mushroom</itemName>
+					<description>growing on the floor next to the tree</description>
+					<quantity>2</quantity>
+				</sceneItem>
+			</sceneItems>
+			<sceneObjects>
+				<sceneObject>
+					<objectName>tree_stump</objectName>
+				</sceneObject>
+			</sceneObjects>
+			<sceneMobs>
+				<sceneMob>
+					<mobName>james_the_guide</mobName>
+					<status>alive</status>
+				</sceneMob>
+			</sceneMobs>
+		</scene>
+		<scene>
+			<name>forest_grove</name>
+			<description>
+					You come across a grove in the forest, the trees break away for long grass.
+					You think you can see a cave entrance of to the east. 
+			</description>
+			<paths>
+				<path>
+					<sceneName>forest_cave_entrance</sceneName>
+					<direction>east_towards_cave</direction>
+				</path>
+				<path>
+					<sceneName>forest_opening</sceneName>
+					<direction>south_exit_grove</direction>
+				</path>
+			</paths>
+			<sceneItems>
+				<sceneItem>
+					<itemName>brown_mushroom</itemName>
+					<description>growing on the (tree_stump)</description>
+					<quantity>3</quantity>
+				</sceneItem>
+				<sceneItem>
+					<itemName>rotten_apple</itemName>
+					<description>hanging from tree</description>
+					<quantity>10</quantity>
+				</sceneItem>
+			</sceneItems>
+			<sceneObjects>
+				<sceneObject>
+					<objectName>tree_stump</objectName>
+				</sceneObject>
+				<sceneObject>
+					<objectName>wooden_chest</objectName>
+				</sceneObject>
+			</sceneObjects>
+		</scene>
 
 
-        <scene>
-            <name>forest_cave_entrance</name>
-            <description>Dark cave...</description>
-            <paths>
-                <path>
-                    <sceneName>forest_grove</sceneName>
-                    <direction>west_back_out_cave</direction>
-                </path>
-            </paths>
+		<scene>
+			<name>forest_cave_entrance</name>
+			<description>Dark cave...</description>
+			<paths>
+				<path>
+					<sceneName>forest_grove</sceneName>
+					<direction>west_back_out_cave</direction>
+				</path>
+			</paths>
 
-            <sceneMobs>
-                <sceneMob>
-                    <mobName>jimmy_the_smelly</mobName>
-                </sceneMob>
-            </sceneMobs>
-        </scene>
-    </scenes>
+			<sceneMobs>
+				<sceneMob>
+					<mobName>jimmy_the_smelly</mobName>
+				</sceneMob>
+			</sceneMobs>
+		</scene>
+	</scenes>
 
-    <!-- Spells -->
-    <spells>
-        <spell>
-            <name>fire_bolt</name>
-            <spellType>damage</spellType>
-            <damageType>fire</damageType>
-            <baseManaCost>25</baseManaCost>
-            <diceType>D6</diceType>
-            <numberOfDice>2</numberOfDice>
-            <bonus>4</bonus>
-        </spell>
-        <spell>
-            <name>magic_missile</name>
-            <spellType>damage</spellType>
-            <damageType>force</damageType>
-            <baseManaCost>5</baseManaCost>
-            <diceType>D4</diceType>
-            <numberOfDice>1</numberOfDice>
-            <bonus>2</bonus>
-        </spell>
-    </spells>
+	<!-- Spells -->
+	<spells>
+		<spell>
+			<name>fire_bolt</name>
+			<spellType>damage</spellType>
+			<damageType>fire</damageType>
+			<baseManaCost>25</baseManaCost>
+			<diceType>D6</diceType>
+			<numberOfDice>2</numberOfDice>
+			<bonus>4</bonus>
+		</spell>
+		<spell>
+			<name>magic_missile</name>
+			<spellType>damage</spellType>
+			<damageType>force</damageType>
+			<baseManaCost>5</baseManaCost>
+			<diceType>D4</diceType>
+			<numberOfDice>1</numberOfDice>
+			<bonus>2</bonus>
+		</spell>
+	</spells>
 
-    <!-- Items -->
-    <items>
-        <item>
-            <name>rusted_sword</name>
-            <description>Rusty old sword, looks like it has seen some battles!</description>
-            <rarity>uncommon</rarity>
-            <type>weapon</type>
-        </item>
-        <item>
-            <name>brown_mushroom</name>
-            <description>Small brown mushroom that might might be used as an ingredient</description>
-            <rarity>common</rarity>
-            <type>food</type>
-        </item>
-        <item>
-            <name>weird_note#1</name>
-            <description>Note reads: "good luck... j xxx"</description>
-            <rarity>quest</rarity>
-        </item>
-        <item>
-            <name>blue_crystal</name>
-            <description>The crystal glows dimly as you pass it over in your hands</description>
-            <rarity>quest</rarity>
-        </item>
-        <item>
-            <name>rotten_apple</name>
-            <description>ewww smelly</description>
-            <rarity>common</rarity>
-        </item>
-    </items>
+	<!-- Items -->
+	<items>
+		<item>
+			<name>rusted_sword</name>
+			<description>Rusty old sword, looks like it has seen some battles!</description>
+			<rarity>uncommon</rarity>
+			<type>weapon</type>
+		</item>
+		<item>
+			<name>brown_mushroom</name>
+			<description>Small brown mushroom that might might be used as an ingredient</description>
+			<rarity>common</rarity>
+			<type>food</type>
+		</item>
+		<item>
+			<name>weird_note#1</name>
+			<description>Note reads: "good luck... j xxx"</description>
+			<rarity>quest</rarity>
+		</item>
+		<item>
+			<name>blue_crystal</name>
+			<description>The crystal glows dimly as you pass it over in your hands</description>
+			<rarity>quest</rarity>
+		</item>
+		<item>
+			<name>rotten_apple</name>
+			<description>ewww smelly</description>
+			<rarity>common</rarity>
+		</item>
+	</items>
 
-    <!-- Objects-->
-    <objects>
-        <object>
-            <name>tree_stump</name>
-        </object>
-        <object>
-            <name>wooden_chest</name>
-        </object>
-    </objects>
+	<!-- Objects-->
+	<objects>
+		<object>
+			<name>tree_stump</name>
+		</object>
+		<object>
+			<name>wooden_chest</name>
+		</object>
+	</objects>
 
-    <!-- Quests-->
-    <quests>
-        <quest>
-            <id>1</id>
-            <name>Find out what the hell is going on</name>
-            <description>There is a note on the floor where you woke up, pickup and investigate the [weird_note#1]</description>
-        </quest>
-        <quest>
-            <id>2</id>
-            <name>Get food</name>
-            <description>pickup 5x any single food item</description>
-        </quest>
-        <quest>
-            <id>3</id>
-            <name>Feed jimmy_the_smelly</name>
-            <description>give jimmy_the_smelly 5x any single food item</description>
-            <rewards>
-                <reward>
-                    <itemName>rusted_sword</itemName>
-                    <quantity>1</quantity>
-                </reward>
-            </rewards>
-        </quest>
-    </quests>
+	<!-- Quests-->
+	<quests>
+		<quest>
+			<id>1</id>
+			<name>Find out what the hell is going on</name>
+			<description>There is a note on the floor where you woke up, pickup and investigate the [weird_note#1]</description>
+			<triggers>
+				<assign>
+					<action>start</action>
+					<nouns></nouns>
+				</assign>
+				<update>
+					<action>investigate</action>
+					<nouns>
+						<noun>weird_note#1</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId>789</nextQuestId>
+				</complete>
+			</triggers>
+		</quest>
+		<quest>
+			<id>789</id>
+			<name>Who Is "J"</name>
+			<description>The [weird_note#1] was signed off by a "J", explore the area to find more clues</description>
+			<triggers>
+				<assign>
+					<action></action>
+					<nouns>
+					</nouns>
+				</assign>
+				<update>
+					<action>discover</action>
+					<nouns>
+						<noun>forest_cave_entrance</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
+		</quest>
+		<quest>
+			<id>2</id>
+			<name>Get food</name>
+			<description>pickup 5x any single food item</description>
+			<triggers>
+				<assign>
+					<action>receiveQuest</action>
+					<nouns>
+					</nouns>
+				</assign>
+				<update>
+					<action>inventory_update</action>
+					<nouns>
+						<noun>item:type:food</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>5</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
+		</quest>
+		<quest>
+			<id>3</id>
+			<name>Feed jimmy_the_smelly</name>
+			<description>give jimmy_the_smelly 5x any single food item</description>
+			<triggers>
+				<assign>
+					<action></action>
+					<nouns>
+					</nouns>
+				</assign>
+				<update>
+					<action>handin</action>
+					<nouns>
+						<noun>jimmy_the_smelly</noun>
+						<noun>item:type:food:5</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
+			<rewards>
+				<reward>
+					<itemName>rusted_sword</itemName>
+					<quantity>1</quantity>
+				</reward>
+			</rewards>
+		</quest>
+	</quests>
 
-    <!-- Mobs-->
-    <mobs>
-        <mob>
-            <name>small_goblin</name>
-            <type>enemy</type>
-            <description></description>
-            <dialog></dialog>
-        </mob>
-        <mob>
-            <name>jimmy_the_smelly</name>
-            <type>npc</type>
-            <description>Yeah, he is very smelly, he's probably been in this cave for a while</description>
-            <dialog>
-                <statement>
-                    <id>1</id>
-                    <text>Oh look who it is, high and mighty. What you doin in my cave then? </text>
-                    <responses>
-                        <response>
-                            <text>Hmm, not sure really. Just looking around. What is your name?</text>
-                            <nextStatementId>2</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>2</id>
-                    <text>Harumph... my name is Jimmy if you must know</text>
-                    <responses>
-                        <response>
-                            <text>How did you end up here, in a cave?</text>
-                            <nextStatementId>3</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>3</id>
-                    <text>I used to be a soldier, but I was injured in a battle and taken captive... I escaped and ended up here.</text>
-                    <responses>
-                        <response>
-                            <text>Is there anything I can do to help?</text>
-                            <nextStatementId>4</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>4</id>
-                    <text>I used to be a soldier, but I was injured in a battle and taken captive... I escaped and ended up here.</text>
-                    <responses>
-                        <response>
-                            <text>Is there anything I can do to help?</text>
-                            <nextStatementId>5</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>5</id>
-                    <text>Can you get me some food, I'm so hungry</text>
-                    <responses></responses>
-                </statement>
-            </dialog>
-        </mob>
-        <mob>
-            <name>james_the_guide</name>
-            <type>npc</type>
-            <description>Old strange man, but he's kinda hot though so he's got that going for him, kinda silverfox type thing going on</description>
-            <dialog>
-                <statement>
-                    <id>1</id>
-                    <text>Hello, my name is james.</text>
-                    <responses>
-                        <response>
-                            <text>Okay, what am I doing here?</text>
-                            <nextStatementId>2</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>2</id>
-                    <text>Haha... that is a good question, I'm not sure though I just sort of appeared... same as you.</text>
-                    <responses>
-                        <response>
-                            <text>Can you tell me a joke?</text>
-                            <nextStatementId>3</nextStatementId>
-                        </response>
-                        <response>
-                            <text>Well well well if it isn't the Spanish inquisition....</text>
-                            <nextStatementId>5</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>3</id>
-                    <text>What's brown and sticky?</text>
-                    <responses>
-                        <response>
-                            <text>I dunno what's 'brown and sticky'?</text>
-                            <nextStatementId>4</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>4</id>
-                    <text>A Stick...</text>
-                    <responses></responses>
-                </statement>
-                <statement>
-                    <id>5</id>
-                    <text>Our chief weapon is surprise... surprise and fear... fear and surprise... our two weapons are fear and surprise... and ruthless efficiency... Our three weapons are fear, surprise, and ruthless efficiency... and an almost fanatical devotion to the Pope...</text>
-                    <responses>
-                        <response>
-                            <text>And now for something completely different</text>
-                            <nextStatementId>6</nextStatementId>
-                        </response>
-                    </responses>
-                </statement>
-                <statement>
-                    <id>6</id>
-                    <text>Beep Boop I am a robot...</text>
-                    <responses></responses>
-                </statement>
-            </dialog>
-        </mob>
-    </mobs>
+	<!-- Mobs-->
+	<mobs>
+		<mob>
+			<name>small_goblin</name>
+			<type>enemy</type>
+			<description></description>
+			<dialog></dialog>
+		</mob>
+		<mob>
+			<name>jimmy_the_smelly</name>
+			<type>npc</type>
+			<description>Yeah, he is very smelly, he's probably been in this cave for a while</description>
+			<dialog>
+				<statement>
+					<id>1</id>
+					<text>Oh look who it is, high and mighty. What you doin in my cave then? </text>
+					<responses>
+						<response>
+							<text>Hmm, not sure really. Just looking around. What is your name?</text>
+							<nextStatementId>2</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>2</id>
+					<text>Harumph... my name is Jimmy if you must know</text>
+					<responses>
+						<response>
+							<text>How did you end up here, in a cave?</text>
+							<nextStatementId>3</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>3</id>
+					<text>I used to be a soldier, but I was injured in a battle and taken captive... I escaped and ended up here.</text>
+					<responses>
+						<response>
+							<text>Is there anything I can do to help?</text>
+							<nextStatementId>5</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>5</id>
+					<text>Can you get me some food, I'm so hungry</text>
+					<responses></responses>
+				</statement>
+			</dialog>
+		</mob>
+		<mob>
+			<name>james_the_guide</name>
+			<type>npc</type>
+			<description>Old strange man, but he's kinda hot though so he's got that going for him, kinda silverfox type thing going on</description>
+			<dialog>
+				<statement>
+					<id>1</id>
+					<text>Hello, my name is james.</text>
+					<responses>
+						<response>
+							<text>Okay, what am I doing here?</text>
+							<nextStatementId>2</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>2</id>
+					<text>Haha... that is a good question, I'm not sure though I just sort of appeared... same as you.</text>
+					<responses>
+						<response>
+							<text>Can you tell me a joke?</text>
+							<nextStatementId>3</nextStatementId>
+						</response>
+						<response>
+							<text>Well well well if it isn't the Spanish inquisition....</text>
+							<nextStatementId>5</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>3</id>
+					<text>What's brown and sticky?</text>
+					<responses>
+						<response>
+							<text>I dunno what's 'brown and sticky'?</text>
+							<nextStatementId>4</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>4</id>
+					<text>A Stick...</text>
+					<responses></responses>
+				</statement>
+				<statement>
+					<id>5</id>
+					<text>Our chief weapon is surprise... surprise and fear... fear and surprise... our two weapons are fear and surprise... and ruthless efficiency... Our three weapons are fear, surprise, and ruthless efficiency... and an almost fanatical devotion to the Pope...</text>
+					<responses>
+						<response>
+							<text>And now for something completely different</text>
+							<nextStatementId>6</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>6</id>
+					<text>Beep Boop I am a robot...</text>
+					<responses></responses>
+				</statement>
+			</dialog>
+		</mob>
+	</mobs>
 </story>
