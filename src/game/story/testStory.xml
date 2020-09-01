@@ -171,16 +171,89 @@
 			<id>1</id>
 			<name>Find out what the hell is going on</name>
 			<description>There is a note on the floor where you woke up, pickup and investigate the [weird_note#1]</description>
+			<triggers>
+				<assign>
+					<action>start</action>
+					<nouns></nouns>
+				</assign>
+				<update>
+					<action>investigate</action>
+					<nouns>
+						<noun>weird_note#1</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId>789</nextQuestId>
+				</complete>
+			</triggers>
+		</quest>
+		<quest>
+			<id>789</id>
+			<name>Who Is "J"</name>
+			<description>The [weird_note#1] was signed off by a "J", explore the area to find more clues</description>
+			<triggers>
+				<assign>
+					<action></action>
+					<nouns>
+					</nouns>
+				</assign>
+				<update>
+					<action>discover</action>
+					<nouns>
+						<noun>forest_cave_entrance</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
 		</quest>
 		<quest>
 			<id>2</id>
 			<name>Get food</name>
 			<description>pickup 5x any single food item</description>
+			<triggers>
+				<assign>
+					<action>receiveQuest</action>
+					<nouns>
+					</nouns>
+				</assign>
+				<update>
+					<action>inventory_update</action>
+					<nouns>
+						<noun>item:type:food</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>5</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
 		</quest>
 		<quest>
 			<id>3</id>
 			<name>Feed jimmy_the_smelly</name>
 			<description>give jimmy_the_smelly 5x any single food item</description>
+			<triggers>
+				<assign>
+					<action></action>
+					<nouns>
+					</nouns>
+				</assign>
+				<update>
+					<action>handin</action>
+					<nouns>
+						<noun>jimmy_the_smelly</noun>
+						<noun>item:type:food:5</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
 			<rewards>
 				<reward>
 					<itemName>rusted_sword</itemName>

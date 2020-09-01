@@ -1,5 +1,6 @@
-import { commandInput, commandSubmit } from "./commandInputController";
+
 import { game } from "../game/game";
+import { commandInput, commandSubmit } from "./commandInputController";
 
 let adventureLog;
 

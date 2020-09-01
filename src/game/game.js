@@ -1,5 +1,5 @@
 import { log } from "../controller/adventureLogController"
-import { Player } from "./player";
+import { Player, PlayerEvent, PlayerAction } from "./player";
 import { JSONUtil } from "./util/jsonUtil";
 import { Story } from "./story";
 import { Scene } from "./scene";
@@ -21,13 +21,13 @@ export class Game {
 		this.dialog = new Dialog();
 		this.loadPlayer();
 		this.currentScene.loadScene();
-		this.player.getQuestLog().addNewQuest("1");
 	}
 
 	start() {
 		log("Game started");
 		log("Hello This is a text adventure game, currently work in progress! type '/help' to see a list of commands. You can click text that is highlighted and a corresponding command will be executed. Use the TAB key to select available commands and then press ENTER key or CLICK to autocomplete the phrase. You can also use UP/DOWN arrow keys to run previously entered commands.");
 		this.currentScene.init();
+		PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.START));
 	}
 
 	changeScene(sceneName) {

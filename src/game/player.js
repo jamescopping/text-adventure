@@ -3,6 +3,7 @@ import { ResourceType } from "./resource";
 import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
 import { QuestLog } from "./quest"
+import { game } from "./game";
 
 export class Player {
 	constructor() {
@@ -23,7 +24,7 @@ export class Player {
 		},
 		]);
 		this.knownSpells = ["fire_bolt"];
-		this.inventory = new Inventory([{ name: "blue_crystal", quantity: 1 }], 100);
+		this.inventory = new Inventory([{ name: "blue_crystal", quantity: 1 }], 100, true);
 	}
 
 	pickupItem(itemObj) {
@@ -44,7 +45,9 @@ export class Player {
 }
 
 export const PlayerAction = {
+	START: 'start',
 	PICKUP: 'pickup',
+	INVENTORY_UPDATE: 'inventory_update',
 	DROP: 'drop',
 	INVESTIGATE: 'investigate',
 	GIVE: 'give',
@@ -52,19 +55,43 @@ export const PlayerAction = {
 	SELL: 'sell',
 	DISCOVER: 'discover',
 	USE: 'use',
-	TALKTO: 'talkto'
+	TALKTO: 'talkto',
+	RECEIVE_QUEST: 'receiveQuest'
 }
 
 export class PlayerEvent {
-	constructor(action = null, subject = null, object = null, amount = null, ...args) {
+	constructor(action, ...args) {
 		this.action = action;
-		this.subject = subject;
-		this.object = object;
-		this.amount = amount;
+		this.args = args;
+		try {
+			if (!Object.values(PlayerAction).includes(this.action)) throw new PlayerEventError(this, "Action not found in PlayerAction list")
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
+	getAction() { return this.action }
+	getArgs() { return this.args }
+
 	static broadcastPlayerEvent(playerEvent) {
-		console.log(playerEvent);
-		QuestLog.receivePlayerEvent(playerEvent);
+		try {
+			if (playerEvent === null) throw new PlayerEventError(playerEvent, "PlayerEvent is null");
+			game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+}
+
+class PlayerEventError extends Error {
+	constructor(playerEvent, ...params) {
+		// Pass remaining arguments (including vendor specific ones) to parent constructor
+		super(...params);
+		// Maintains proper stack trace for where our error was thrown (only available on V8)
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, PlayerEventError);
+		}
+		this.name = 'PlayerEventError';
+		this.playerEvent = playerEvent;
 	}
 }

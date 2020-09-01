@@ -112,6 +112,8 @@ const handleTextCommandInput = value => {
 					suggestion.populateList(operand.getList(), command.operand);
 				} else if (command.action === "/roll") {
 					suggestion.getList().push("!Usage: [number]d[dice type]");
+				} else if (command.action === "questlog") {
+					suggestion.getList().push(["active", "completed"]);
 				} else {
 					switch (command.action) {
 						case "cast":
@@ -144,7 +146,6 @@ const handleTextCommandInput = value => {
 						case "response":
 							operand.setType(OperandList.RESPONSE);
 							break;
-
 					}
 					suggestion.populateList(operand.getList(), command.operand);
 				}
@@ -220,6 +221,10 @@ const validateCommand = command => {
 			break;
 		case "response":
 			if (Command.response(command.operand)) save = true;
+			break;
+		case "questlog":
+			Command.questlog(command.operand);
+			save = true;
 			break;
 		default:
 			log(`${command.action} ${command.operand} !this command is yet to be implemented!`);

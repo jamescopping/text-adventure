@@ -1,12 +1,12 @@
-import { log, clearResponseClass, clearPathClass } from "../controller/adventureLogController";
 import { Dice } from "./dice";
 import { game, GameMode } from "./game";
 import { Story } from "./story";
 import { triggerAlert } from "../controller/alertController";
 import { PlayerEvent, PlayerAction } from "./player";
 import { Scene } from "./scene";
+import { log, clearResponseClass, clearPathClass } from "../controller/adventureLogController";
 
-const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use'].sort();
+const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
 const combatCommandList = ['flee', 'attack', 'cast', 'use'].sort();
 export const CommandMap = new Map();
@@ -80,7 +80,7 @@ export class Command {
 			let sceneItem = game.getCurrentScene().pickupItem(itemName);
 			if (sceneItem !== null) {
 				game.getPlayer().pickupItem(sceneItem);
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, game.getCurrentScene().getName(), sceneItem["name"], sceneItem["quantity"]));
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, sceneItem["name"], sceneItem["quantity"]));
 				return true;
 			} else {
 				triggerAlert("alert-warning", `Item [${itemName}] does not exist in this scene`);
@@ -95,7 +95,7 @@ export class Command {
 		if (itemObj !== null) {
 			game.getCurrentScene().getItems().push({ name: itemObj["name"], quantity: itemObj["quantity"], description: "dropped by player" });
 			log(`Item [*${itemObj["name"]}*] x ${itemObj["quantity"]} dropped from inventory`);
-			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DROP, game.getCurrentScene().getName(), itemObj["name"], itemObj["quantity"]));
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DROP, itemObj["name"], itemObj["quantity"]));
 			return true;
 		} else {
 			triggerAlert("alert-warning", `Item [${itemName}] can't be dropped from your inventory`);
@@ -108,7 +108,7 @@ export class Command {
 		if (game.getPlayer().getInventory().hasItem(itemName)) {
 			let item = Story.getItemMap().get(itemName);
 			log(`You investigate [${item["name"]}]: ${item["description"]}`);
-			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVESTIGATE, null, item["name"], null));
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVESTIGATE, item["name"]));
 			return true;
 		} else {
 			triggerAlert("alert-warning", `Item [${itemName}] is not in your inventory`);
@@ -131,6 +131,18 @@ export class Command {
 		} else {
 			triggerAlert("alert-warning", `Inventory is empty`);
 			return false;
+		}
+	}
+
+	static questlog(type) {
+		const questlog = game.getPlayer().getQuestLog();
+		switch (type) {
+			case "completed":
+				questlog.logCompletedQuests();
+				break;
+			default:
+				questlog.logActiveQuests();
+				break;
 		}
 	}
 

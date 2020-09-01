@@ -1,8 +1,10 @@
 import { Story } from "./story";
+import { PlayerEvent, PlayerAction } from "./player";
 export class Inventory {
-	constructor(itemList, maxWeight) {
+	constructor(itemList, maxWeight, player = false) {
 		this.list = [...itemList];
 		this.maxWeight = maxWeight;
+		this.player = player;
 	}
 
 	getList() { return this.list }
@@ -11,14 +13,17 @@ export class Inventory {
 	addItem(newItemObj) {
 		if (Story.getItemMap().has(newItemObj["name"])) {
 			let itemAlreadyIn = false;
+			let newTotal = newItemObj["quantity"];
 			for (let index = 0; index < this.list.length; index++) {
 				if (this.list[index]["name"] === newItemObj["name"]) {
 					this.list[index]["quantity"] += newItemObj["quantity"];
+					newTotal = this.list[index]["quantity"];
 					itemAlreadyIn = true;
 					break;
 				}
 			}
 			if (!itemAlreadyIn) this.list.push(newItemObj);
+			if (this.player) PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, newItemObj["name"], newTotal));
 		}
 	}
 
@@ -44,7 +49,9 @@ export class Inventory {
 		let itemIndex = this.getIndex(itemName);
 		if (itemIndex === -1) return null;
 		if (this.getItemRarity(itemName) === "quest") return null;
-		return this.list.splice(itemIndex, 1)[0];
+		const item = this.list.splice(itemIndex, 1)[0];
+		if (this.player) PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, item["name"], 0));
+		return item;
 	}
 
 	hasItem(itemName) {
