@@ -74,6 +74,7 @@ export class PlayerEvent {
 	getArgs() { return this.args }
 
 	static broadcastPlayerEvent(playerEvent) {
+		console.log(playerEvent);
 		try {
 			if (playerEvent === null) throw new PlayerEventError(playerEvent, "PlayerEvent is null");
 			game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);

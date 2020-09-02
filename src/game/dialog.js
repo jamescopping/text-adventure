@@ -1,4 +1,5 @@
 import { log } from "../controller/adventureLogController";
+import { game } from "./game";
 export class Dialog {
 	constructor() {
 		this.npcName = "";
@@ -24,6 +25,7 @@ export class Dialog {
 		const statement = this.getStatement(statementId);
 		if (statement === null) return false;
 		log(`/**${this.npcName}*\\: ${statement.text}`);
+		if (statement.hasOwnProperty("assignQuestId")) game.getPlayer().getQuestLog().activateQuest(statement.assignQuestId);
 		return this.logResponses(statement.responses);
 	}
 
@@ -33,6 +35,7 @@ export class Dialog {
      */
 	logResponses(responses) {
 		if (responses === undefined || responses === null || responses.length === 0) return false;
+		if (responses.length === 1 && (responses[0].text === undefined || responses[0].text === "")) { this.logStatement(responses[0].nextStatementId); return true; }
 		responses.forEach((response, index) => {
 			log(`<span class="response-text" data-nextStatementId="${response.nextStatementId}">${index + 1}. ${response.text}</span>`);
 		});

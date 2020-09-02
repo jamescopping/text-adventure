@@ -11,19 +11,23 @@ export class Inventory {
 	listSize() { return this.list.length }
 	addItems(itemObjList) { itemObjList.forEach(itemObj => this.addItem(itemObj)) }
 	addItem(newItemObj) {
-		if (Story.getItemMap().has(newItemObj["name"])) {
+		const { name, quantity } = newItemObj;
+		if (Story.getItemMap().has(name)) {
 			let itemAlreadyIn = false;
-			let newTotal = newItemObj["quantity"];
+			let newTotal = quantity;
 			for (let index = 0; index < this.list.length; index++) {
-				if (this.list[index]["name"] === newItemObj["name"]) {
-					this.list[index]["quantity"] += newItemObj["quantity"];
+				if (this.list[index]["name"] === name) {
+					this.list[index]["quantity"] += quantity;
 					newTotal = this.list[index]["quantity"];
 					itemAlreadyIn = true;
 					break;
 				}
 			}
 			if (!itemAlreadyIn) this.list.push(newItemObj);
-			if (this.player) PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, newItemObj["name"], newTotal));
+			if (this.player) {
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, name, newTotal));
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, "add", "type", `${this.getItemType(name)}`, quantity));
+			}
 		}
 	}
 
@@ -50,7 +54,10 @@ export class Inventory {
 		if (itemIndex === -1) return null;
 		if (this.getItemRarity(itemName) === "quest") return null;
 		const item = this.list.splice(itemIndex, 1)[0];
-		if (this.player) PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, item["name"], 0));
+		if (this.player) {
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, item["name"], 0));
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, "remove", "type", `${this.getItemType(item["name"])}`, -999));
+		}
 		return item;
 	}
 
@@ -60,7 +67,17 @@ export class Inventory {
 		return foundItem;
 	}
 
+	getItemProperty(itemName, property) {
+		const item = Story.getItemMap().get(itemName);
+		if (item !== undefined && item.hasOwnProperty(property)) return item[property];
+		return undefined;
+	}
+
 	getItemRarity(itemName) {
 		return Story.getItemMap().get(itemName)["rarity"];
+	}
+
+	getItemType(itemName) {
+		return Story.getItemMap().get(itemName)["type"];
 	}
 }

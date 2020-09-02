@@ -152,6 +152,7 @@
 			<name>rotten_apple</name>
 			<description>ewww smelly</description>
 			<rarity>common</rarity>
+			<type>food</type>
 		</item>
 	</items>
 
@@ -193,11 +194,6 @@
 			<name>Who Is "J"</name>
 			<description>The [weird_note#1] was signed off by a "J", explore the area to find more clues</description>
 			<triggers>
-				<assign>
-					<action></action>
-					<nouns>
-					</nouns>
-				</assign>
 				<update>
 					<action>discover</action>
 					<nouns>
@@ -215,20 +211,18 @@
 			<name>Get food</name>
 			<description>pickup 5x any single food item</description>
 			<triggers>
-				<assign>
-					<action>receiveQuest</action>
-					<nouns>
-					</nouns>
-				</assign>
 				<update>
 					<action>inventory_update</action>
 					<nouns>
-						<noun>item:type:food</noun>
+						<noun>add</noun>
+						<noun>type</noun>
+						<noun>food</noun>
+						<noun>{triggerCount}</noun>
 					</nouns>
 				</update>
 				<complete>
 					<requiredTriggers>5</requiredTriggers>
-					<nextQuestId></nextQuestId>
+					<nextQuestId>3</nextQuestId>
 				</complete>
 			</triggers>
 		</quest>
@@ -291,7 +285,7 @@
 					<text>Harumph... my name is Jimmy if you must know</text>
 					<responses>
 						<response>
-							<text>How did you end up here, in a cave?</text>
+							<text></text>
 							<nextStatementId>3</nextStatementId>
 						</response>
 					</responses>
@@ -302,13 +296,33 @@
 					<responses>
 						<response>
 							<text>Is there anything I can do to help?</text>
+							<nextStatementId>4</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>4</id>
+					<text>Can you get me some food? I'm so hungry.</text>
+					<responses>
+						<response>
+							<text>Accept Quest: I'll see what I can do</text>
 							<nextStatementId>5</nextStatementId>
+						</response>
+						<response>
+							<text>Find your own food, smelly old man</text>
+							<nextStatementId>6</nextStatementId>
 						</response>
 					</responses>
 				</statement>
 				<statement>
 					<id>5</id>
-					<text>Can you get me some food, I'm so hungry</text>
+					<text>Thank you kind sir!</text>
+					<assignQuestId>2</assignQuestId>
+					<responses></responses>
+				</statement>
+				<statement>
+					<id>6</id>
+					<text>Well that's not very nice... :(</text>
 					<responses></responses>
 				</statement>
 			</dialog>
