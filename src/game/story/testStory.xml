@@ -302,13 +302,33 @@
 					<responses>
 						<response>
 							<text>Is there anything I can do to help?</text>
+							<nextStatementId>4</nextStatementId>
+						</response>
+					</responses>
+				</statement>
+				<statement>
+					<id>4</id>
+					<text>Can you get me some food? I'm so hungry.</text>
+					<responses>
+						<response>
+							<text>Accept Quest: I'll see what I can do</text>
 							<nextStatementId>5</nextStatementId>
+						</response>
+						<response>
+							<text>Find your own food, smelly old man</text>
+							<nextStatementId>6</nextStatementId>
 						</response>
 					</responses>
 				</statement>
 				<statement>
 					<id>5</id>
-					<text>Can you get me some food, I'm so hungry</text>
+					<text>Thank you kind sir!</text>
+					<assignQuestId>2</assignQuestId>
+					<responses></responses>
+				</statement>
+				<statement>
+					<id>6</id>
+					<text>Well that's not very nice... :(</text>
 					<responses></responses>
 				</statement>
 			</dialog>

@@ -27,7 +27,7 @@ export class QuestLog {
             filterQuests.forEach(quest => {
                 quest.trigger(1);
                 if (quest.isCompleted()) {
-                    this.completeActiveQuest(quest.getId())
+                    this.completeActiveQuest(quest.getId());
                 };
             });
         }
