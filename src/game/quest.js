@@ -1,6 +1,7 @@
 
 import { Story } from "./story"
 import { log } from "../controller/adventureLogController"
+import { PlayerAction } from "./player";
 
 export class QuestLog {
 
@@ -14,8 +15,9 @@ export class QuestLog {
         Story.getQuestMap().forEach(quest => {
             const storyQuest = Quest.fromStory(quest);
             this.unassignedQuestMap.set(quest.id, storyQuest);
-            const assignAction = storyQuest.getAssignTrigger().getAction();
-            if (assignAction !== "") this.unassignedActionListenerSet.add(assignAction);
+            const assignTrigger = storyQuest.getAssignTrigger();
+            const assignAction = (assignTrigger !== undefined) ? assignTrigger.getAction() : undefined;
+            if (assignAction !== "" && assignAction !== undefined) this.unassignedActionListenerSet.add(assignAction);
         });
     }
 
@@ -24,8 +26,12 @@ export class QuestLog {
         if (this.activeActionListenerSet.has(playerEvent.getAction())) {
             //the so there is a quest that is in the active list that is listening for this action
             const filterQuests = this.filterQuests([...this.activeQuestMap.values()], playerEvent, "update");
+            console.log(filterQuests);
             filterQuests.forEach(quest => {
-                quest.trigger(1);
+                const updateTrigger = quest.getUpdateTrigger();
+                const nouns = (updateTrigger !== undefined) ? updateTrigger.getNouns() : undefined;
+                let triggerCount = (nouns !== undefined && nouns.includes("{triggerCount}")) ? parseInt(playerEvent.getArgs()[nouns.indexOf("{triggerCount}")]) : 1;
+                quest.trigger(triggerCount);
                 if (quest.isCompleted()) {
                     this.completeActiveQuest(quest.getId());
                 };
@@ -42,13 +48,14 @@ export class QuestLog {
     filterQuests(quests, event, triggerType) {
         return quests.filter(quest => {
             const trigger = (triggerType === "update") ? quest.getUpdateTrigger() : quest.getAssignTrigger();
-            if (trigger.getAction() === event.getAction()) {
+            const action = (trigger !== undefined) ? trigger.getAction() : undefined;
+            if (action === event.getAction()) {
                 const nouns = trigger.getNouns();
-                if (nouns === undefined || nouns === null || nouns.length === 0) return true;
                 const eventArgs = event.getArgs();
+                if (nouns.length === 0 && eventArgs.length === 0) return true;
                 let matchNouns = true;
                 nouns.forEach((noun, index) => {
-                    if (noun !== eventArgs[index]) matchNouns = false; return;
+                    if (noun !== eventArgs[index] && noun !== "{triggerCount}") matchNouns = false; return;
                 });
                 return matchNouns;
             }
@@ -126,8 +133,8 @@ class Quest {
         this.requiredTriggers = requiredTriggers;
         this.nextQuestId = nextQuestId;
         this.triggerCount = 0;
-        this.updateTrigger = new QuestTrigger(updateTrigger.action, updateTrigger.nouns);
-        this.assignTrigger = new QuestTrigger(assignTrigger.action, assignTrigger.nouns);
+        this.updateTrigger = (updateTrigger !== undefined) ? new QuestTrigger(updateTrigger.action, updateTrigger.nouns) : undefined;
+        this.assignTrigger = (assignTrigger !== undefined) ? new QuestTrigger(assignTrigger.action, assignTrigger.nouns) : undefined;
         this.complete = false;
     }
 
@@ -161,12 +168,14 @@ class Quest {
     getNextQuestId() { return this.nextQuestId }
     getTriggerCount() { return this.triggerCount }
 
+    setTriggerCount(count) { this.triggerCount = count; this.isTriggerRequirementMet(); }
+
 }
 
 class QuestTrigger {
     constructor(action, nouns) {
         this.action = action;
-        this.nouns = nouns;
+        this.nouns = nouns === undefined ? [] : nouns;
     }
     getAction() { return this.action }
     getNouns() { return this.nouns }

@@ -35,6 +35,7 @@ export class Dialog {
      */
 	logResponses(responses) {
 		if (responses === undefined || responses === null || responses.length === 0) return false;
+		if (responses.length === 1 && (responses[0].text === undefined || responses[0].text === "")) { this.logStatement(responses[0].nextStatementId); return true; }
 		responses.forEach((response, index) => {
 			log(`<span class="response-text" data-nextStatementId="${response.nextStatementId}">${index + 1}. ${response.text}</span>`);
 		});
