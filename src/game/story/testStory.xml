@@ -296,9 +296,19 @@
 					<responses>
 						<response>
 							<text>Is there anything I can do to help?</text>
-							<nextStatementId>4</nextStatementId>
+							<nextStatementId>2?7:4</nextStatementId>
+						</response>
+						<response>
+							<questRequirement>1</questRequirement>
+							<text>Do you know anything about this [weird_note#1]</text>
+							<nextStatementId>31</nextStatementId>
 						</response>
 					</responses>
+				</statement>
+				<statement>
+					<id>31</id>
+					<text>*looks at note* Hmmmm weird, well I could tell you something about it if I could read...</text>
+					<responses></responses>
 				</statement>
 				<statement>
 					<id>4</id>
@@ -322,7 +332,20 @@
 				</statement>
 				<statement>
 					<id>6</id>
-					<text>Well that's not very nice... :(</text>
+					<text>Well that's not very nice...</text>
+					<responses></responses>
+				</statement>
+				<statement>
+					<id>7</id>
+					<text>You have done more than enough, thank you for the food</text>
+					<responses>
+						<text></text>
+						<nextStatementId>8</nextStatementId>
+					</responses>
+				</statement>
+				<statement>
+					<id>8</id>
+					<text>I will say that you might be able to find a weapon that I used to use, I think I dropped it somewhere near a river northward</text>
 					<responses></responses>
 				</statement>
 			</dialog>
