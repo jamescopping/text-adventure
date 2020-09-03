@@ -49,6 +49,8 @@ const generateLog = text => {
 	text = text.replace(/(\<\-)/gm, `<span class="path-text font-weight-bold text-nowrap">\<-`);
 	text = text.replace(/(\-\>)/gm, `-\></span>`);
 
+	text = text.replace(/(accept quest)/gim, `<span class="accept-quest-text">Accept Quest</span>`);
+
 	const log = document.createElement("p");
 	log.className = "text-monospace text-break lead";
 	log.innerHTML += `<strong class="font-weight-bolder">\> </strong>`;

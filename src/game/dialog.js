@@ -26,7 +26,13 @@ export class Dialog {
 		if (statement === null) return false;
 		log(`/**${this.npcName}*\\: ${statement.text}`);
 		if (statement.hasOwnProperty("assignQuestId")) game.getPlayer().getQuestLog().activateQuest(statement.assignQuestId);
-		return this.logResponses(statement.responses);
+		let responses = [];
+		if (Array.isArray(statement.responses)) {
+			responses = statement.responses;
+		} else if (typeof statement.responses === "object") {
+			responses = [statement.responses];
+		}
+		return this.logResponses(responses);
 	}
 
     /**
@@ -35,17 +41,52 @@ export class Dialog {
      */
 	logResponses(responses) {
 		if (responses === undefined || responses === null || responses.length === 0) return false;
-		if (responses.length === 1 && (responses[0].text === undefined || responses[0].text === "")) { this.logStatement(responses[0].nextStatementId); return true; }
+		if (responses.length === 1 && (responses[0].text === undefined || responses[0].text === "")) {
+			if (this.playerMeetsRequirements(responses[0])) {
+				return this.logStatement(this.evalNextStatementId(responses[0].nextStatementId));
+			}
+		}
 		responses.forEach((response, index) => {
-			log(`<span class="response-text" data-nextStatementId="${response.nextStatementId}">${index + 1}. ${response.text}</span>`);
+			if (this.playerMeetsRequirements(response)) log(`<span class="response-text" data-nextStatementId="${this.evalNextStatementId(response.nextStatementId)}">${index + 1}. ${response.text}</span>`);
 		});
 		return true;
 	}
 
-    /**
-     * getStatement returns the statement obj from dialog given a matching id
-     * @param {string} statementId 
-     */
+	playerMeetsRequirements(response) {
+		if (response.hasOwnProperty("questRequirement")) {
+			let questIdArray = [];
+			const questRequirement = response["questRequirement"];
+			if (questRequirement.match(/^((\d+)(\,\d+)+)$/)) { //if there are multiple quest requirements
+				questIdArray = questRequirement.split(",");
+			} else if (questRequirement.match(/^(\d+)$/)) { //single quest requirement
+				questIdArray = [questRequirement];
+			}
+			let allCompleted = true;
+			const playerQuestLog = game.getPlayer().getQuestLog();
+			questIdArray.forEach(questId => {
+				if (!playerQuestLog.hasCompletedQuest(questId)) allCompleted = false; return;
+			});
+			return allCompleted;
+		} else {
+			return true;
+		}
+	}
+
+	evalNextStatementId(statementIdStr) {
+		if (statementIdStr.match(/^\d+\?\d+\:\d+$/g)) {
+			const idArray = statementIdStr.split("?");
+			const questId = idArray[0];
+			const [id1, id2] = idArray[1].split(":");
+			return (game.getPlayer().getQuestLog().hasCompletedQuest(questId)) ? id1 : id2;
+		} else {
+			return statementIdStr;
+		}
+	}
+
+	/**
+	 * getStatement returns the statement obj from dialog given a matching id
+	 * @param {string} statementId 
+	 */
 	getStatement(statementId) {
 		if (this.dialog === null || this.dialog === undefined || this.dialog === {}) return null;
 		let foundStatement = null;

@@ -63,6 +63,7 @@ export class QuestLog {
     }
 
     activateQuest(questId) {
+        if (questId === "" || questId === undefined) return false;
         if (!this.hasUnassignedQuest(questId) && (this.hasActiveQuest(questId) || this.hasCompletedQuest(questId))) return false;
         const assignedQuest = this.unassignedQuestMap.get(questId);
         if (assignedQuest === null || assignedQuest === undefined) return false;
@@ -76,6 +77,7 @@ export class QuestLog {
             if (unassignedQuest.getUpdateTrigger().getAction() === action) sameAction = true; return;
         });
         if (!sameAction) this.unassignedActionListenerSet.delete(action);
+        //TODO: Once the quest has been activated, if somehow the quest has already been solved 
 
         log(`New Quest: ${assignedQuest.getName()}, ${assignedQuest.getDescription()}`);
         return true;
