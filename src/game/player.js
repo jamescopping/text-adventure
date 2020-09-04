@@ -74,15 +74,16 @@ export class PlayerEvent {
 	getArgs() { return this.args }
 
 	static broadcastPlayerEvent(playerEvent) {
-		console.log(playerEvent);
-		try {
-			if (playerEvent === null) throw new PlayerEventError(playerEvent, "PlayerEvent is null");
-			game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
-		} catch (error) {
-			console.error(error);
-		}
+		PlayerEvent.addEventToList(playerEvent);
+		game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
 	}
+
+	static addEventToList(playerEvent) { PlayerEvent.eventList.push(playerEvent) }
+	static getPlayerEventList() { return PlayerEvent.eventList }
+	static getAllEventsWithAction(playerAction) { return PlayerEvent.eventList.filter(event => playerAction === event.getAction()) }
 }
+
+PlayerEvent.eventList = [];
 
 class PlayerEventError extends Error {
 	constructor(playerEvent, ...params) {

@@ -1,7 +1,7 @@
 
 import { Story } from "./story"
 import { log } from "../controller/adventureLogController"
-import { PlayerAction } from "./player";
+import { PlayerAction, PlayerEvent } from "./player";
 
 export class QuestLog {
 
@@ -23,29 +23,32 @@ export class QuestLog {
 
     receivePlayerEvent(playerEvent) {
         //the player event is received, now we need to see if there are any active quests that need to be updated by this specific event
+        this.triggerEventForQuests(playerEvent);
+    }
+
+    triggerEventForQuests(playerEvent) {
+        if (this.unassignedActionListenerSet.has(playerEvent.getAction())) {
+            const filterQuests = this.filterQuestsOnPlayerEvent([...this.unassignedQuestMap.values()], playerEvent, "assign");
+            filterQuests.forEach(quest => this.activateQuest(quest.getId()));
+        }
         if (this.activeActionListenerSet.has(playerEvent.getAction())) {
             //the so there is a quest that is in the active list that is listening for this action
-            const filterQuests = this.filterQuests([...this.activeQuestMap.values()], playerEvent, "update");
-            console.log(filterQuests);
-            filterQuests.forEach(quest => {
-                const updateTrigger = quest.getUpdateTrigger();
-                const nouns = (updateTrigger !== undefined) ? updateTrigger.getNouns() : undefined;
-                let triggerCount = (nouns !== undefined && nouns.includes("{triggerCount}")) ? parseInt(playerEvent.getArgs()[nouns.indexOf("{triggerCount}")]) : 1;
-                quest.trigger(triggerCount);
-                if (quest.isCompleted()) {
-                    this.completeActiveQuest(quest.getId());
-                };
-            });
-        }
-        if (this.unassignedActionListenerSet.has(playerEvent.getAction())) {
-            const filterQuests = this.filterQuests([...this.unassignedQuestMap.values()], playerEvent, "assign");
-            filterQuests.forEach(quest => {
-                this.activateQuest(quest.getId());
-            });
+            const filterQuests = this.filterQuestsOnPlayerEvent([...this.activeQuestMap.values()], playerEvent, "update");
+            filterQuests.forEach(quest => this.triggerUpdateForQuest(quest));
         }
     }
 
-    filterQuests(quests, event, triggerType) {
+    triggerUpdateForQuest(quest) {
+        const updateTrigger = quest.getUpdateTrigger();
+        const nouns = (updateTrigger !== undefined) ? updateTrigger.getNouns() : undefined;
+        let triggerCount = (nouns !== undefined && nouns.includes("{triggerCount}")) ? parseInt(playerEvent.getArgs()[nouns.indexOf("{triggerCount}")]) : 1;
+        quest.trigger(triggerCount);
+        if (quest.isCompleted()) {
+            this.completeActiveQuest(quest.getId());
+        };
+    }
+
+    filterQuestsOnPlayerEvent(quests, event, triggerType) {
         return quests.filter(quest => {
             const trigger = (triggerType === "update") ? quest.getUpdateTrigger() : quest.getAssignTrigger();
             const action = (trigger !== undefined) ? trigger.getAction() : undefined;
@@ -70,33 +73,62 @@ export class QuestLog {
         this.activeQuestMap.set(questId, assignedQuest);
         this.unassignedQuestMap.delete(questId);
 
-        const action = assignedQuest.getUpdateTrigger().getAction();
-        this.activeActionListenerSet.add(action);
-        let sameAction = false;
-        this.unassignedQuestMap.forEach(unassignedQuest => {
-            if (unassignedQuest.getUpdateTrigger().getAction() === action) sameAction = true; return;
-        });
-        if (!sameAction) this.unassignedActionListenerSet.delete(action);
-        //TODO: Once the quest has been activated, if somehow the quest has already been solved 
-
         log(`New Quest: ${assignedQuest.getName()}, ${assignedQuest.getDescription()}`);
+        this.checkQuestAlreadyCompleted(assignedQuest);
+
+
+        const updateTrigger = assignedQuest.getUpdateTrigger();
+        const assignTrigger = assignedQuest.getAssignTrigger();
+
+        const updateAction = (updateTrigger !== undefined) ? updateTrigger.getAction() : undefined;
+        const assignAction = (assignTrigger !== undefined) ? assignTrigger.getAction() : undefined;
+        if (updateAction !== undefined) this.activeActionListenerSet.add(updateAction);
+        if (assignAction !== undefined)
+            if (![...this.unassignedQuestMap.values()].some(unassignedQuest => {
+                const trigger = unassignedQuest.getAssignTrigger();
+                const action = (trigger !== undefined) ? trigger.getAction() : undefined;
+                if (action !== undefined) {
+                    return assignAction === action;
+                } else {
+                    return false;
+                }
+            })) { this.unassignedActionListenerSet.delete(assignAction) }
         return true;
     }
 
     completeActiveQuest(questId) {
+        if (questId === "" || questId === undefined) return false;
+        if (!this.hasActiveQuest(questId) && (this.hasUnassignedQuest(questId) || this.hasCompletedQuest(questId))) return false;
         const completedQuest = this.activeQuestMap.get(questId);
+        if (completedQuest === null || completedQuest === undefined) return false;
         this.completedQuestMap.set(questId, completedQuest);
         this.activeQuestMap.delete(questId);
 
         log(`Quest Completed! ${completedQuest.getName()}`);
         this.activateQuest(completedQuest.getNextQuestId());
-        //possibly remove the action from the listener set if there are no other active ones with that action
-        const action = completedQuest.getUpdateTrigger().getAction();
-        let sameAction = false;
-        this.activeQuestMap.forEach(activeQuest => {
-            if (activeQuest.getUpdateTrigger().getAction() === action) sameAction = true; return;
-        });
-        if (!sameAction) this.activeActionListenerSet.delete(action);
+
+        const updateTrigger = completedQuest.getUpdateTrigger();
+        const updateAction = (updateTrigger !== undefined) ? updateTrigger.getAction() : undefined;
+        if (updateAction !== undefined)
+            if (![...this.activeQuestMap.values()].some(activeQuest => {
+                const trigger = activeQuest.getAssignTrigger();
+                const action = (trigger !== undefined) ? trigger.getAction() : undefined;
+                if (action !== undefined) {
+                    return updateAction === action;
+                } else {
+                    return false;
+                }
+            })) { this.activeActionListenerSet.delete(updateAction) }
+        return true;
+    }
+
+    checkQuestAlreadyCompleted(quest) {
+        const trigger = quest.getUpdateTrigger();
+        const action = (trigger !== undefined) ? trigger.getAction() : undefined;
+        if (PlayerEvent.getAllEventsWithAction(action).some(event => this.filterQuestsOnPlayerEvent([quest], event, "update").length === 1)) {
+            quest.trigger(999);
+            this.completeActiveQuest(quest.getId());
+        }
     }
 
     logActiveQuests() {
