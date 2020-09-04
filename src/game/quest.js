@@ -34,14 +34,14 @@ export class QuestLog {
         if (this.activeActionListenerSet.has(playerEvent.getAction())) {
             //the so there is a quest that is in the active list that is listening for this action
             const filterQuests = this.filterQuestsOnPlayerEvent([...this.activeQuestMap.values()], playerEvent, "update");
-            filterQuests.forEach(quest => this.triggerUpdateForQuest(quest));
+            filterQuests.forEach(quest => this.triggerUpdateForQuest(quest, playerEvent));
         }
     }
 
-    triggerUpdateForQuest(quest) {
+    triggerUpdateForQuest(quest, event) {
         const updateTrigger = quest.getUpdateTrigger();
         const nouns = (updateTrigger !== undefined) ? updateTrigger.getNouns() : undefined;
-        let triggerCount = (nouns !== undefined && nouns.includes("{triggerCount}")) ? parseInt(playerEvent.getArgs()[nouns.indexOf("{triggerCount}")]) : 1;
+        let triggerCount = (nouns !== undefined && nouns.includes("{triggerCount}")) ? parseInt(event.getArgs()[nouns.indexOf("{triggerCount}")]) : 1;
         quest.trigger(triggerCount);
         if (quest.isCompleted()) {
             this.completeActiveQuest(quest.getId());
