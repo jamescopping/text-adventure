@@ -19,6 +19,7 @@ export class Story {
 		initMap(Story.objectMap, xml.getElementsByTagName("object"));
 		initMap(Story.spellMap, xml.getElementsByTagName("spell"));
 		initMap(Story.questMap, xml.getElementsByTagName("quest"));
+		xml = null;
 	}
 
 	static getSceneMap() { return Story.sceneMap }
