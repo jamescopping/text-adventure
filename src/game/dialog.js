@@ -1,5 +1,7 @@
 import { log } from "../controller/adventureLogController";
 import { game } from "./game";
+import { PlayerAction } from "./player";
+import { Command } from "./command";
 export class Dialog {
 	constructor() {
 		this.npcName = "";
@@ -25,7 +27,9 @@ export class Dialog {
 		const statement = this.getStatement(statementId);
 		if (statement === null) return false;
 		log(`/**${this.npcName}*\\: ${statement.text}`);
-		if (statement.hasOwnProperty("assignQuestId")) game.getPlayer().getQuestLog().activateQuest(statement.assignQuestId);
+
+		if (this.handleStatementQuestChanges(statement)) return false;
+
 		let responses = [];
 		if (Array.isArray(statement.responses)) {
 			responses = statement.responses;
@@ -46,40 +50,81 @@ export class Dialog {
 				return this.logStatement(this.evalNextStatementId(responses[0].nextStatementId));
 			}
 		}
-		responses.forEach((response, index) => {
-			if (this.playerMeetsRequirements(response)) log(`<span class="response-text" data-nextStatementId="${this.evalNextStatementId(response.nextStatementId)}">${index + 1}. ${response.text}</span>`);
+		let index = 1;
+		responses.forEach((response) => {
+			if (this.playerMeetsRequirements(response)) log(`<span class="response-text" data-nextStatementId="${this.evalNextStatementId(response.nextStatementId)}">${index++}. ${response.text}</span>`);
 		});
 		return true;
 	}
 
 	playerMeetsRequirements(response) {
 		if (response.hasOwnProperty("questRequirement")) {
-			let questIdArray = [];
+			let questCodeStrArray = [];
 			const questRequirement = response["questRequirement"];
-			if (questRequirement.match(/^((\d+)(\,\d+)+)$/)) { //if there are multiple quest requirements
-				questIdArray = questRequirement.split(",");
-			} else if (questRequirement.match(/^(\d+)$/)) { //single quest requirement
-				questIdArray = [questRequirement];
+			if (questRequirement.match(/^(\d+\#(c|a|ua))(\,\d+\#(c|a|ua))+$/i)) { //if there are multiple quest requirements
+				questCodeStrArray = questRequirement.split(",");
+			} else if (questRequirement.match(/^(\d+\#(c|a|ua))$/i)) { //single quest requirement
+				questCodeStrArray = [questRequirement];
 			}
-			let allCompleted = true;
-			const playerQuestLog = game.getPlayer().getQuestLog();
-			questIdArray.forEach(questId => {
-				if (!playerQuestLog.hasCompletedQuest(questId)) allCompleted = false; return;
-			});
-			return allCompleted;
+			return (questCodeStrArray.filter(questCodeStr => this.checkQuestStatus(questCodeStr))).length === questCodeStrArray.length;
 		} else {
 			return true;
 		}
 	}
 
 	evalNextStatementId(statementIdStr) {
-		if (statementIdStr.match(/^\d+\?\d+\:\d+$/g)) {
-			const idArray = statementIdStr.split("?");
-			const questId = idArray[0];
-			const [id1, id2] = idArray[1].split(":");
-			return (game.getPlayer().getQuestLog().hasCompletedQuest(questId)) ? id1 : id2;
+		if (statementIdStr.match(/^(\d+\#(c|a|ua))\?\d+\:\d+$/i)) {
+			const tmpArray = statementIdStr.split("?", 2);
+			const questCodeStr = tmpArray[0];
+			const [id1, id2] = tmpArray[1].split(":", 2);
+			return (this.checkQuestStatus(questCodeStr)) ? id1 : id2;
 		} else {
 			return statementIdStr;
+		}
+	}
+
+	checkQuestStatus(questCodeStr) {
+		let [questId, statusCode] = questCodeStr.split("#", 2);
+		statusCode = statusCode.toLowerCase();
+		const questLog = game.getPlayer().getQuestLog();
+		switch (statusCode) {
+			case "a":
+				return questLog.hasActiveQuest(questId);
+			case "ua":
+				return questLog.hasUnassignedQuest(questId);
+			default: //assume completed
+				return questLog.hasCompletedQuest(questId);
+		}
+	}
+
+	handleStatementQuestChanges(statement) {
+		const questLog = game.getPlayer().getQuestLog();
+		if (statement.hasOwnProperty("assignQuestId")) {
+			return questLog.activateQuest(statement.assignQuestId);
+		} else if (statement.hasOwnProperty("completeQuestId") && questLog.hasActiveQuest(statement.completeQuestId)) {
+			const quest = questLog.activeQuestMap.get(statement.completeQuestId);
+			const updateTrigger = quest.getUpdateTrigger();
+			const action = (updateTrigger !== undefined) ? updateTrigger.getAction() : undefined;
+			const nouns = (updateTrigger !== undefined) ? updateTrigger.getNouns() : undefined;
+
+			if (action === PlayerAction.QUEST_HAND_IN) {
+				const [mobId, ...itemInfo] = nouns;
+				const itemObj = { type: "", rarity: "", name: "", quantity: 0 };
+				if (itemInfo.length > 0 && mobId === this.getNPCName()) {
+					if (itemInfo[0].includes("type:")) {
+						itemObj.type = itemInfo[0].split(":", 2)[1];
+						if (itemInfo[0].includes("type:")) {
+							itemObj.rarity = itemInfo[0].split(":", 4)[3];
+						}
+					} else {
+						itemObj.name = itemInfo[0];
+					}
+					itemObj.quantity = parseInt(itemInfo[1]);
+					if (Command.questHandIn(this.getNPCName(), itemObj)) {
+						questLog.completeActiveQuest(quest.getId());
+					}
+				}
+			}
 		}
 	}
 

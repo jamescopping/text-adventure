@@ -29,6 +29,11 @@ export const initAdventureLog = () => {
 	});
 };
 
+export const executeCommand = command => {
+	commandInput.value = command;
+	commandSubmit.click();
+}
+
 const findAdventureLogElement = () => document.getElementById("adventure-log");
 
 const generateLog = text => {
@@ -49,7 +54,8 @@ const generateLog = text => {
 	text = text.replace(/(\<\-)/gm, `<span class="path-text font-weight-bold text-nowrap">\<-`);
 	text = text.replace(/(\-\>)/gm, `-\></span>`);
 
-	text = text.replace(/(accept quest)/gim, `<span class="accept-quest-text">Accept Quest</span>`);
+	text = text.replace(/(accept quest)/gim, `<span class="active-quest-text">Accept Quest</span>`);
+	text = text.replace(/(complete quest)/gim, `<span class="completed-quest-text">Complete Quest</span>`);
 
 	const log = document.createElement("p");
 	log.className = "text-monospace text-break lead";
