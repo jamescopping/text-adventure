@@ -56,11 +56,7 @@ export class QuestLog {
                 const nouns = trigger.getNouns();
                 const eventArgs = event.getArgs();
                 if (nouns.length === 0 && eventArgs.length === 0) return true;
-                let matchNouns = true;
-                nouns.forEach((noun, index) => {
-                    if (noun !== eventArgs[index] && noun !== "{triggerCount}") matchNouns = false; return;
-                });
-                return matchNouns;
+                return !nouns.some((noun, index) => (noun !== eventArgs[index] && noun !== "{triggerCount}"));
             }
         });
     }
@@ -75,7 +71,6 @@ export class QuestLog {
 
         log(`New Quest: ${assignedQuest.getName()}, ${assignedQuest.getDescription()}`);
         this.checkQuestAlreadyCompleted(assignedQuest);
-
 
         const updateTrigger = assignedQuest.getUpdateTrigger();
         const assignTrigger = assignedQuest.getAssignTrigger();
@@ -132,7 +127,7 @@ export class QuestLog {
     }
 
     logActiveQuests() {
-        log("Active Quest Log: ");
+        log("<span class='active-quest-text'>Active Quest Log:</span>");
         if (this.activeQuestMap.size !== 0) {
             this.activeQuestMap.forEach(quest => {
                 log(`${quest.getName()} ${quest.percentageComplete()}% : ${quest.getDescription()}`);
@@ -143,7 +138,7 @@ export class QuestLog {
     }
 
     logCompletedQuests() {
-        log("Completed Quest Log: ");
+        log("<span class='completed-quest-text'>Completed Quest Log:</span>");
         if (this.completedQuestMap.size !== 0) {
             this.completedQuestMap.forEach(quest => {
                 log(`${quest.getName()} ${quest.percentageComplete()}% : ${quest.getDescription()}`);
@@ -156,6 +151,10 @@ export class QuestLog {
     hasActiveQuest(questId) { return this.activeQuestMap.has(questId); }
     hasCompletedQuest(questId) { return this.completedQuestMap.has(questId); }
     hasUnassignedQuest(questId) { return this.unassignedQuestMap.has(questId) }
+
+    getActiveQuest(questId) { return this.activeQuestMap.get(questId) }
+    getUnassignedQuest(questId) { return this.unassignedQuestMap.get(questId) }
+
     toString() { return `Active Quests: ${this.activeQuestMap} \n Completed Quests: ${this.completedQuestMap}\n` }
 }
 
@@ -203,7 +202,6 @@ class Quest {
     getTriggerCount() { return this.triggerCount }
 
     setTriggerCount(count) { this.triggerCount = count; this.isTriggerRequirementMet(); }
-
 }
 
 class QuestTrigger {

@@ -1,5 +1,7 @@
 import { log } from "../controller/adventureLogController";
 import { game } from "./game";
+import { PlayerAction } from "./player";
+import { Command } from "./command";
 export class Dialog {
 	constructor() {
 		this.npcName = "";
@@ -25,7 +27,9 @@ export class Dialog {
 		const statement = this.getStatement(statementId);
 		if (statement === null) return false;
 		log(`/**${this.npcName}*\\: ${statement.text}`);
-		if (statement.hasOwnProperty("assignQuestId")) game.getPlayer().getQuestLog().activateQuest(statement.assignQuestId);
+
+		if (this.handleStatementQuestChanges(statement)) return false;
+
 		let responses = [];
 		if (Array.isArray(statement.responses)) {
 			responses = statement.responses;
@@ -93,6 +97,36 @@ export class Dialog {
 		}
 	}
 
+	handleStatementQuestChanges(statement) {
+		const questLog = game.getPlayer().getQuestLog();
+		if (statement.hasOwnProperty("assignQuestId")) {
+			return questLog.activateQuest(statement.assignQuestId);
+		} else if (statement.hasOwnProperty("completeQuestId") && questLog.hasActiveQuest(statement.completeQuestId)) {
+			const quest = questLog.activeQuestMap.get(statement.completeQuestId);
+			const updateTrigger = quest.getUpdateTrigger();
+			const action = (updateTrigger !== undefined) ? updateTrigger.getAction() : undefined;
+			const nouns = (updateTrigger !== undefined) ? updateTrigger.getNouns() : undefined;
+
+			if (action === PlayerAction.QUEST_HAND_IN) {
+				const [mobId, ...itemInfo] = nouns;
+				const itemObj = { type: "", rarity: "", name: "", quantity: 0 };
+				if (itemInfo.length > 0 && mobId === this.getNPCName()) {
+					if (itemInfo[0].includes("type:")) {
+						itemObj.type = itemInfo[0].split(":", 2)[1];
+						if (itemInfo[0].includes("type:")) {
+							itemObj.rarity = itemInfo[0].split(":", 4)[3];
+						}
+					} else {
+						itemObj.name = itemInfo[0];
+					}
+					itemObj.quantity = parseInt(itemInfo[1]);
+					if (Command.questHandIn(this.getNPCName(), itemObj)) {
+						questLog.completeActiveQuest(quest.getId());
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * getStatement returns the statement obj from dialog given a matching id

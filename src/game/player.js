@@ -56,7 +56,7 @@ export const PlayerAction = {
 	DISCOVER: 'discover',
 	USE: 'use',
 	TALKTO: 'talkto',
-	RECEIVE_QUEST: 'receiveQuest'
+	QUEST_HAND_IN: 'quest_hand_in'
 }
 
 export class PlayerEvent {

@@ -174,6 +174,26 @@ export class Command {
 		}
 	}
 
+	static questHandIn(mobName, requiredItemObj) {
+		const inv = game.getPlayer().getInventory();
+		const { type, rarity, name, quantity } = requiredItemObj;
+		if (name !== "" && inv.hasItem(name)) {
+			if (inv.removeItem(name, quantity, true)) {
+				log(`You give /**${mobName}*\\ ${quantity} x [${name}]`);
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.QUEST_HAND_IN, mobName, name, quantity));
+				return true;
+			}
+		} else if (type !== "" && inv.hasItemType(type)) {
+			const removedItem = inv.removeItemType(type, rarity, quantity, true);
+			if (removedItem) {
+				log(`You give /**${mobName}*\\ ${quantity} x [${removedItem.name}]`);
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.QUEST_HAND_IN, mobName, `type:${type}:rarity:${rarity}`, quantity));
+				return true;
+			}
+		}
+		return false;
+	}
+
 	static bye() {
 		game.changeGameMode(GameMode.ADVENTURE);
 		log(`You finish your conversation and walk away...`);

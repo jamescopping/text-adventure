@@ -77,8 +77,12 @@ main {
   color: rgb(201, 17, 17);
 }
 
-.accept-quest-text{
+.active-quest-text{
   color: #D4AF37;
+}
+
+.completed-quest-text{
+  color: #26df1f;
 }
 
 .selected-path{

@@ -145,11 +145,13 @@
 			<name>weird_note#1</name>
 			<description>Note reads: "good luck... j xxx"</description>
 			<rarity>quest</rarity>
+			<type>note</type>
 		</item>
 		<item>
 			<name>blue_crystal</name>
 			<description>The crystal glows dimly as you pass it over in your hands</description>
 			<rarity>quest</rarity>
+			<type>magic_item</type>
 		</item>
 		<item>
 			<name>rotten_apple</name>
@@ -205,7 +207,7 @@
 				</update>
 				<complete>
 					<requiredTriggers>1</requiredTriggers>
-					<nextQuestId></nextQuestId>
+					<nextQuestId>4</nextQuestId>
 				</complete>
 			</triggers>
 		</quest>
@@ -235,10 +237,11 @@
 			<description>give jimmy_the_smelly 5x any single food item</description>
 			<triggers>
 				<update>
-					<action>handin</action>
+					<action>quest_hand_in</action>
 					<nouns>
 						<noun>jimmy_the_smelly</noun>
-						<noun>item:type:food:5</noun>
+						<noun>type:food:rarity:common</noun>
+						<noun>5</noun>
 					</nouns>
 				</update>
 				<complete>
@@ -252,6 +255,25 @@
 					<quantity>1</quantity>
 				</reward>
 			</rewards>
+		</quest>
+		<quest>
+			<id>4</id>
+			<name>Give the guide the [weird_note#1]</name>
+			<description>hand the note into the guide</description>
+			<triggers>
+				<update>
+					<action>quest_hand_in</action>
+					<nouns>
+						<noun>james_the_guide</noun>
+						<noun>weird_note#1</noun>
+						<noun>1</noun>
+					</nouns>
+				</update>
+				<complete>
+					<requiredTriggers>1</requiredTriggers>
+					<nextQuestId></nextQuestId>
+				</complete>
+			</triggers>
 		</quest>
 	</quests>
 
@@ -314,7 +336,7 @@
 					<responses>
 						<response>
 							<questRequirement>2#UA</questRequirement>
-							<text>I'll see what I can do</text>
+							<text>Accept Quest: I'll see what I can do</text>
 							<nextStatementId>5</nextStatementId>
 						</response>
 						<response>
@@ -324,8 +346,8 @@
 						</response>
 						<response>
 							<questRequirement>3#A</questRequirement>
-							<text>I got you some food</text>
-							<nextStatementId>7</nextStatementId>
+							<text>Complete Quest: I got you some food</text>
+							<nextStatementId>51</nextStatementId>
 						</response>
 						<response>
 							<text>Find your own food, smelly old man</text>
@@ -338,6 +360,17 @@
 					<text>Thank you kind sir!</text>
 					<assignQuestId>2</assignQuestId>
 					<responses></responses>
+				</statement>
+				<statement>
+					<id>51</id>
+					<text>Thank you, this will have to do *he takes the food*</text>
+					<completeQuestId>3</completeQuestId>
+					<responses>
+						<responses>
+							<text></text>
+							<nextStatementId>3#C?7:4</nextStatementId>
+						</responses>
+					</responses>
 				</statement>
 				<statement>
 					<id>6</id>
@@ -376,6 +409,11 @@
 						<response>
 							<text>Okay, what am I doing here?</text>
 							<nextStatementId>2</nextStatementId>
+						</response>
+						<response>
+							<questRequirement>4#A</questRequirement>
+							<text>Complete Quest: Here have this note</text>
+							<nextStatementId>7</nextStatementId>
 						</response>
 					</responses>
 				</statement>
@@ -421,6 +459,12 @@
 				<statement>
 					<id>6</id>
 					<text>Beep Boop I am a robot...</text>
+					<responses></responses>
+				</statement>
+				<statement>
+					<id>7</id>
+					<text>*james pockets the note and looks around shiftily*</text>
+					<completeQuestId>4</completeQuestId>
 					<responses></responses>
 				</statement>
 			</dialog>
