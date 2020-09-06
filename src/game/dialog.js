@@ -109,7 +109,7 @@ export class Dialog {
 
 			if (action === PlayerAction.QUEST_HAND_IN) {
 				const [mobId, ...itemInfo] = nouns;
-				const itemObj = { type: "", rarity: "", name: "", quantity: 0 };
+				const itemObj = { type: "", rarity: "", itemName: "", quantity: 0 };
 				if (itemInfo.length > 0 && mobId === this.getNPCName()) {
 					if (itemInfo[0].includes("type:")) {
 						itemObj.type = itemInfo[0].split(":", 2)[1];
@@ -117,7 +117,7 @@ export class Dialog {
 							itemObj.rarity = itemInfo[0].split(":", 4)[3];
 						}
 					} else {
-						itemObj.name = itemInfo[0];
+						itemObj.itemName = itemInfo[0];
 					}
 					itemObj.quantity = parseInt(itemInfo[1]);
 					if (Command.questHandIn(this.getNPCName(), itemObj)) {

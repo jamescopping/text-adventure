@@ -2,6 +2,7 @@
 import { Story } from "./story"
 import { log } from "../controller/adventureLogController"
 import { PlayerAction, PlayerEvent } from "./player";
+import { game } from "./game"
 
 export class QuestLog {
 
@@ -101,6 +102,7 @@ export class QuestLog {
 
         log(`Quest Completed! ${completedQuest.getName()}`);
         this.activateQuest(completedQuest.getNextQuestId());
+        this.giveRewards(completedQuest.getRewards());
 
         const updateTrigger = completedQuest.getUpdateTrigger();
         const updateAction = (updateTrigger !== undefined) ? updateTrigger.getAction() : undefined;
@@ -115,6 +117,20 @@ export class QuestLog {
                 }
             })) { this.activeActionListenerSet.delete(updateAction) }
         return true;
+    }
+
+    giveRewards(rewards) {
+        if (rewards === undefined || rewards.length === 0) return false;
+        const playerInv = game.getPlayer().getInventory().addItems(rewards);
+        log(`Item rewards: `);
+        rewards.forEach(reward => {
+            let outString = "";
+            if (reward["quantity"] > 1) {
+                outString += `${reward["quantity"]} x `;
+            }
+            outString += `[${reward["itemName"]}] added to your inventory`;
+            log(outString);
+        });
     }
 
     checkQuestAlreadyCompleted(quest) {
@@ -159,7 +175,7 @@ export class QuestLog {
 }
 
 class Quest {
-    constructor(id, name, description, updateTrigger, assignTrigger, requiredTriggers, nextQuestId) {
+    constructor(id, name, description, updateTrigger, assignTrigger = undefined, requiredTriggers = undefined, nextQuestId = -1, rewards = []) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -168,6 +184,7 @@ class Quest {
         this.triggerCount = 0;
         this.updateTrigger = (updateTrigger !== undefined) ? new QuestTrigger(updateTrigger.action, updateTrigger.nouns) : undefined;
         this.assignTrigger = (assignTrigger !== undefined) ? new QuestTrigger(assignTrigger.action, assignTrigger.nouns) : undefined;
+        this.rewards = rewards;
         this.complete = false;
     }
 
@@ -189,7 +206,7 @@ class Quest {
     percentageComplete() { return Math.round((this.triggerCount / this.requiredTriggers) * 100) }
 
     static fromStory(storyQuest) {
-        return new Quest(storyQuest.id, storyQuest.name, storyQuest.description, storyQuest.triggers.update, storyQuest.triggers.assign, storyQuest.triggers.complete.requiredTriggers, storyQuest.triggers.complete.nextQuestId);
+        return new Quest(storyQuest.id, storyQuest.name, storyQuest.description, storyQuest.triggers.update, storyQuest.triggers.assign, storyQuest.triggers.complete.requiredTriggers, storyQuest.triggers.complete.nextQuestId, storyQuest.rewards);
     }
 
     getId() { return this.id }
@@ -200,6 +217,7 @@ class Quest {
     getRequiredTriggers() { return this.requiredTriggers }
     getNextQuestId() { return this.nextQuestId }
     getTriggerCount() { return this.triggerCount }
+    getRewards() { return this.rewards }
 
     setTriggerCount(count) { this.triggerCount = count; this.isTriggerRequirementMet(); }
 }

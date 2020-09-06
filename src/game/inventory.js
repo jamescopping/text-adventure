@@ -11,22 +11,23 @@ export class Inventory {
 	listSize() { return this.list.length }
 	addItems(itemObjList) { itemObjList.forEach(itemObj => this.addItem(itemObj)) }
 	addItem(newItemObj) {
-		const { name, quantity } = newItemObj;
-		if (Story.getItemMap().has(name)) {
+		const { itemName, quantity } = newItemObj;
+		console.log(newItemObj, itemName);
+		if (Story.getItemMap().has(itemName)) {
 			let itemAlreadyIn = false;
 			let newTotal = quantity;
 			for (let index = 0; index < this.list.length; index++) {
-				if (this.list[index]["name"] === name) {
+				if (this.list[index]["itemName"] === itemName) {
 					this.list[index]["quantity"] += quantity;
 					newTotal = this.list[index]["quantity"];
 					itemAlreadyIn = true;
 					break;
 				}
 			}
-			if (!itemAlreadyIn) this.list.push(newItemObj);
+			if (!itemAlreadyIn) this.list.push({ itemName: itemName, quantity: quantity });
 			if (this.player) {
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, name, quantity));
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, "add", "type", `${this.getItemType(name)}`, quantity));
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, itemName, quantity));
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, "add", "type", `${this.getItemType(itemName)}`, quantity));
 			}
 		}
 	}
@@ -41,7 +42,7 @@ export class Inventory {
 	getIndex(itemName) {
 		let itemIndex = -1;
 		this.list.some((itemObj, index) => {
-			if (itemName === itemObj["name"]) {
+			if (itemName === itemObj["itemName"]) {
 				itemIndex = index;
 				return true;
 			}
@@ -57,9 +58,9 @@ export class Inventory {
 
 	getItemListOfType(itemType, rarity = "") {
 		const itemList = this.list.filter(itemObj => {
-			if (itemType === this.getItemType(itemObj["name"])) {
+			if (itemType === this.getItemType(itemObj["itemName"])) {
 				if (rarity !== "") {
-					return rarity === this.getItemRarity(itemObj["name"]);
+					return rarity === this.getItemRarity(itemObj["itemName"]);
 				}
 				return true;
 			}
@@ -72,7 +73,7 @@ export class Inventory {
 		const foundItemList = this.getItemListOfType(itemType, rarity);
 		if (foundItemList.length === 0) return false;
 		if (foundItemList[0].quantity < quantity) return false;
-		return this.removeItem(foundItemList[0]["name"], quantity, quest);
+		return this.removeItem(foundItemList[0]["itemName"], quantity, quest);
 	}
 
 	removeItem(itemName, quantity = -1, quest = false) {
@@ -93,14 +94,14 @@ export class Inventory {
 			return false;
 		}
 		if (this.player) {
-			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, removedItem["name"], -quantity));
-			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, "remove", "type", `${this.getItemType(removedItem["name"])}`, quantity));
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, removedItem["itemName"], -quantity));
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVENTORY_UPDATE, "remove", "type", `${this.getItemType(removedItem["itemName"])}`, quantity));
 		}
 		return removedItem;
 	}
 
-	hasItem(itemName) { return this.list.some(itemObj => itemName == itemObj["name"]) }
-	hasItemType(itemType) { return this.list.some(itemObj => itemType == this.getItemType(itemObj["name"])) }
+	hasItem(itemName) { return this.list.some(itemObj => itemName === itemObj["itemName"]) }
+	hasItemType(itemType) { return this.list.some(itemObj => itemType === this.getItemType(itemObj["itemName"])) }
 
 	getItemProperty(itemName, property) {
 		const item = Story.getItemMap().get(itemName);

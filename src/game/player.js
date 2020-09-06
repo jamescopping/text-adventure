@@ -24,7 +24,7 @@ export class Player {
 		},
 		]);
 		this.knownSpells = ["fire_bolt"];
-		this.inventory = new Inventory([{ name: "blue_crystal", quantity: 1 }], 100, true);
+		this.inventory = new Inventory([{ itemName: "blue_crystal", quantity: 1 }], 100, true);
 	}
 
 	pickupItem(itemObj) {
@@ -33,7 +33,7 @@ export class Player {
 		if (itemObj["quantity"] > 1) {
 			outString += `${itemObj["quantity"]} x `;
 		}
-		outString += `[${itemObj["name"]}] added to your inventory`;
+		outString += `[${itemObj["itemName"]}] added to your inventory`;
 		log(outString);
 	}
 
