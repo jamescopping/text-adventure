@@ -46,7 +46,7 @@ export class Command {
 		sceneItems.forEach(itemObj => {
 			let outString = "";
 			if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
-			outString += `[*${itemObj["name"]}*] ${itemObj["description"]}`;
+			outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
 			log(outString);
 			logCount++;
 		});
@@ -75,12 +75,12 @@ export class Command {
 	}
 
 	static pickup(itemName) {
-		//TODO remove item from the scene
 		if (itemName !== "") {
 			let sceneItem = game.getCurrentScene().pickupItem(itemName);
+			console.log(sceneItem);
 			if (sceneItem !== null) {
 				game.getPlayer().pickupItem(sceneItem);
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, sceneItem["name"], sceneItem["quantity"]));
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, sceneItem["itemName"], sceneItem["quantity"]));
 				return true;
 			} else {
 				triggerAlert("alert-warning", `Item [${itemName}] does not exist in this scene`);
@@ -93,9 +93,9 @@ export class Command {
 		if (itemName === "") return false;
 		let itemObj = game.getPlayer().getInventory().removeItem(itemName);
 		if (itemObj !== null) {
-			game.getCurrentScene().getItems().push({ name: itemObj["name"], quantity: itemObj["quantity"], description: "dropped by player" });
-			log(`Item [*${itemObj["name"]}*] x ${itemObj["quantity"]} dropped from inventory`);
-			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DROP, itemObj["name"], itemObj["quantity"]));
+			game.getCurrentScene().getItems().push({ itemName: itemObj["itemName"], quantity: itemObj["quantity"], description: "dropped by player" });
+			log(`Item [*${itemObj["itemName"]}*] x ${itemObj["quantity"]} dropped from inventory`);
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DROP, itemObj["itemName"], itemObj["quantity"]));
 			return true;
 		} else {
 			triggerAlert("alert-warning", `Item [${itemName}] can't be dropped from your inventory`);
@@ -122,7 +122,7 @@ export class Command {
 		for (let index = 0; index < itemObjList.length; index++) {
 			const itemObj = itemObjList[index];
 			if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
-			outString += `[${itemObj["name"]}]`;
+			outString += `[${itemObj["itemName"]}]`;
 			if (index !== itemObjList.length - 1) outString += ", ";
 		}
 		if (outString !== "") {
@@ -176,17 +176,17 @@ export class Command {
 
 	static questHandIn(mobName, requiredItemObj) {
 		const inv = game.getPlayer().getInventory();
-		const { type, rarity, name, quantity } = requiredItemObj;
-		if (name !== "" && inv.hasItem(name)) {
-			if (inv.removeItem(name, quantity, true)) {
-				log(`You give /**${mobName}*\\ ${quantity} x [${name}]`);
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.QUEST_HAND_IN, mobName, name, quantity));
+		const { type, rarity, itemName, quantity } = requiredItemObj;
+		if (itemName !== "" && inv.hasItem(itemName)) {
+			if (inv.removeItem(itemName, quantity, true)) {
+				log(`You give /**${mobName}*\\ ${quantity} x [${itemName}]`);
+				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.QUEST_HAND_IN, mobName, itemName, quantity));
 				return true;
 			}
 		} else if (type !== "" && inv.hasItemType(type)) {
 			const removedItem = inv.removeItemType(type, rarity, quantity, true);
 			if (removedItem) {
-				log(`You give /**${mobName}*\\ ${quantity} x [${removedItem.name}]`);
+				log(`You give /**${mobName}*\\ ${quantity} x [${removedItem.itemName}]`);
 				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.QUEST_HAND_IN, mobName, `type:${type}:rarity:${rarity}`, quantity));
 				return true;
 			}

@@ -47,7 +47,13 @@ export class Scene {
 
 	pickupItem(itemName) {
 		let itemIndex = - 1;
-		this.items.forEach((itemObj, index) => { if (itemObj["name"] === itemName) itemIndex = index; return; });
+		this.items.some((itemObj, index) => {
+			if (itemObj["itemName"] === itemName) {
+				itemIndex = index;
+				return true;
+			};
+			return false;
+		});
 		if (itemIndex === -1) return null;
 		return this.items.splice(itemIndex, 1)[0];
 	}
@@ -76,7 +82,7 @@ export class Scene {
 			if (storyScene.hasOwnProperty("sceneItems")) {
 				storyScene.sceneItems.forEach(element => {
 					let itemObj = {
-						name: element["itemName"],
+						itemName: element["itemName"],
 						quantity: parseInt(element["quantity"]),
 						description: element["description"]
 					};

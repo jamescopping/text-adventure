@@ -13,10 +13,10 @@ export const operand = {
 				this.setList([...(game.getPlayer().getKnownSpells())]);
 				break;
 			case OperandList.ITEM:
-				this.setList(game.getCurrentScene().getItems().map(itemObj => itemObj["name"]));
+				this.setList(game.getCurrentScene().getItems().map(itemObj => itemObj["itemName"]));
 				break;
 			case OperandList.INVENTORY:
-				this.setList(game.getPlayer().getInventory().getList().map(itemObj => itemObj["name"]));
+				this.setList(game.getPlayer().getInventory().getList().map(itemObj => itemObj["itemName"]));
 				break;
 			case OperandList.MOB:
 				this.setList([...(game.getCurrentScene().getMobs())]);
