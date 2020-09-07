@@ -1,6 +1,7 @@
 import { Story } from "./story";
 import { log } from "../controller/adventureLogController";
 import { game, GameMode } from "./game";
+import { MobStatus } from "./definitions";
 export class Scene {
 	constructor() {
 		this.name = "";
@@ -27,7 +28,45 @@ export class Scene {
 
 	startCombat() {
 		game.changeGameMode(GameMode.COMBAT);
+		log("Combat started!");
+		const combatMobs = this.mobs.filter(mobObj => mobObj.status === MobStatus.ALIVE && mobObj.type === "enemy");
+		if (combatMobs.length === 0) return false;
+		let outString = "Mob List: ";
+		combatMobs.forEach((mobObj, index) => {
+			outString += mobObj.mobName;
+			if (index < combatMobs.length - 1) outString += ", ";
+		});
+		log(outString);
+		this.combatLoop(combatMobs);
+		this.endCombat();
 	}
+
+	combatLoop(combatMobsList) {
+		let numberOfActiveMobs = combatMobsList.length;
+		const updateNumOfActiveMobs = () => {
+			numberOfActiveMobs = (combatMobsList.filter(mobObj => mobObj.status !== MobStatus.DEAD)).length;
+		}
+		const player = game.getPlayer();
+
+		//combat is active while player is alive and there are active mobs to fight
+		while (player.isAlive() && numberOfActiveMobs > 0) {
+
+
+			setTimeout(() => { console.log(combatMobsList) }, 1000);
+
+
+
+
+			updateNumOfActiveMobs();
+		}
+	}
+
+	endCombat() {
+		//save the states of the mobs that were in the combat
+		this.enter
+	}
+
+	checkForCombat() { return this.mobs.some(mobObj => mobObj.status === MobStatus.ALIVE && mobObj.type === "enemy") }
 
 	exploreScene() {
 		game.changeGameMode(GameMode.ADVENTURE);
@@ -38,11 +77,6 @@ export class Scene {
 			outString += `\<-${direction}-\> | `;
 		});
 		log(outString);
-	}
-
-
-	checkForCombat() {
-		return false;
 	}
 
 	pickupItem(itemName) {
@@ -76,7 +110,20 @@ export class Scene {
 			this.name = storyScene.hasOwnProperty("name") ? storyScene.name : "";
 			this.description = storyScene.hasOwnProperty("description") ? storyScene.description : "";
 			this.objects = storyScene.hasOwnProperty("sceneObjects") ? storyScene.sceneObjects.map(element => element["objectName"]) : [];
-			this.mobs = storyScene.hasOwnProperty("sceneMobs") ? storyScene.sceneMobs.map(element => element["mobName"]) : [];
+
+			this.mobs = [];
+			if (storyScene.hasOwnProperty("sceneMobs")) {
+				storyScene.sceneMobs.forEach(element => {
+					let mobObj = {
+						mobName: element["mobName"],
+						status: element["status"]
+					};
+					const storyMob = Story.getMob(mobObj.mobName);
+					mobObj.stats = storyMob["stats"];
+					mobObj.type = storyMob["type"];
+					this.mobs.push(mobObj);
+				});
+			}
 
 			this.items = [];
 			if (storyScene.hasOwnProperty("sceneItems")) {
@@ -105,7 +152,7 @@ export class Scene {
 	static getStoryScene(sceneKey) {
 		let scene;
 		if (sceneKey !== undefined) {
-			scene = Story.getSceneMap().get(sceneKey);
+			scene = Story.getScene(sceneKey);
 		} else {
 			const list = Story.getSceneMap().values();
 			[...list].forEach(element => {
@@ -122,6 +169,8 @@ export class Scene {
 	static getVisitedScenes() { return Scene.visitedScenes }
 	static hasSceneBeenVisited(sceneName) { return Scene.visitedScenes.has(sceneName) }
 	static getVisitedScene(sceneName) { return Scene.visitedScenes.get(sceneName) }
+
+	getMob(mobName) { return this.mobs.find(mob => mob.mobName === mobName) }
 
 	getName() { return this.name }
 	getDescription() { return this.description }

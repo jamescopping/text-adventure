@@ -146,6 +146,9 @@ const handleTextCommandInput = value => {
 						case "response":
 							operand.setType(OperandList.RESPONSE);
 							break;
+						case "look":
+							operand.setType(OperandList.LOOK);
+							break;
 					}
 					suggestion.populateList(operand.getList(), command.operand);
 				}
@@ -193,7 +196,7 @@ const validateCommand = command => {
 			save = true;
 			break;
 		case "look":
-			Command.look();
+			Command.look(command.operand);
 			save = true;
 			break;
 		case "path":

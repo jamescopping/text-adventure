@@ -18,24 +18,20 @@ export class Resource {
 		return this.currentValue;
 	}
 
-	isEmpty() {
-		return this.currentValue === 0;
-	}
-	getCurrentPercentage() {
-		return (this.currentValue / this.maxValue) * 100;
-	}
-	getCurrentValue() {
-		return this.currentValue;
-	}
-	getType() { return this.type; }
+	isEmpty() { return this.currentValue === 0 }
+	getCurrentPercentage() { return (this.currentValue / this.maxValue) * 100 }
+	getCurrentValue() { return this.currentValue }
+	getMaxValue() { return this.maxValue }
 
-	toString() {
-		return `resourceType: ${this.type}, currentValue: ${this.currentValue}, maxValue: ${this.maxValue}`;
-	}
+	setCurrentValue(value) { this.currentValue = value }
+	setMaxValue(value) { this.maxValue = value }
+
+	getType() { return this.type; }
+	toString() { return `resourceType: ${this.type}, currentValue: ${this.currentValue}, maxValue: ${this.maxValue}` }
 }
 
 export const ResourceType = {
 	HEALTH: "health",
 	STAMINA: "stamina",
-	MANA: "mana",
+	MANA: "mana"
 };

@@ -34,6 +34,9 @@ export const operand = {
 				game.getDialog().setResponses(getResponseMap());
 				this.setList([...game.getDialog().getResponses().keys()]);
 				break;
+			case OperandList.LOOK:
+				this.setList(["items", "objects", "mobs"]);
+				break;
 			default:
 				this.setList([]);
 				break;

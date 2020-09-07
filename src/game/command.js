@@ -5,6 +5,7 @@ import { triggerAlert } from "../controller/alertController";
 import { PlayerEvent, PlayerAction } from "./player";
 import { Scene } from "./scene";
 import { log, clearResponseClass, clearPathClass } from "../controller/adventureLogController";
+import { MobStatus } from "./definitions";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
@@ -30,27 +31,47 @@ export class Command {
 		return { action: string.split(" ")[0], operand: string.split(" ")[1] };
 	}
 
-	static look() {
+	static look(lookFor) {
 		const currentScene = game.getCurrentScene();
 		log(`You look around the ${currentScene.getName()} and you find...`);
-		const sceneItems = currentScene.getItems();
-		const sceneNPCs = currentScene.getMobs();
-		let logCount = 0;
-		sceneNPCs.forEach(npc => {
-			let outString = "";
-			outString += `/**${npc}*\\ ${Story.getMobMap().get(npc).description}`;
-			log(outString);
-			logCount++;
-		});
 
-		sceneItems.forEach(itemObj => {
-			let outString = "";
-			if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
-			outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
-			log(outString);
-			logCount++;
-		});
+		let logCount = 0;
+
+		switch (lookFor.toLowerCase()) {
+			case "items":
+				const sceneItems = currentScene.getItems();
+				sceneItems.forEach(itemObj => {
+					let outString = "";
+					if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
+					outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
+					log(outString);
+					logCount++;
+				});
+				break;
+			case "objects":
+				const sceneObjects = currentScene.getObjects();
+				sceneObjects.forEach(obj => {
+					let outString = "";
+					outString += `(${obj.objectName}) ${Story.getObject(obj.objectName).description}`;
+					log(outString);
+					logCount++;
+				});
+				break;
+			case "mobs":
+				const sceneMobs = currentScene.getMobs();
+				sceneMobs.forEach(mob => {
+					if (mob.status === MobStatus.ALIVE) {
+						let outString = "";
+						outString += `/**${mob.mobName}*\\ ${Story.getMob(mob.mobName).description}`;
+						log(outString);
+						logCount++;
+					}
+				});
+				break;
+		}
+
 		if (logCount === 0) log("nothing...");
+		return true;
 	}
 
 	static path(direction) {
@@ -106,7 +127,7 @@ export class Command {
 
 	static investigate(itemName) {
 		if (game.getPlayer().getInventory().hasItem(itemName)) {
-			let item = Story.getItemMap().get(itemName);
+			let item = Story.getItem(itemName);
 			log(`You investigate [${item["name"]}]: ${item["description"]}`);
 			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVESTIGATE, item["name"]));
 			return true;
@@ -146,18 +167,17 @@ export class Command {
 		}
 	}
 
-	static talkto(mob) {
+	static talkto(mobName) {
 		if (game.getGameMode() === GameMode.DIALOG) { this.bye(); return false; }
-		if (game.getCurrentScene().getMobs().includes(mob)) {
-			const foundMob = Story.getMobMap().get(mob);
-			if (foundMob.hasOwnProperty("type") && foundMob["type"] === "npc" && foundMob.hasOwnProperty("dialog") && foundMob["dialog"].length > 0) {
-				game.loadDialog(foundMob);
-				game.changeGameMode(GameMode.DIALOG);
-				game.getDialog().start();
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.TALKTO, foundMob["name"]))
-			} else {
-				log("You probably shouldn't talk to them, or they just have nothing to say.");
-			}
+		const sceneMob = game.getCurrentScene().getMob(mobName);
+		const storyMob = Story.getMob(mobName);
+		if (sceneMob.type === "npc" && sceneMob.status === MobStatus.ALIVE && storyMob.hasOwnProperty("dialog") && storyMob["dialog"].length > 0) {
+			game.loadDialog(storyMob);
+			game.changeGameMode(GameMode.DIALOG);
+			game.getDialog().start();
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.TALKTO, mobName));
+		} else {
+			log("You probably shouldn't talk to them, or they just have nothing to say.");
 		}
 	}
 

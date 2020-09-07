@@ -4,10 +4,12 @@ import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
 import { QuestLog } from "./quest"
 import { game } from "./game";
+import { MobStatus } from "./definitions";
 
 export class Player {
 	constructor() {
 		this.questLog = new QuestLog();
+		this.status = MobStatus.ALIVE;
 		this.stats = new Stats([{
 			type: ResourceType.HEALTH,
 			currentValue: 100,
@@ -20,11 +22,11 @@ export class Player {
 		{
 			type: ResourceType.STAMINA,
 			currentValue: 20,
-			maxValue: 999,
-		},
+			maxValue: 20,
+		}
 		]);
-		this.knownSpells = ["fire_bolt"];
-		this.inventory = new Inventory([{ itemName: "blue_crystal", quantity: 1 }], 100, true);
+		this.knownSpells = [];
+		this.inventory = new Inventory([], 100, true);
 	}
 
 	pickupItem(itemObj) {
@@ -40,6 +42,29 @@ export class Player {
 	getQuestLog() { return this.questLog }
 	getInventory() { return this.inventory }
 	getKnownSpells() { return this.knownSpells }
+
+	isAlive() { this.status !== MobStatus.DEAD }
+	setStatus(status) { this.status = status }
+
+	loadStoryPlayerObj(playerObj) {
+		const startingInv = playerObj.player.inventory;
+		if (Array.isArray(startingInv)) {
+			this.inventory.addItems(startingInv);
+		} else if (typeof startingInv === "object" && startingInv.hasOwnProperty("inventoryItem")) {
+			this.inventory.addItem(startingInv.inventoryItem);
+		}
+		const stats = playerObj.player.stats;
+		const statKeys = Object.keys(stats);
+		statKeys.forEach(statType => {
+			const statResource = this.stats.getResourceOfType(statType);
+			statResource.setCurrentValue(stats[statType].currentValue);
+			statResource.setMaxValue(stats[statType].maxValue);
+		});
+		//known spells
+		const knownSpells = playerObj.player.knownSpells;
+		this.knownSpells = (knownSpells !== undefined) ? knownSpells.split(",") : [];
+		if (this.knownSpells[0] === "") this.knownSpells = [];
+	}
 
 	toString() { return `Health: ${this.stats.getResourceOfType(ResourceType.HEALTH).toString()}`; }
 }
