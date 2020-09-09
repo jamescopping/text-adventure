@@ -1,8 +1,8 @@
 
 import { Story } from "./story"
 import { log } from "../controller/adventureLogController"
-import { PlayerAction, PlayerEvent } from "./player";
-import { game } from "./game"
+import { PlayerEvent } from "./player";
+import { Game } from "./game"
 
 export class QuestLog {
 
@@ -121,7 +121,7 @@ export class QuestLog {
 
     giveRewards(rewards) {
         if (rewards === undefined || rewards.length === 0) return false;
-        const playerInv = game.getPlayer().getInventory().addItems(rewards);
+        const playerInv = Game.getPlayer().getInventory().addItems(rewards);
         log(`Item rewards: `);
         rewards.forEach(reward => {
             let outString = "";

@@ -3,7 +3,7 @@ import { ResourceType } from "./resource";
 import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
 import { QuestLog } from "./quest"
-import { game } from "./game";
+import { Game } from "./game";
 import { MobStatus } from "./definitions";
 
 export class Player {
@@ -100,7 +100,7 @@ export class PlayerEvent {
 
 	static broadcastPlayerEvent(playerEvent) {
 		PlayerEvent.addEventToList(playerEvent);
-		game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
+		Game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
 	}
 
 	static addEventToList(playerEvent) { PlayerEvent.eventList.push(playerEvent) }

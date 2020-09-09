@@ -1,4 +1,4 @@
-import { Command } from "../game/command";
+import { Command } from "../adventureGame/command";
 
 export const prevCommand = {
 	maxSavedCommands: 10,

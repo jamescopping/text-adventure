@@ -5,7 +5,6 @@ export class Story {
 
 	static loadStoryAssetsFromXML(fileName) {
 		let xml = FileUtil.stringToXML(require(`./story/${fileName}.xml`));
-
 		const initMap = (map, xmlArray) => {
 			[...xmlArray].forEach(node => {
 				let key = node.children[0].textContent;

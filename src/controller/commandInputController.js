@@ -2,12 +2,12 @@ import { updateContentSuggestionBox, hideSuggestionBox, selectNextSuggestion, is
 import { log } from "../controller/adventureLogController";
 import { triggerAlert } from "../controller/alertController";
 
-import { Command, CommandMap } from "../game/command";
-import { OperandList } from "../game/definitions";
+import { Command, CommandMap } from "../adventureGame/command";
+import { OperandList } from "../adventureGame/definitions";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
-import { game } from "../game/game";
+import { Game } from "../adventureGame/game";
 
 export let commandTextWidth, commandInput, commandSubmit;
 
@@ -85,7 +85,7 @@ const specialKeyInput = event => {
 			break;
 		case "Tab":
 			if (commandInput.value === "") {
-				suggestion.setList(CommandMap.get(game.getGameMode()));
+				suggestion.setList(CommandMap.get(Game.getGameMode()));
 				commandTextWidth.textContent = commandInput.value;
 				updateContentSuggestionBox();
 			}
@@ -106,7 +106,7 @@ const handleTextCommandInput = value => {
 		resetToDefaults();
 		if (hasSpace(value)) {  //if there is a space in the string then do checks on the second word
 			let command = new Command(value);
-			if (CommandMap.get(game.getGameMode()).includes(command.action)) {
+			if (CommandMap.get(Game.getGameMode()).includes(command.action)) {
 				if (command.action === "/help") {
 					operand.setType(OperandList.COMMAND);
 					suggestion.populateList(operand.getList(), command.operand);

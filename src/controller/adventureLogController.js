@@ -1,5 +1,5 @@
 
-import { game } from "../game/game";
+import { Game } from "../adventureGame/game";
 import { commandInput, commandSubmit } from "./commandInputController";
 
 let adventureLog;
@@ -16,7 +16,7 @@ export const initAdventureLog = () => {
 			commandInput.value = `investigate ${element.textContent.substring(1, element.textContent.length - 1)}`;
 			commandSubmit.click();
 		} else if (element.tagName === "SPAN" && element.className.includes("response-text")) {
-			game.getDialog().setResponses(getResponseMap());
+			Game.getDialog().setResponses(getResponseMap());
 			commandInput.value = `response ${element.textContent.substring(0, element.textContent.indexOf("."))}`;
 			commandSubmit.click();
 		} else if (element.tagName === "SPAN" && element.className.includes("path-text")) {

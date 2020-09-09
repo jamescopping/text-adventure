@@ -1,6 +1,6 @@
 import { Story } from "./story";
 import { log } from "../controller/adventureLogController";
-import { game, GameMode } from "./game";
+import { Game, GameMode } from "./game";
 import { MobStatus } from "./definitions";
 export class Scene {
 	constructor() {
@@ -20,56 +20,17 @@ export class Scene {
 	enter() {
 		//if there are mobs to fight then go into combat mode
 		if (this.checkForCombat()) {
-			this.startCombat();
+			Game.getCombat().start();
 		} else {
 			this.exploreScene();
 		}
 	}
 
-	startCombat() {
-		game.changeGameMode(GameMode.COMBAT);
-		log("Combat started!");
-		const combatMobs = this.mobs.filter(mobObj => mobObj.status === MobStatus.ALIVE && mobObj.type === "enemy");
-		if (combatMobs.length === 0) return false;
-		let outString = "Mob List: ";
-		combatMobs.forEach((mobObj, index) => {
-			outString += mobObj.mobName;
-			if (index < combatMobs.length - 1) outString += ", ";
-		});
-		log(outString);
-		this.combatLoop(combatMobs);
-		this.endCombat();
-	}
-
-	combatLoop(combatMobsList) {
-		let numberOfActiveMobs = combatMobsList.length;
-		const updateNumOfActiveMobs = () => {
-			numberOfActiveMobs = (combatMobsList.filter(mobObj => mobObj.status !== MobStatus.DEAD)).length;
-		}
-		const player = game.getPlayer();
-
-		//combat is active while player is alive and there are active mobs to fight
-		while (player.isAlive() && numberOfActiveMobs > 0) {
-
-
-			setTimeout(() => { console.log(combatMobsList) }, 1000);
-
-
-
-
-			updateNumOfActiveMobs();
-		}
-	}
-
-	endCombat() {
-		//save the states of the mobs that were in the combat
-		this.enter
-	}
-
 	checkForCombat() { return this.mobs.some(mobObj => mobObj.status === MobStatus.ALIVE && mobObj.type === "enemy") }
 
+
 	exploreScene() {
-		game.changeGameMode(GameMode.ADVENTURE);
+		Game.changeGameMode(GameMode.ADVENTURE);
 		log(this.getDescription());
 		//log the paths that you can choose
 		let outString = "Paths: | ";
