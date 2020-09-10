@@ -11,16 +11,16 @@ export class Player {
 		this.questLog = new QuestLog();
 		this.status = MobStatus.ALIVE;
 		this.stats = new Stats([{
-			type: ResourceType.HEALTH,
+			resourceType: ResourceType.HEALTH,
 			currentValue: 100,
 			maxValue: 100
 		}, {
-			type: ResourceType.MANA,
+			resourceType: ResourceType.MANA,
 			currentValue: 10,
 			maxValue: 56,
 		},
 		{
-			type: ResourceType.STAMINA,
+			resourceType: ResourceType.STAMINA,
 			currentValue: 20,
 			maxValue: 20,
 		}
@@ -42,8 +42,9 @@ export class Player {
 	getQuestLog() { return this.questLog }
 	getInventory() { return this.inventory }
 	getKnownSpells() { return this.knownSpells }
+	getStats() { return this.stats }
 
-	isAlive() { this.status !== MobStatus.DEAD }
+	isAlive() { return this.status !== MobStatus.DEAD }
 	setStatus(status) { this.status = status }
 
 	loadStoryPlayerObj(playerObj) {
@@ -54,12 +55,12 @@ export class Player {
 			this.inventory.addItem(startingInv.inventoryItem);
 		}
 		const stats = playerObj.player.stats;
-		const statKeys = Object.keys(stats);
-		statKeys.forEach(statType => {
-			const statResource = this.stats.getResourceOfType(statType);
-			statResource.setCurrentValue(stats[statType].currentValue);
-			statResource.setMaxValue(stats[statType].maxValue);
+		stats.resources.forEach(resource => {
+			const statResource = this.stats.getResourceOfType(resource.resourceType);
+			statResource.setCurrentValue(resource.currentValue);
+			statResource.setMaxValue(resource.maxValue);
 		});
+		this.stats.setInitiativeBonus(stats.initiativeBonus);
 		//known spells
 		const knownSpells = playerObj.player.knownSpells;
 		this.knownSpells = (knownSpells !== undefined) ? knownSpells.split(",") : [];

@@ -25,6 +25,8 @@ export const initAdventureLog = () => {
 		} else if (element.tagName === "SPAN" && element.className.includes("mob-text")) {
 			commandInput.value = `talkto ${element.textContent.substring(2, element.textContent.length - 2)}`;
 			commandSubmit.click();
+		} else if (element.tagName === "SPAN" && element.className.includes("combat-option")) {
+			Game.getCombat().playerCombatOptionSelected(element.textContent);
 		}
 	});
 };

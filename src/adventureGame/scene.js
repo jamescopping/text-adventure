@@ -1,4 +1,5 @@
 import { Story } from "./story";
+import { Stats } from "./stats";
 import { log } from "../controller/adventureLogController";
 import { Game, GameMode } from "./game";
 import { MobStatus } from "./definitions";
@@ -80,7 +81,7 @@ export class Scene {
 						status: element["status"]
 					};
 					const storyMob = Story.getMob(mobObj.mobName);
-					mobObj.stats = storyMob["stats"];
+					mobObj.stats = new Stats(storyMob["stats"]["resources"], storyMob["stats"]["initiativeBonus"]);
 					mobObj.type = storyMob["type"];
 					this.mobs.push(mobObj);
 				});
@@ -130,8 +131,8 @@ export class Scene {
 	static getVisitedScenes() { return Scene.visitedScenes }
 	static hasSceneBeenVisited(sceneName) { return Scene.visitedScenes.has(sceneName) }
 	static getVisitedScene(sceneName) { return Scene.visitedScenes.get(sceneName) }
-
-	getMob(mobName) { return this.mobs.find(mob => mob.mobName === mobName) }
+	static setLastSceneName(sceneName) { Scene.lastSceneName = sceneName }
+	static getLastSceneName() { return Scene.lastSceneName }
 
 	getName() { return this.name }
 	getDescription() { return this.description }
@@ -139,5 +140,7 @@ export class Scene {
 	getPaths() { return this.paths }
 	getObjects() { return this.objects }
 	getMobs() { return this.mobs }
+	getMob(mobName) { return this.mobs.find(mob => mob.mobName === mobName) }
 }
 Scene.visitedScenes = new Map();
+Scene.lastSceneName = "";

@@ -9,7 +9,7 @@ import { MobStatus } from "./definitions";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
-const combatCommandList = ['flee', 'attack', 'cast', 'use'].sort();
+const combatCommandList = ['flee', 'attack', 'spell', 'item'].sort();
 export const CommandMap = new Map();
 
 CommandMap.set(GameMode.ADVENTURE, adventureCommandList);

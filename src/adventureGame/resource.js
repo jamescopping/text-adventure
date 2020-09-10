@@ -1,7 +1,7 @@
 export class Resource {
 	constructor(resourceObj) {
-		const { type, currentValue, maxValue } = resourceObj;
-		this.type = type;
+		const { resourceType, currentValue, maxValue } = resourceObj;
+		this.type = resourceType;
 		this.currentValue = currentValue;
 		this.maxValue = maxValue;
 	}

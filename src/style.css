@@ -89,6 +89,15 @@ main {
   color: rgb(20, 218, 102);
 }
 
+.combat-option{
+  color: #009fd4;
+}
+
+.combat-option:hover{
+  cursor: pointer;
+  color: #075b77;
+}
+
 .path-text:hover{
   cursor: pointer;
   color:  rgb(141, 13, 13);

@@ -13,18 +13,24 @@
 			</inventoryItem>
 		</inventory>
 		<stats>
-			<health>
-				<currentValue>100</currentValue>
-				<maxValue>100</maxValue>
-			</health>
-			<stamina>
-				<currentValue>20</currentValue>
-				<maxValue>20</maxValue>
-			</stamina>
-			<mana>
-				<currentValue>20</currentValue>
-				<maxValue>20</maxValue>
-			</mana>
+			<resources>
+				<resource>
+					<resourceType>health</resourceType>
+					<currentValue>100</currentValue>
+					<maxValue>100</maxValue>
+				</resource>
+				<resource>
+					<resourceType>stamina</resourceType>
+					<currentValue>20</currentValue>
+					<maxValue>20</maxValue>
+				</resource>
+				<resource>
+					<resourceType>mana</resourceType>
+					<currentValue>20</currentValue>
+					<maxValue>20</maxValue>
+				</resource>
+			</resources>
+			<initiativeBonus>1</initiativeBonus>
 		</stats>
 		<knownSpells>magic_missile</knownSpells>
 	</player>
@@ -324,18 +330,24 @@
 				<deathText>Bleeeegh!</deathText>
 			</dialog>
 			<stats>
-				<health>
-					<currentValue>25</currentValue>
-					<maxValue>25</maxValue>
-				</health>
-				<stamina>
-					<currentValue>20</currentValue>
-					<maxValue>20</maxValue>
-				</stamina>
-				<mana>
-					<currentValue>0</currentValue>
-					<maxValue>1</maxValue>
-				</mana>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>25</currentValue>
+						<maxValue>25</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>20</currentValue>
+						<maxValue>20</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>0</currentValue>
+						<maxValue>1</maxValue>
+					</resource>
+				</resources>
+				<initiativeBonus>0</initiativeBonus>
 			</stats>
 		</mob>
 		<mob>
@@ -343,18 +355,24 @@
 			<type>npc</type>
 			<description>Yeah, he is very smelly, he's probably been in this cave for a while</description>
 			<stats>
-				<health>
-					<currentValue>9999</currentValue>
-					<maxValue>9999</maxValue>
-				</health>
-				<stamina>
-					<currentValue>100</currentValue>
-					<maxValue>100</maxValue>
-				</stamina>
-				<mana>
-					<currentValue>100</currentValue>
-					<maxValue>100</maxValue>
-				</mana>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>10</currentValue>
+						<maxValue>15</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>0</currentValue>
+						<maxValue>1</maxValue>
+					</resource>
+				</resources>
+				<other></other>
 			</stats>
 			<dialog>
 				<statement>
@@ -469,18 +487,24 @@
 			<type>npc</type>
 			<description>Old strange man, but he's kinda hot though so he's got that going for him, kinda silverfox type thing going on</description>
 			<stats>
-				<health>
-					<currentValue>45</currentValue>
-					<maxValue>30</maxValue>
-				</health>
-				<stamina>
-					<currentValue>33</currentValue>
-					<maxValue>25</maxValue>
-				</stamina>
-				<mana>
-					<currentValue>0</currentValue>
-					<maxValue>1</maxValue>
-				</mana>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>20</currentValue>
+						<maxValue>20</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>20</currentValue>
+						<maxValue>20</maxValue>
+					</resource>
+				</resources>
+				<other></other>
 			</stats>
 			<dialog>
 				<statement>
