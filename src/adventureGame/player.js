@@ -9,7 +9,6 @@ import { MobStatus } from "./definitions";
 export class Player {
 	constructor() {
 		this.questLog = new QuestLog();
-		this.status = MobStatus.ALIVE;
 		this.stats = new Stats([{
 			resourceType: ResourceType.HEALTH,
 			currentValue: 100,
@@ -24,7 +23,7 @@ export class Player {
 			currentValue: 20,
 			maxValue: 20,
 		}
-		]);
+		], 0, MobStatus.ALIVE);
 		this.knownSpells = [];
 		this.inventory = new Inventory([], 100, true);
 	}

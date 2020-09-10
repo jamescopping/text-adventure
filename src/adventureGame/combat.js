@@ -34,7 +34,6 @@ export class Combat {
         });
         log(outString);
         await this.loop();
-        this.end();
     }
 
     async loop() {
@@ -47,7 +46,14 @@ export class Combat {
             }
             this.updateNumOfActiveMobs();
         }
-        log("Combat is over!");
+
+        if (this.playerRef.isAlive() && !this.playerFled && this.anyActiveMobs() === 0) {
+            log("Combat is over!");
+        } else if (this.playerRef.isAlive() && this.playerFled) {
+            log(`You successfully escape from combat!`);
+            Game.changeScene(Scene.getLastSceneName());
+        }
+        this.end();
     }
 
     async enemyTurn(combatIndex) {
@@ -62,7 +68,7 @@ export class Combat {
 
 
         log(`${enemy.mobName} does something blah blah blah`);
-        await this.sleep(500);
+        await this.sleep(1000);
     }
 
     async playerTurn() {
@@ -77,9 +83,7 @@ export class Combat {
             case "item":
             case "flee":
                 if (Dice.rollDice(DiceType.D20) >= 10) {
-                    log(`You successfully escape from combat!`);
                     this.playerFled = true;
-                    Game.changeScene(Scene.getLastSceneName());
                 } else {
                     log(`You try to run away, but you can't see a way out...`);
                 }
@@ -87,11 +91,7 @@ export class Combat {
         }
     }
 
-    end() {
-        //save the states of the mobs that were in the combat
-        Game.getCurrentScene().exploreScene();
-    }
-
+    end() { Game.getCurrentScene().exploreScene() }
     updateNumOfActiveMobs() { this.numberOfActiveMobs = (this.enemies.filter(mobObj => mobObj.status !== MobStatus.DEAD)).length }
 
     rollRoundOrder() {
@@ -103,4 +103,6 @@ export class Combat {
     playerCombatOptionSelected(option) { return option }
     anyActiveMobs() { return this.numberOfActiveMobs > 0 }
     sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
+
+
 }

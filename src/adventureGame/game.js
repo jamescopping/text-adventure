@@ -27,7 +27,7 @@ export class Game {
 
 	static changeScene(sceneName) {
 		Game.currentScene.saveSceneState();
-		Scene.setLastSceneName(sceneName);
+		Scene.setLastSceneName(Game.currentScene.getName());
 		Game.currentScene.loadScene(sceneName);
 		return true;
 	}
