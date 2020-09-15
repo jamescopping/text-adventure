@@ -1,5 +1,5 @@
 import { log } from "../controller/adventureLogController";
-import { game } from "./game";
+import { Game } from "./game";
 import { PlayerAction } from "./player";
 import { Command } from "./command";
 export class Dialog {
@@ -86,7 +86,7 @@ export class Dialog {
 	checkQuestStatus(questCodeStr) {
 		let [questId, statusCode] = questCodeStr.split("#", 2);
 		statusCode = statusCode.toLowerCase();
-		const questLog = game.getPlayer().getQuestLog();
+		const questLog = Game.getPlayer().getQuestLog();
 		switch (statusCode) {
 			case "a":
 				return questLog.hasActiveQuest(questId);
@@ -98,7 +98,7 @@ export class Dialog {
 	}
 
 	handleStatementQuestChanges(statement) {
-		const questLog = game.getPlayer().getQuestLog();
+		const questLog = Game.getPlayer().getQuestLog();
 		if (statement.hasOwnProperty("assignQuestId")) {
 			return questLog.activateQuest(statement.assignQuestId);
 		} else if (statement.hasOwnProperty("completeQuestId") && questLog.hasActiveQuest(statement.completeQuestId)) {

@@ -12,13 +12,12 @@ export class Inventory {
 	addItems(itemObjList) { itemObjList.forEach(itemObj => this.addItem(itemObj)) }
 	addItem(newItemObj) {
 		const { itemName, quantity } = newItemObj;
-		console.log(newItemObj, itemName);
 		if (Story.getItemMap().has(itemName)) {
 			let itemAlreadyIn = false;
 			let newTotal = quantity;
 			for (let index = 0; index < this.list.length; index++) {
 				if (this.list[index]["itemName"] === itemName) {
-					this.list[index]["quantity"] += quantity;
+					this.list[index]["quantity"] += parseInt(quantity);
 					newTotal = this.list[index]["quantity"];
 					itemAlreadyIn = true;
 					break;
@@ -104,16 +103,11 @@ export class Inventory {
 	hasItemType(itemType) { return this.list.some(itemObj => itemType === this.getItemType(itemObj["itemName"])) }
 
 	getItemProperty(itemName, property) {
-		const item = Story.getItemMap().get(itemName);
+		const item = Story.getItem(itemName);
 		if (item !== undefined && item.hasOwnProperty(property)) return item[property];
 		return undefined;
 	}
 
-	getItemRarity(itemName) {
-		return Story.getItemMap().get(itemName)["rarity"];
-	}
-
-	getItemType(itemName) {
-		return Story.getItemMap().get(itemName)["type"];
-	}
+	getItemRarity(itemName) { return Story.getItem(itemName)["rarity"] }
+	getItemType(itemName) { return Story.getItem(itemName)["type"] }
 }

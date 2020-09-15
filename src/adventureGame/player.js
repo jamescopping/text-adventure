@@ -3,28 +3,29 @@ import { ResourceType } from "./resource";
 import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
 import { QuestLog } from "./quest"
-import { game } from "./game";
+import { Game } from "./game";
+import { MobStatus } from "./definitions";
 
 export class Player {
 	constructor() {
 		this.questLog = new QuestLog();
 		this.stats = new Stats([{
-			type: ResourceType.HEALTH,
+			resourceType: ResourceType.HEALTH,
 			currentValue: 100,
 			maxValue: 100
 		}, {
-			type: ResourceType.MANA,
+			resourceType: ResourceType.MANA,
 			currentValue: 10,
 			maxValue: 56,
 		},
 		{
-			type: ResourceType.STAMINA,
+			resourceType: ResourceType.STAMINA,
 			currentValue: 20,
-			maxValue: 999,
-		},
-		]);
-		this.knownSpells = ["fire_bolt"];
-		this.inventory = new Inventory([{ itemName: "blue_crystal", quantity: 1 }], 100, true);
+			maxValue: 20,
+		}
+		], 0, MobStatus.ALIVE);
+		this.knownSpells = [];
+		this.inventory = new Inventory([], 100, true);
 	}
 
 	pickupItem(itemObj) {
@@ -40,6 +41,30 @@ export class Player {
 	getQuestLog() { return this.questLog }
 	getInventory() { return this.inventory }
 	getKnownSpells() { return this.knownSpells }
+	getStats() { return this.stats }
+
+	isAlive() { return this.status !== MobStatus.DEAD }
+	setStatus(status) { this.status = status }
+
+	loadStoryPlayerObj(playerObj) {
+		const startingInv = playerObj.player.inventory;
+		if (Array.isArray(startingInv)) {
+			this.inventory.addItems(startingInv);
+		} else if (typeof startingInv === "object" && startingInv.hasOwnProperty("inventoryItem")) {
+			this.inventory.addItem(startingInv.inventoryItem);
+		}
+		const stats = playerObj.player.stats;
+		stats.resources.forEach(resource => {
+			const statResource = this.stats.getResourceOfType(resource.resourceType);
+			statResource.setCurrentValue(resource.currentValue);
+			statResource.setMaxValue(resource.maxValue);
+		});
+		this.stats.setInitiativeBonus(stats.initiativeBonus);
+		//known spells
+		const knownSpells = playerObj.player.knownSpells;
+		this.knownSpells = (knownSpells !== undefined) ? knownSpells.split(",") : [];
+		if (this.knownSpells[0] === "") this.knownSpells = [];
+	}
 
 	toString() { return `Health: ${this.stats.getResourceOfType(ResourceType.HEALTH).toString()}`; }
 }
@@ -75,7 +100,7 @@ export class PlayerEvent {
 
 	static broadcastPlayerEvent(playerEvent) {
 		PlayerEvent.addEventToList(playerEvent);
-		game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
+		Game.getPlayer().getQuestLog().receivePlayerEvent(playerEvent);
 	}
 
 	static addEventToList(playerEvent) { PlayerEvent.eventList.push(playerEvent) }

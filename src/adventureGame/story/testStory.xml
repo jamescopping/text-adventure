@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <story>
+	<!-- Starting Player Info-->
+	<player>
+		<inventory>
+			<inventoryItem>
+				<itemName>blue_crystal</itemName>
+				<quantity>1</quantity>
+			</inventoryItem>
+			<inventoryItem>
+				<itemName>rotten_apple</itemName>
+				<quantity>1</quantity>
+			</inventoryItem>
+		</inventory>
+		<stats>
+			<resources>
+				<resource>
+					<resourceType>health</resourceType>
+					<currentValue>100</currentValue>
+					<maxValue>100</maxValue>
+				</resource>
+				<resource>
+					<resourceType>stamina</resourceType>
+					<currentValue>20</currentValue>
+					<maxValue>20</maxValue>
+				</resource>
+				<resource>
+					<resourceType>mana</resourceType>
+					<currentValue>20</currentValue>
+					<maxValue>20</maxValue>
+				</resource>
+			</resources>
+			<initiativeBonus>1</initiativeBonus>
+		</stats>
+		<knownSpells>magic_missile</knownSpells>
+	</player>
+
 	<!-- Scenes -->
 	<scenes>
 		<scene>
@@ -43,9 +78,6 @@
 					<mobName>james_the_guide</mobName>
 					<status>alive</status>
 				</sceneMob>
-				<sceneMob>
-					<mobName>jimmy_the_smelly</mobName>
-				</sceneMob>
 			</sceneMobs>
 		</scene>
 		<scene>
@@ -84,6 +116,16 @@
 					<objectName>wooden_chest</objectName>
 				</sceneObject>
 			</sceneObjects>
+			<sceneMobs>
+				<sceneMob>
+					<mobName>small_goblin</mobName>
+					<status>alive</status>
+				</sceneMob>
+				<sceneMob>
+					<mobName>small_goblin</mobName>
+					<status>alive</status>
+				</sceneMob>
+			</sceneMobs>
 		</scene>
 
 
@@ -96,10 +138,10 @@
 					<direction>west_back_out_cave</direction>
 				</path>
 			</paths>
-
 			<sceneMobs>
 				<sceneMob>
 					<mobName>jimmy_the_smelly</mobName>
+					<status>alive</status>
 				</sceneMob>
 			</sceneMobs>
 		</scene>
@@ -282,13 +324,56 @@
 		<mob>
 			<name>small_goblin</name>
 			<type>enemy</type>
-			<description></description>
-			<dialog></dialog>
+			<description>Small nasty little goblin</description>
+			<dialog>
+				<greetingText>Hehehe, look what we have here boys!</greetingText>
+				<deathText>Bleeeegh!</deathText>
+			</dialog>
+			<stats>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>25</currentValue>
+						<maxValue>25</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>20</currentValue>
+						<maxValue>20</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>0</currentValue>
+						<maxValue>1</maxValue>
+					</resource>
+				</resources>
+				<initiativeBonus>0</initiativeBonus>
+			</stats>
 		</mob>
 		<mob>
 			<name>jimmy_the_smelly</name>
 			<type>npc</type>
 			<description>Yeah, he is very smelly, he's probably been in this cave for a while</description>
+			<stats>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>10</currentValue>
+						<maxValue>15</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>0</currentValue>
+						<maxValue>1</maxValue>
+					</resource>
+				</resources>
+				<other></other>
+			</stats>
 			<dialog>
 				<statement>
 					<id>1</id>
@@ -401,6 +486,26 @@
 			<name>james_the_guide</name>
 			<type>npc</type>
 			<description>Old strange man, but he's kinda hot though so he's got that going for him, kinda silverfox type thing going on</description>
+			<stats>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>20</currentValue>
+						<maxValue>20</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>20</currentValue>
+						<maxValue>20</maxValue>
+					</resource>
+				</resources>
+				<other></other>
+			</stats>
 			<dialog>
 				<statement>
 					<id>1</id>

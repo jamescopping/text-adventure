@@ -1,5 +1,5 @@
 
-import { game } from "../game/game";
+import { Game } from "../adventureGame/game";
 import { commandInput, commandSubmit } from "./commandInputController";
 
 let adventureLog;
@@ -16,7 +16,7 @@ export const initAdventureLog = () => {
 			commandInput.value = `investigate ${element.textContent.substring(1, element.textContent.length - 1)}`;
 			commandSubmit.click();
 		} else if (element.tagName === "SPAN" && element.className.includes("response-text")) {
-			game.getDialog().setResponses(getResponseMap());
+			Game.getDialog().setResponses(getResponseMap());
 			commandInput.value = `response ${element.textContent.substring(0, element.textContent.indexOf("."))}`;
 			commandSubmit.click();
 		} else if (element.tagName === "SPAN" && element.className.includes("path-text")) {
@@ -25,6 +25,8 @@ export const initAdventureLog = () => {
 		} else if (element.tagName === "SPAN" && element.className.includes("mob-text")) {
 			commandInput.value = `talkto ${element.textContent.substring(2, element.textContent.length - 2)}`;
 			commandSubmit.click();
+		} else if (element.tagName === "SPAN" && element.className.includes("combat-option")) {
+			Game.getCombat().playerCombatOptionSelected(element.textContent);
 		}
 	});
 };
@@ -61,7 +63,28 @@ const generateLog = text => {
 	log.className = "text-monospace text-break lead";
 	log.innerHTML += `<strong class="font-weight-bolder">\> </strong>`;
 	log.innerHTML += text;
+	log.style.opacity = '0';
+	fadeIn(log, 500);
 	return log;
+};
+
+export const fadeIn = (element, duration) => {
+	(function increment(value = 0) {
+		element.style.opacity = String(value);
+		if (element.style.opacity !== '1') {
+			setTimeout(() => {
+				increment(value + 0.1);
+			}, duration / 10);
+		}
+	})();
+};
+
+export const fadeOut = (element, duration) => {
+	(function decrement() {
+		(element.style.opacity -= 0.1) < 0 ? element.style.display = 'none' : setTimeout(() => {
+			decrement();
+		}, duration / 10);
+	})();
 };
 
 const insertIntoAdventureLog = text => {

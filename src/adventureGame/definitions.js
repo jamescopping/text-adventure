@@ -7,6 +7,7 @@ export const OperandList = {
 	INVENTORY: "inventory",
 	KNOWN_SPELL: "known_spell",
 	RESPONSE: "response",
+	LOOK: "look"
 }
 
 export const SpellType = {
@@ -14,6 +15,11 @@ export const SpellType = {
 	HEAL: "heal",
 	BUFF: "buff",
 	DEBUFF: "debuff"
+}
+
+export const MobStatus = {
+	ALIVE: "alive",
+	DEAD: "dead"
 }
 
 export const DamageType = {

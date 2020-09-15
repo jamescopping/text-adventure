@@ -1,14 +1,15 @@
 import { Dice } from "./dice";
-import { game, GameMode } from "./game";
+import { Game, GameMode } from "./game";
 import { Story } from "./story";
 import { triggerAlert } from "../controller/alertController";
 import { PlayerEvent, PlayerAction } from "./player";
 import { Scene } from "./scene";
 import { log, clearResponseClass, clearPathClass } from "../controller/adventureLogController";
+import { MobStatus } from "./definitions";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
-const combatCommandList = ['flee', 'attack', 'cast', 'use'].sort();
+const combatCommandList = ['flee', 'attack', 'spell', 'item'].sort();
 export const CommandMap = new Map();
 
 CommandMap.set(GameMode.ADVENTURE, adventureCommandList);
@@ -30,36 +31,56 @@ export class Command {
 		return { action: string.split(" ")[0], operand: string.split(" ")[1] };
 	}
 
-	static look() {
-		const currentScene = game.getCurrentScene();
+	static look(lookFor) {
+		const currentScene = Game.getCurrentScene();
 		log(`You look around the ${currentScene.getName()} and you find...`);
-		const sceneItems = currentScene.getItems();
-		const sceneNPCs = currentScene.getMobs();
-		let logCount = 0;
-		sceneNPCs.forEach(npc => {
-			let outString = "";
-			outString += `/**${npc}*\\ ${Story.getMobMap().get(npc).description}`;
-			log(outString);
-			logCount++;
-		});
 
-		sceneItems.forEach(itemObj => {
-			let outString = "";
-			if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
-			outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
-			log(outString);
-			logCount++;
-		});
+		let logCount = 0;
+
+		switch (lookFor.toLowerCase()) {
+			case "items":
+				const sceneItems = currentScene.getItems();
+				sceneItems.forEach(itemObj => {
+					let outString = "";
+					if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
+					outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
+					log(outString);
+					logCount++;
+				});
+				break;
+			case "objects":
+				const sceneObjects = currentScene.getObjects();
+				sceneObjects.forEach(obj => {
+					let outString = "";
+					outString += `(${obj.objectName}) ${Story.getObject(obj.objectName).description}`;
+					log(outString);
+					logCount++;
+				});
+				break;
+			case "mobs":
+				const sceneMobs = currentScene.getMobs();
+				sceneMobs.forEach(mob => {
+					if (mob.status === MobStatus.ALIVE) {
+						let outString = "";
+						outString += `/**${mob.mobName}*\\ ${Story.getMob(mob.mobName).description}`;
+						log(outString);
+						logCount++;
+					}
+				});
+				break;
+		}
+
 		if (logCount === 0) log("nothing...");
+		return true;
 	}
 
 	static path(direction) {
-		const currentScene = game.getCurrentScene();
+		const currentScene = Game.getCurrentScene();
 		if (direction !== "") {
 			if (!currentScene.getPaths().hasOwnProperty(direction)) return false;
 			const sceneName = currentScene.getPaths()[direction];
 			const sceneVisited = Scene.hasSceneBeenVisited(sceneName);
-			if (game.changeScene(sceneName)) {
+			if (Game.changeScene(sceneName)) {
 				clearPathClass(direction);
 				log(`You chose path ${direction}`);
 				currentScene.init();
@@ -76,10 +97,10 @@ export class Command {
 
 	static pickup(itemName) {
 		if (itemName !== "") {
-			let sceneItem = game.getCurrentScene().pickupItem(itemName);
+			let sceneItem = Game.getCurrentScene().pickupItem(itemName);
 			console.log(sceneItem);
 			if (sceneItem !== null) {
-				game.getPlayer().pickupItem(sceneItem);
+				Game.getPlayer().pickupItem(sceneItem);
 				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, sceneItem["itemName"], sceneItem["quantity"]));
 				return true;
 			} else {
@@ -91,9 +112,9 @@ export class Command {
 
 	static drop(itemName) {
 		if (itemName === "") return false;
-		let itemObj = game.getPlayer().getInventory().removeItem(itemName);
+		let itemObj = Game.getPlayer().getInventory().removeItem(itemName);
 		if (itemObj !== null) {
-			game.getCurrentScene().getItems().push({ itemName: itemObj["itemName"], quantity: itemObj["quantity"], description: "dropped by player" });
+			Game.getCurrentScene().getItems().push({ itemName: itemObj["itemName"], quantity: itemObj["quantity"], description: "dropped by player" });
 			log(`Item [*${itemObj["itemName"]}*] x ${itemObj["quantity"]} dropped from inventory`);
 			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.DROP, itemObj["itemName"], itemObj["quantity"]));
 			return true;
@@ -105,8 +126,8 @@ export class Command {
 	}
 
 	static investigate(itemName) {
-		if (game.getPlayer().getInventory().hasItem(itemName)) {
-			let item = Story.getItemMap().get(itemName);
+		if (Game.getPlayer().getInventory().hasItem(itemName)) {
+			let item = Story.getItem(itemName);
 			log(`You investigate [${item["name"]}]: ${item["description"]}`);
 			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.INVESTIGATE, item["name"]));
 			return true;
@@ -117,7 +138,7 @@ export class Command {
 	}
 
 	static inventory() {
-		const itemObjList = game.getPlayer().getInventory().getList();
+		const itemObjList = Game.getPlayer().getInventory().getList();
 		let outString = "";
 		for (let index = 0; index < itemObjList.length; index++) {
 			const itemObj = itemObjList[index];
@@ -135,7 +156,7 @@ export class Command {
 	}
 
 	static questlog(type) {
-		const questlog = game.getPlayer().getQuestLog();
+		const questlog = Game.getPlayer().getQuestLog();
 		switch (type) {
 			case "completed":
 				questlog.logCompletedQuests();
@@ -146,36 +167,36 @@ export class Command {
 		}
 	}
 
-	static talkto(mob) {
-		if (game.getGameMode() === GameMode.DIALOG) { this.bye(); return false; }
-		if (game.getCurrentScene().getMobs().includes(mob)) {
-			const foundMob = Story.getMobMap().get(mob);
-			if (foundMob.hasOwnProperty("type") && foundMob["type"] === "npc" && foundMob.hasOwnProperty("dialog") && foundMob["dialog"].length > 0) {
-				game.loadDialog(foundMob);
-				game.changeGameMode(GameMode.DIALOG);
-				game.getDialog().start();
-				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.TALKTO, foundMob["name"]))
-			} else {
-				log("You probably shouldn't talk to them, or they just have nothing to say.");
-			}
+	static talkto(mobName) {
+		if (Game.getGameMode() !== GameMode.DIALOG) return false;
+		const sceneMob = Game.getCurrentScene().getMob(mobName);
+		const storyMob = Story.getMob(mobName);
+		if (sceneMob.type === "npc" && sceneMob.status === MobStatus.ALIVE && storyMob.hasOwnProperty("dialog") && storyMob["dialog"].length > 0) {
+			Game.loadDialog(storyMob);
+			Game.changeGameMode(GameMode.DIALOG);
+			Game.getDialog().start();
+			PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.TALKTO, mobName));
+			return true;
+		} else {
+			log("You probably shouldn't talk to them, or they just have nothing to say.");
 		}
 	}
 
 	static response(responseIndex) {
-		let nextStatementId = game.getDialog().getResponses().get(responseIndex);
+		let nextStatementId = Game.getDialog().getResponses().get(responseIndex);
 		if (nextStatementId === undefined || nextStatementId === null) {
 			triggerAlert("alert-warning", `Invalid response`);
 			return false;
 		} else {
 			clearResponseClass(responseIndex);
 			//if the called statement has no further responses then the conversation is over  
-			if (!game.getDialog().logStatement(nextStatementId)) this.bye();
+			if (!Game.getDialog().logStatement(nextStatementId)) this.bye();
 			return true;
 		}
 	}
 
 	static questHandIn(mobName, requiredItemObj) {
-		const inv = game.getPlayer().getInventory();
+		const inv = Game.getPlayer().getInventory();
 		const { type, rarity, itemName, quantity } = requiredItemObj;
 		if (itemName !== "" && inv.hasItem(itemName)) {
 			if (inv.removeItem(itemName, quantity, true)) {
@@ -195,8 +216,10 @@ export class Command {
 	}
 
 	static bye() {
-		game.changeGameMode(GameMode.ADVENTURE);
-		log(`You finish your conversation and walk away...`);
+		if (Game.getGameMode() === GameMode.DIALOG) {
+			Game.changeGameMode(GameMode.ADVENTURE);
+			log(`You finish your conversation and walk away...`);
+		}
 	}
 
 	static async roll(rollString) {
@@ -205,8 +228,8 @@ export class Command {
 	}
 
 	static async save() {
-		game.savePlayer();
-		log(`/save ${game.player}`);
+		Game.savePlayer();
+		log(`/save ${Game.player}`);
 	}
 
 	static help(commandName = "") {

@@ -10,7 +10,7 @@ import { initCommandInput } from "./controller/commandInputController";
 import { initAdventureLog } from "./controller/adventureLogController";
 import { initAlert } from "./controller/alertController";
 import { initSuggestionBox } from "./controller/suggestionBoxController";
-import { game } from "./game/game";
+import { Game } from "./adventureGame/game";
 
 const buildPage = () => {
 	const main = document.createElement("main");
@@ -36,5 +36,5 @@ const buildPage = () => {
 	initAdventureLog();
 	initAlert();
 
-	game.start();
+	Game.start();
 })();

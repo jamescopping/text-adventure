@@ -1,5 +1,5 @@
 import { operand } from "./operand";
-import { ListUtil } from "../game/util/listUtil";
+import { ListUtil } from "../adventureGame/util/listUtil";
 
 export const suggestion = {
 	list: [],
