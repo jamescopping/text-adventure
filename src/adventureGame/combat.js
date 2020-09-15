@@ -4,7 +4,14 @@ import { log, clearPathClass } from "../controller/adventureLogController";
 import { Dice, DiceType } from "./dice";
 import { Scene } from "./scene";
 
-const playersTurnOptionsOutput = `Select Option: <span class="combat-option">Attack</span> | <span class="combat-option">Item</span> | <span class="combat-option">Spell</span> | <span class="combat-option">Flee</span>`;
+const playersTurnOptionsOutput = `Select Action | <span class="combat-option">Attack</span> | <span class="combat-option">Item</span> | <span class="combat-option">Spell</span> | <span class="combat-option">Flee</span> |`;
+const backCombatOption = `<span class="combat-option">back</span> |`;
+
+const AttackType = {
+    SINGLE: 'single',
+    MULTI: 'multi',
+    RANDOM: 'random'
+}
 export class Combat {
     constructor() {
         this.reset();
@@ -75,12 +82,15 @@ export class Combat {
         log(`PLAYER's turn`);
         //output the options the player can select;
         log(playersTurnOptionsOutput);
-        const playerSelectPromise = new Promise(resolve => { this.playerCombatOptionSelected = resolve });
-        const selectedOption = await playerSelectPromise.then(option => option);
+        let playerSelectPromise = new Promise(resolve => { this.playerCombatOptionSelected = resolve });
+        let selectedOption = await playerSelectPromise.then(option => option);
         switch (selectedOption.toLowerCase()) {
             case "attack":
+                await this.playerAttack();
+                break;
             case "spell":
             case "item":
+            // player use item, like a potion or ring or something
             case "flee":
                 if (Dice.rollDice(DiceType.D20) >= 10) {
                     this.playerFled = true;
@@ -90,6 +100,46 @@ export class Combat {
                 break;
         }
     }
+
+    async playerSelectWeapon() {
+        const weaponNameList = (this.playerRef.getInventory().getItemListOfType("weapon")).map(weaponObj => weaponObj.itemName);
+        if (weaponNameList.length === 0) return false;
+        let outString = "Select Weapon | ";
+        weaponNameList.forEach(weapon => {
+            outString += `<span class="combat-option">${weapon}</span> |`;
+        });
+        outString += backCombatOption;
+        log(outString);
+        let playerSelectPromise = new Promise(resolve => { this.playerCombatOptionSelected = resolve });
+        return await playerSelectPromise.then(option => option);
+    }
+
+    async playerSelectTargets(attackType) {
+        const targets = [];
+        return targets;
+    }
+
+    async playerAttack() {
+        let weaponSelection = await this.playerSelectWeapon();
+        let selectBack = false;
+        if (!weaponSelection) {
+            log("You have no weapons!");
+            selectBack = true;
+        } else if (weaponSelection === "back") {
+            selectBack = true;
+        }
+
+        if (selectBack) {
+            await this.playerTurn();
+            return false;
+        }
+
+        //find the type of weapon, single, multi, random
+        let targets = await this.playerSelectTargets(AttackType.SINGLE);
+        console.log(weaponSelection);
+    }
+
+
 
     end() { Game.getCurrentScene().exploreScene() }
     updateNumOfActiveMobs() { this.numberOfActiveMobs = (this.enemies.filter(mobObj => mobObj.status !== MobStatus.DEAD)).length }
@@ -103,6 +153,4 @@ export class Combat {
     playerCombatOptionSelected(option) { return option }
     anyActiveMobs() { return this.numberOfActiveMobs > 0 }
     sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
-
-
 }
