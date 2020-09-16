@@ -10,6 +10,7 @@ export class Stats {
 		this.setStatus(MobStatus.ALIVE);
 		this.setInitiativeBonus(0);
 		this.setArmourClass(0);
+		this.setAttackBonus(0);
 	}
 
 	getResourceOfType(resourceType) {
@@ -22,6 +23,9 @@ export class Stats {
 	setInitiativeBonus(value) { this.initiativeBonus = (value !== undefined) ? parseInt(value) : 0 }
 	getArmourClass() { return this.armourClass }
 	setArmourClass(value) { this.armourClass = (value !== undefined) ? parseInt(value) : 0 }
+	getAttackBonus() { return this.attackBonus }
+	setAttackBonus(value) { this.attackBonus = (value !== undefined) ? parseInt(value) : 0 }
+
 	getStatus() { return this.status }
 	setStatus(status) { this.status = status }
 }

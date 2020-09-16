@@ -83,8 +83,9 @@ export class Scene {
 					mobObj.mobName = element["mobName"];
 					mobObj.stats = new Stats(storyMob["stats"]["resources"]);
 					mobObj.stats.setInitiativeBonus(storyMob["stats"]["initiativeBonus"]);
-					mobObj.stats.setStatus(element["status"]);
 					mobObj.stats.setArmourClass(storyMob["stats"]["armourClass"]);
+					mobObj.stats.setAttackBonus(storyMob["stats"]["attackBonus"]);
+					mobObj.stats.setStatus(element["status"]);
 					mobObj.inventory = new Inventory([], 100);
 					mobObj.type = storyMob["type"];
 					const startingInv = storyMob["inventory"];

@@ -48,13 +48,15 @@ export class Combat {
 
         if (this.playerRef.isAlive() && !this.playerFled && !this.anyActiveMobs()) {
             log("You win... Combat is over!");
+            this.end();
         } else if (this.playerRef.isAlive() && this.playerFled) {
             log(`You successfully escape from combat!`);
+            Game.changeGameMode(GameMode.ADVENTURE);
             Game.changeScene(Scene.getLastSceneName());
         } else if (!this.playerRef.isAlive()) {
             log("You died... Game Over");
+            Game.start();
         }
-        this.end();
     }
 
     roundStart() {
@@ -76,7 +78,8 @@ export class Combat {
 
     async roundOfCombat() {
         for (const { combatIndex, initiative } of this.roundOrder) {
-            if (this.playerFled || !this.anyActiveMobs() || !this.playerRef.isAlive()) break;
+            if (!this.anyActiveMobs()) break;
+            if (this.playerFled || !this.playerRef.isAlive()) break;
             if (combatIndex === -1) {
                 await this.playerTurn();
             } else {
@@ -103,8 +106,7 @@ export class Combat {
 
         let damageRoll = Dice.rollFromString(weaponSelection.damageDice).total;
         const damageType = weaponSelection.damageType;
-        let attackRoll = Dice.rollDice(DiceType.D20);
-        console.log(attackRoll, this.playerRef.stats.getArmourClass());
+        let attackRoll = Dice.rollDice(DiceType.D20) + enemy.stats.getAttackBonus();
         if (attackRoll === 20) { damageRoll = Math.round(damageRoll * 2); log("CRIT!"); }
         if (attackRoll === 20 || attackRoll >= this.playerRef.stats.getArmourClass()) {
             const playerHealth = this.playerRef.stats.getResourceOfType(ResourceType.HEALTH);
@@ -223,7 +225,7 @@ export class Combat {
 
         let damageRoll = Dice.rollFromString(weaponSelection.damageDice).total;
         const damageType = weaponSelection.damageType;
-        let attackRoll = Dice.rollDice(DiceType.D20);
+        let attackRoll = Dice.rollDice(DiceType.D20) + this.playerRef.getStats().getAttackBonus();
 
         if (attackRoll === 20) { damageRoll = Math.round(damageRoll * 2); log("CRIT!"); }
         targetIndices.forEach(targetIndex => {
