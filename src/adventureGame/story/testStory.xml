@@ -11,6 +11,14 @@
 				<itemName>rotten_apple</itemName>
 				<quantity>1</quantity>
 			</inventoryItem>
+			<inventoryItem>
+				<itemName>punch</itemName>
+				<quantity>1</quantity>
+			</inventoryItem>
+			<inventoryItem>
+				<itemName>double_kick</itemName>
+				<quantity>1</quantity>
+			</inventoryItem>
 		</inventory>
 		<stats>
 			<resources>
@@ -171,6 +179,33 @@
 
 	<!-- Items -->
 	<items>
+		<item>
+			<name>punch</name>
+			<description>Kapaow, right in the kisser!</description>
+			<rarity>common</rarity>
+			<type>weapon</type>
+			<damageType>bludgeoning</damageType>
+			<attackType>single</attackType>
+			<damageDice>1d4+1</damageDice>
+		</item>
+		<item>
+			<name>double_kick</name>
+			<description>Enter the dragon, Haiya!</description>
+			<rarity>common</rarity>
+			<type>weapon</type>
+			<damageType>bludgeoning</damageType>
+			<attackType>random#2</attackType>
+			<damageDice>1d6</damageDice>
+		</item>
+		<item>
+			<name>battle_axe</name>
+			<description>Swoosh!</description>
+			<rarity>uncommon</rarity>
+			<type>weapon</type>
+			<damageType>slashing</damageType>
+			<attackType>multi#3</attackType>
+			<damageDice>1d8+2</damageDice>
+		</item>
 		<item>
 			<name>rusted_sword</name>
 			<description>Rusty old sword, looks like it has seen some battles!</description>
@@ -333,8 +368,8 @@
 				<resources>
 					<resource>
 						<resourceType>health</resourceType>
-						<currentValue>25</currentValue>
-						<maxValue>25</maxValue>
+						<currentValue>5</currentValue>
+						<maxValue>5</maxValue>
 					</resource>
 					<resource>
 						<resourceType>stamina</resourceType>

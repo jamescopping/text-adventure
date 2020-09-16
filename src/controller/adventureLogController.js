@@ -26,7 +26,7 @@ export const initAdventureLog = () => {
 			commandInput.value = `talkto ${element.textContent.substring(2, element.textContent.length - 2)}`;
 			commandSubmit.click();
 		} else if (element.tagName === "SPAN" && element.className.includes("combat-option")) {
-			Game.getCombat().playerCombatOptionSelected(element.textContent);
+			Game.getCombat().playerCombatOptionSelected({ text: element.textContent, data: element.getAttribute("data") });
 		}
 	});
 };
@@ -122,3 +122,10 @@ export const clearPathClass = (direction) => {
 		}
 	});
 }
+
+export const clearCombatOptionClass = () => {
+	document.querySelectorAll("span.combat-option").forEach(element => {
+		element.className = element.className.replace(/\bcombat-option\b/g, "disabled");
+	});
+}
+

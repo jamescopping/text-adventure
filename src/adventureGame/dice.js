@@ -1,11 +1,11 @@
 
 export class Dice {
 
-	static rollNDice(numberOfDice, diceType) {
-		let total = 0;
+	static rollNDice(numberOfDice, diceType, bonus = 0) {
+		let total = bonus;
 		let dice = [];
 		for (let index = 0; index < numberOfDice; index++) {
-			dice.push(this.rollDice(diceType));
+			dice.push(this.rollDice(diceType, bonus));
 			total += dice[dice.length - 1];
 		}
 		return { total, dice };
@@ -13,17 +13,18 @@ export class Dice {
 
 	static rollDice(diceType) { return Math.floor(Math.random() * diceType) + 1; }
 
-    /**
-     * Rolls three eight sided dice and returns an object of the total and the in individual dice 
-     * @param {string} rollString 
-     */
-	static async rollFromString(rollString) {
-		const regex = new RegExp("(\d+d{1}\d+){1}");
-		if (regex.test(rollString)) return;
-		let rollStringReg = rollString.match(/(\d+d{1}\d+){1}/g);
-		if (rollStringReg === null || rollStringReg === undefined) return { total: "error string ont valid", dice: [] };
-		let rollArray = rollStringReg[0].split("d");
-		return this.rollNDice(parseInt(rollArray[0]), parseInt(rollArray[1]));
+	/**
+	 * Rolls three eight sided dice and returns an object of the total and the in individual dice 
+	 * @param {string} rollString 
+	 */
+	static rollFromString(rollString) {
+		if (rollString.match(/^\d+d\d+(\+\d+)?$/)) {
+			let rollArray = rollString.split("d", 2);
+			let bonus = 0;
+			if (rollArray[1].includes("+")) [rollArray[1], bonus] = rollArray[1].split("+", 2);
+			return this.rollNDice(parseInt(rollArray[0]), parseInt(rollArray[1]), parseInt(bonus));
+		}
+		return { total: 0, dice: [] };
 	}
 }
 

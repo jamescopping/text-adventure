@@ -2,8 +2,8 @@ export class Resource {
 	constructor(resourceObj) {
 		const { resourceType, currentValue, maxValue } = resourceObj;
 		this.type = resourceType;
-		this.currentValue = currentValue;
-		this.maxValue = maxValue;
+		this.currentValue = parseInt(currentValue);
+		this.maxValue = parseInt(maxValue);
 	}
 
 	add(addition) {
