@@ -60,7 +60,7 @@ export class Command {
 			case "mobs":
 				const sceneMobs = currentScene.getMobs();
 				sceneMobs.forEach(mob => {
-					if (mob.status === MobStatus.ALIVE) {
+					if (mob.stats.getStatus() === MobStatus.ALIVE) {
 						let outString = "";
 						outString += `/**${mob.mobName}*\\ ${Story.getMob(mob.mobName).description}`;
 						log(outString);
@@ -168,10 +168,9 @@ export class Command {
 	}
 
 	static talkto(mobName) {
-		if (Game.getGameMode() !== GameMode.DIALOG) return false;
 		const sceneMob = Game.getCurrentScene().getMob(mobName);
 		const storyMob = Story.getMob(mobName);
-		if (sceneMob.type === "npc" && sceneMob.status === MobStatus.ALIVE && storyMob.hasOwnProperty("dialog") && storyMob["dialog"].length > 0) {
+		if (sceneMob.type === "npc" && sceneMob.stats.getStatus() === MobStatus.ALIVE && storyMob.hasOwnProperty("dialog") && storyMob["dialog"].length > 0) {
 			Game.loadDialog(storyMob);
 			Game.changeGameMode(GameMode.DIALOG);
 			Game.getDialog().start();
