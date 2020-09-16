@@ -69,7 +69,7 @@ export class Combat {
             } else {
                 outString += "DEAD";
             }
-            if (index < this.numberOfActiveMobs) outString += " => ";
+            if (index < this.enemies.length) outString += " => ";
         });
         log(outString);
     }
@@ -93,10 +93,31 @@ export class Combat {
         await this.sleep(1000 + Dice.rollNDice(10, DiceType.D100).total);
 
         //figure out what the enemy can do.. 
+        //what level of AI do we want the enemies to have
 
+        const weaponNameList = (enemy.inventory.getItemListOfType("weapon")).map(weaponObj => weaponObj.itemName);
+        const randomIndex = Dice.rollDice(weaponNameList.length) - 1;
+        let weaponSelection = Story.getItem(weaponNameList[randomIndex]);
 
-        //then do it...
-        log(`${enemy.mobName} does something blah blah blah`);
+        log(`${enemy.mobName} used ${weaponSelection.name}`);
+
+        let damageRoll = Dice.rollFromString(weaponSelection.damageDice).total;
+        const damageType = weaponSelection.damageType;
+        let attackRoll = Dice.rollDice(DiceType.D20);
+        console.log(attackRoll, this.playerRef.stats.getArmourClass());
+        if (attackRoll === 20) { damageRoll = Math.round(damageRoll * 2); log("CRIT!"); }
+        if (attackRoll === 20 || attackRoll >= this.playerRef.stats.getArmourClass()) {
+            const playerHealth = this.playerRef.stats.getResourceOfType(ResourceType.HEALTH);
+            playerHealth.subtract(damageRoll);
+            log(`PLAYER took ${damageRoll} ${damageType} damage`);
+            if (playerHealth.isEmpty()) {
+                this.playerRef.stats.setStatus(MobStatus.DEAD);
+                log(`PLAYER has died!`);
+            }
+        } else {
+            log(`Attack on PLAYER missed`);
+        }
+
         await this.sleep(1000);
     }
 
@@ -204,11 +225,11 @@ export class Combat {
         const damageType = weaponSelection.damageType;
         let attackRoll = Dice.rollDice(DiceType.D20);
 
-        if (attackRoll === 20) damageRoll = Math.round(damageRoll * 2);
+        if (attackRoll === 20) { damageRoll = Math.round(damageRoll * 2); log("CRIT!"); }
         targetIndices.forEach(targetIndex => {
             const enemy = this.enemies[targetIndex];
             //TODO get the targets AC to check against
-            const targetAC = 1;
+            const targetAC = enemy.stats.getArmourClass();
             if (enemy !== undefined && (attackRoll >= targetAC || attackRoll === 20)) {
                 const enemyKilled = this.damageTarget(enemy, damageRoll, damageType);
                 if (enemyKilled) {
@@ -221,11 +242,11 @@ export class Combat {
     }
 
     damageTarget(target, damage, damageType) {
-        const enemyHealth = target.stats.getResourceOfType(ResourceType.HEALTH);
-        if (enemyHealth.isEmpty()) return false;
-        enemyHealth.subtract(damage);
+        const targetHealth = target.stats.getResourceOfType(ResourceType.HEALTH);
+        if (targetHealth.isEmpty()) return false;
+        targetHealth.subtract(damage);
         log(`${target.mobName} took ${damage} ${damageType} damage`);
-        if (enemyHealth.isEmpty()) {
+        if (targetHealth.isEmpty()) {
             target.stats.setStatus(MobStatus.DEAD);
             this.numberOfActiveMobs--;
             return true;

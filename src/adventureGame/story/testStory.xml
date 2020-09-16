@@ -39,6 +39,7 @@
 				</resource>
 			</resources>
 			<initiativeBonus>1</initiativeBonus>
+			<armourClass>8</armourClass>
 		</stats>
 		<knownSpells>magic_missile</knownSpells>
 	</player>
@@ -179,6 +180,15 @@
 
 	<!-- Items -->
 	<items>
+		<item>
+			<name>short_sword</name>
+			<description>Small short sword</description>
+			<rarity>common</rarity>
+			<type>weapon</type>
+			<damageType>slashing</damageType>
+			<attackType>single</attackType>
+			<damageDice>1d4</damageDice>
+		</item>
 		<item>
 			<name>punch</name>
 			<description>Kapaow, right in the kisser!</description>
@@ -383,7 +393,15 @@
 					</resource>
 				</resources>
 				<initiativeBonus>0</initiativeBonus>
+				<armourClass>5</armourClass>
 			</stats>
+			<inventory>
+				<inventoryItem>
+					<itemName>short_sword</itemName>
+					<quantity>1</quantity>
+				</inventoryItem>
+
+			</inventory>
 		</mob>
 		<mob>
 			<name>jimmy_the_smelly</name>

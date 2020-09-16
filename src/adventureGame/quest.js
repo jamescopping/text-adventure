@@ -15,13 +15,11 @@ export class QuestLog {
 
         Story.getQuestMap().forEach(quest => {
             const storyQuest = Quest.fromStory(quest);
-            console.log(quest);
             this.unassignedQuestMap.set(quest.id, storyQuest);
             const assignTrigger = storyQuest.getAssignTrigger();
             const assignAction = (assignTrigger !== undefined) ? assignTrigger.getAction() : undefined;
             if (assignAction !== "" && assignAction !== undefined) this.unassignedActionListenerSet.add(assignAction);
         });
-        console.log(this);
     }
 
     receivePlayerEvent(playerEvent) {
