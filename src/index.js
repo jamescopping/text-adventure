@@ -7,7 +7,7 @@ import { loadAdventureLog } from "./component/adventureLogComponent";
 import { loadAlert } from "./component/alertComponent";
 
 import { initCommandInput } from "./controller/commandInputController";
-import { initAdventureLog } from "./controller/adventureLogController";
+import { initAdventureLog, log } from "./controller/adventureLogController";
 import { initAlert } from "./controller/alertController";
 import { initSuggestionBox } from "./controller/suggestionBoxController";
 import { Game } from "./adventureGame/game";
@@ -35,6 +35,6 @@ const buildPage = () => {
 	initCommandInput();
 	initAdventureLog();
 	initAlert();
-
+	log("Hello This is a text adventure game, currently work in progress! type '/help' to see a list of commands. You can click text that is highlighted and a corresponding command will be executed. Use the TAB key to select available commands and then press ENTER key or CLICK to autocomplete the phrase. You can also use UP/DOWN arrow keys to run previously entered commands.");
 	Game.start();
 })();

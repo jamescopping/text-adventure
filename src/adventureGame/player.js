@@ -27,7 +27,7 @@ export class Player {
 			currentValue: 20,
 			maxValue: 20,
 		}
-		], 0, MobStatus.ALIVE);
+		]);
 		this.knownSpells = [];
 		this.inventory = new Inventory([], 100, true);
 	}
@@ -47,8 +47,8 @@ export class Player {
 	getKnownSpells() { return this.knownSpells }
 	getStats() { return this.stats }
 
-	isAlive() { return this.status !== MobStatus.DEAD }
-	setStatus(status) { this.status = status }
+	isAlive() { return this.stats.getStatus() !== MobStatus.DEAD }
+	setStatus(status) { this.stats.setStatus(status) }
 
 	loadStoryPlayerObj(playerObj) {
 		const startingInv = playerObj.player.inventory;
@@ -64,6 +64,8 @@ export class Player {
 			statResource.setMaxValue(resource.maxValue);
 		});
 		this.stats.setInitiativeBonus(stats.initiativeBonus);
+		this.stats.setArmourClass(stats.armourClass);
+		this.stats.setAttackBonus(stats.attackBonus);
 		//known spells
 		const knownSpells = playerObj.player.knownSpells;
 		this.knownSpells = (knownSpells !== undefined) ? knownSpells.split(",") : [];

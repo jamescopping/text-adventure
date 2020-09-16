@@ -3,6 +3,7 @@ import { Stats } from "./stats";
 import { log } from "../controller/adventureLogController";
 import { Game, GameMode } from "./game";
 import { MobStatus } from "./definitions";
+import { Inventory } from "./inventory";
 export class Scene {
 	constructor() {
 		this.name = "";
@@ -77,12 +78,22 @@ export class Scene {
 			this.mobs = [];
 			if (storyScene.hasOwnProperty("sceneMobs")) {
 				storyScene.sceneMobs.forEach(element => {
-					let mobObj = {
-						mobName: element["mobName"],
-					};
-					const storyMob = Story.getMob(mobObj.mobName);
-					mobObj.stats = new Stats(storyMob["stats"]["resources"], storyMob["stats"]["initiativeBonus"], element["status"]);
+					const storyMob = Story.getMob(element["mobName"]);
+					let mobObj = {};
+					mobObj.mobName = element["mobName"];
+					mobObj.stats = new Stats(storyMob["stats"]["resources"]);
+					mobObj.stats.setInitiativeBonus(storyMob["stats"]["initiativeBonus"]);
+					mobObj.stats.setArmourClass(storyMob["stats"]["armourClass"]);
+					mobObj.stats.setAttackBonus(storyMob["stats"]["attackBonus"]);
+					mobObj.stats.setStatus(element["status"]);
+					mobObj.inventory = new Inventory([], 100);
 					mobObj.type = storyMob["type"];
+					const startingInv = storyMob["inventory"];
+					if (Array.isArray(startingInv)) {
+						mobObj.inventory.addItems(startingInv);
+					} else if (typeof startingInv === "object" && startingInv.hasOwnProperty("inventoryItem")) {
+						mobObj.inventory.addItem(startingInv.inventoryItem);
+					}
 					this.mobs.push(mobObj);
 				});
 			}

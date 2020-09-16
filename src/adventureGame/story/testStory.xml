@@ -38,7 +38,9 @@
 					<maxValue>20</maxValue>
 				</resource>
 			</resources>
-			<initiativeBonus>1</initiativeBonus>
+			<initiativeBonus>3</initiativeBonus>
+			<attackBonus>2</attackBonus>
+			<armourClass>10</armourClass>
 		</stats>
 		<knownSpells>magic_missile</knownSpells>
 	</player>
@@ -129,14 +131,8 @@
 					<mobName>small_goblin</mobName>
 					<status>alive</status>
 				</sceneMob>
-				<sceneMob>
-					<mobName>small_goblin</mobName>
-					<status>alive</status>
-				</sceneMob>
 			</sceneMobs>
 		</scene>
-
-
 		<scene>
 			<name>forest_cave_entrance</name>
 			<description>Dark cave...</description>
@@ -147,6 +143,10 @@
 				</path>
 			</paths>
 			<sceneMobs>
+				<sceneMob>
+					<mobName>small_goblin</mobName>
+					<status>alive</status>
+				</sceneMob>
 				<sceneMob>
 					<mobName>jimmy_the_smelly</mobName>
 					<status>alive</status>
@@ -179,6 +179,24 @@
 
 	<!-- Items -->
 	<items>
+		<item>
+			<name>short_sword</name>
+			<description>Small short sword</description>
+			<rarity>common</rarity>
+			<type>weapon</type>
+			<damageType>slashing</damageType>
+			<attackType>single</attackType>
+			<damageDice>1d4</damageDice>
+		</item>
+		<item>
+			<name>an_actual_mf_gun</name>
+			<description>Yo he's got a gun, run bitch run</description>
+			<rarity>godlike</rarity>
+			<type>weapon</type>
+			<damageType>piercing</damageType>
+			<attackType>single</attackType>
+			<damageDice>10d40+999</damageDice>
+		</item>
 		<item>
 			<name>punch</name>
 			<description>Kapaow, right in the kisser!</description>
@@ -383,7 +401,53 @@
 					</resource>
 				</resources>
 				<initiativeBonus>0</initiativeBonus>
+				<armourClass>5</armourClass>
+				<attackBonus>-1</attackBonus>
 			</stats>
+			<inventory>
+				<inventoryItem>
+					<itemName>short_sword</itemName>
+					<quantity>1</quantity>
+				</inventoryItem>
+
+			</inventory>
+		</mob>
+		<mob>
+			<name>death</name>
+			<type>enemy</type>
+			<description>Death incarnate</description>
+			<dialog>
+				<greetingText>Hehehe, look what we have here boys!</greetingText>
+				<deathText>Bleeeegh!</deathText>
+			</dialog>
+			<stats>
+				<resources>
+					<resource>
+						<resourceType>health</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+					<resource>
+						<resourceType>stamina</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+					<resource>
+						<resourceType>mana</resourceType>
+						<currentValue>999</currentValue>
+						<maxValue>999</maxValue>
+					</resource>
+				</resources>
+				<initiativeBonus>999</initiativeBonus>
+				<armourClass>999</armourClass>
+				<attackBonus>999</attackBonus>
+			</stats>
+			<inventory>
+				<inventoryItem>
+					<itemName>an_actual_mf_gun</itemName>
+					<quantity>1</quantity>
+				</inventoryItem>
+			</inventory>
 		</mob>
 		<mob>
 			<name>jimmy_the_smelly</name>

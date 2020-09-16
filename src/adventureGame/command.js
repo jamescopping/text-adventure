@@ -9,7 +9,7 @@ import { MobStatus } from "./definitions";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
-const combatCommandList = ['flee', 'attack', 'spell', 'item'].sort();
+const combatCommandList = [];
 export const CommandMap = new Map();
 
 CommandMap.set(GameMode.ADVENTURE, adventureCommandList);
@@ -168,6 +168,7 @@ export class Command {
 	}
 
 	static talkto(mobName) {
+		if (Game.getGameMode() !== GameMode.ADVENTURE) return false;
 		const sceneMob = Game.getCurrentScene().getMob(mobName);
 		const storyMob = Story.getMob(mobName);
 		if (sceneMob.type === "npc" && sceneMob.stats.getStatus() === MobStatus.ALIVE && storyMob.hasOwnProperty("dialog") && storyMob["dialog"].length > 0) {
