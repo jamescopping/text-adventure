@@ -40,6 +40,7 @@ export class Game {
 	static getPlayer() { return Game.player }
 	static getCombat() { return Game.combat }
 	static loadPlayer() {
+		Game.player.init();
 		if (JSON.stringify(Story.getPlayerObj()) !== JSON.stringify({})) {
 			Game.player.loadStoryPlayerObj(Story.getPlayerObj());
 		}

@@ -223,7 +223,7 @@ export class Command {
 	}
 
 	static async roll(rollString) {
-		let { total, dice } = await Dice.rollFromString(rollString);
+		let { total, dice } = Dice.rollFromString(rollString);
 		log(`/roll ${rollString} [${dice}] - total sum => ${total}`);
 	}
 

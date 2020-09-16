@@ -21,13 +21,14 @@ export class Scene {
 	enter() {
 		//if there are mobs to fight then go into combat mode
 		if (this.checkForCombat()) {
-			Game.getCombat().start();
+			let combatStarted = Game.getCombat().start();
+			if (!combatStarted) this.exploreScene();
 		} else {
 			this.exploreScene();
 		}
 	}
 
-	checkForCombat() { return this.mobs.some(mobObj => mobObj.status === MobStatus.ALIVE && mobObj.type === "enemy") }
+	checkForCombat() { return this.mobs.some(mobObj => mobObj.stats.getStatus() === MobStatus.ALIVE && mobObj.type === "enemy") }
 
 
 	exploreScene() {
@@ -78,10 +79,9 @@ export class Scene {
 				storyScene.sceneMobs.forEach(element => {
 					let mobObj = {
 						mobName: element["mobName"],
-						status: element["status"]
 					};
 					const storyMob = Story.getMob(mobObj.mobName);
-					mobObj.stats = new Stats(storyMob["stats"]["resources"], storyMob["stats"]["initiativeBonus"]);
+					mobObj.stats = new Stats(storyMob["stats"]["resources"], storyMob["stats"]["initiativeBonus"], element["status"]);
 					mobObj.type = storyMob["type"];
 					this.mobs.push(mobObj);
 				});

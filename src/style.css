@@ -98,6 +98,10 @@ main {
   color: #075b77;
 }
 
+.disabled {
+  color: #000000;
+}
+
 .path-text:hover{
   cursor: pointer;
   color:  rgb(141, 13, 13);

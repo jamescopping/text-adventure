@@ -8,6 +8,10 @@ import { MobStatus } from "./definitions";
 
 export class Player {
 	constructor() {
+
+	}
+
+	init() {
 		this.questLog = new QuestLog();
 		this.stats = new Stats([{
 			resourceType: ResourceType.HEALTH,
