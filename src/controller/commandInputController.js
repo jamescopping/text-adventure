@@ -3,7 +3,7 @@ import { log } from "../controller/adventureLogController";
 import { triggerAlert } from "../controller/alertController";
 
 import { Command, CommandMap } from "../adventureGame/command";
-import { OperandList } from "../adventureGame/definitions";
+import { OperandList } from "../model/operand";
 import { prevCommand } from "../model/previousCommand";
 import { suggestion } from "../model/suggestion";
 import { operand } from "../model/operand";
@@ -48,10 +48,10 @@ const bindEventListeners = () => {
 }
 
 /*  
-    Function handles special key input (anything that is not a normal character)
-    replicates the functionally of an input box, like pressing enter, deleting,
-    selecting, using arrows to view previous commands. Tab to auto complete from
-    suggestion box popup.
+	Function handles special key input (anything that is not a normal character)
+	replicates the functionally of an input box, like pressing enter, deleting,
+	selecting, using arrows to view previous commands. Tab to auto complete from
+	suggestion box popup.
 */
 const specialKeyInput = event => {
 	const [selStart, selEnd] = getCaretPosition(commandInput);

@@ -2,7 +2,7 @@ import { Story } from "./story";
 import { Stats } from "./stats";
 import { log } from "../controller/adventureLogController";
 import { Game, GameMode } from "./game";
-import { MobStatus } from "./definitions";
+import { MobStatus } from "./stats";
 import { Inventory } from "./inventory";
 export class Scene {
 	constructor() {

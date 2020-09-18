@@ -5,7 +5,7 @@ import { triggerAlert } from "../controller/alertController";
 import { PlayerEvent, PlayerAction } from "./player";
 import { Scene } from "./scene";
 import { log, clearResponseClass, clearPathClass } from "../controller/adventureLogController";
-import { MobStatus } from "./definitions";
+import { MobStatus } from "./stats";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
@@ -15,6 +15,8 @@ export const CommandMap = new Map();
 CommandMap.set(GameMode.ADVENTURE, adventureCommandList);
 CommandMap.set(GameMode.DIALOG, dialogCommandList);
 CommandMap.set(GameMode.COMBAT, combatCommandList);
+
+
 
 export class Command {
 

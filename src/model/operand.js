@@ -1,7 +1,20 @@
-import { OperandList } from "../adventureGame/definitions";
 import { CommandMap } from "../adventureGame/command";
 import { Game } from "../adventureGame/game";
 import { getResponseMap } from "../controller/adventureLogController";
+
+
+export const OperandList = {
+	COMMAND: "command",
+	OBJECT: "object",
+	MOB: "mob",
+	ITEM: "item",
+	PATH: "path",
+	INVENTORY: "inventory",
+	KNOWN_SPELL: "known_spell",
+	RESPONSE: "response",
+	LOOK: "look"
+}
+
 export const operand = {
 	list: [],
 	type: "",

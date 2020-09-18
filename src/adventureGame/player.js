@@ -4,7 +4,7 @@ import { Inventory } from "./inventory";
 import { log } from "../controller/adventureLogController";
 import { QuestLog } from "./quest"
 import { Game } from "./game";
-import { MobStatus } from "./definitions";
+import { MobStatus } from "./stats";
 
 export class Player {
 	constructor() {
