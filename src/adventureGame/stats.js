@@ -1,6 +1,9 @@
 import { Resource } from "./resource";
-import { MobStatus } from "./definitions";
 
+export const MobStatus = {
+	ALIVE: "alive",
+	DEAD: "dead"
+}
 export class Stats {
 	constructor(resourceObjectArray) {
 		this.resourceList = [];

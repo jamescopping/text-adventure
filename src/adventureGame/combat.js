@@ -1,4 +1,4 @@
-import { MobStatus } from "./definitions";
+import { MobStatus } from "./stats";
 import { Game, GameMode } from "./game";
 import { log, clearCombatOptionClass } from "../controller/adventureLogController";
 import { Dice, DiceType } from "./dice";
@@ -6,7 +6,7 @@ import { Scene } from "./scene";
 import { Story } from "./story";
 import { ResourceType } from "./resource";
 
-const playersTurnOptionsOutput = `Select Action | <span class="combat-option">Attack</span> | <span class="combat-option">Item</span> | <span class="combat-option">Spell</span> | <span class="combat-option">Flee</span> |`;
+const playersTurnOptionsOutput = `Select Action | <span class="combat-option">Weapons</span> | <span class="combat-option">Items</span> | <span class="combat-option">Spells</span> | <span class="combat-option">Flee</span> |`;
 const backCombatOption = `<span class="combat-option">back</span> |`;
 
 const AttackType = {
@@ -14,6 +14,27 @@ const AttackType = {
     MULTI: 'multi',
     RANDOM: 'random'
 }
+const DamageType = {
+    ACID: "acid",
+    BLUDGEONING: "bludgeoning",
+    COLD: "cold",
+    FIRE: "fire",
+    FORCE: "force",
+    LIGHTNING: "lightning",
+    NECROTIC: "necrotic",
+    PIERCING: "piercing",
+    POISON: "poison",
+    PSYCHIC: "psychic",
+    RADIANT: "radiant",
+    SLASHING: "slashing"
+}
+const SpellType = {
+    DAMAGE: "damage",
+    HEAL: "heal",
+    BUFF: "buff",
+    DEBUFF: "debuff"
+}
+
 export class Combat {
     constructor() {
         this.reset();

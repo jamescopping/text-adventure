@@ -19,10 +19,10 @@ export class Dialog {
 		this.logStatement(1);
 	}
 
-    /**
-     * logStatement logs out statement given an id. Returns true if the statement is not null and there are valid responses
-     * @param {string} statementId id of the statement in the dialog object
-     */
+	/**
+	 * logStatement logs out statement given an id. Returns true if the statement is not null and there are valid responses
+	 * @param {string} statementId id of the statement in the dialog object
+	 */
 	logStatement(statementId) {
 		const statement = this.getStatement(statementId);
 		if (statement === null) return false;
@@ -39,10 +39,10 @@ export class Dialog {
 		return this.logResponses(responses);
 	}
 
-    /**
-     * logResponses logs out array of responses from a statement to the adventure log returns true if the array is not null
-     * @param {array} responses 
-     */
+	/**
+	 * logResponses logs out array of responses from a statement to the adventure log returns true if the array is not null
+	 * @param {array} responses 
+	 */
 	logResponses(responses) {
 		if (responses === undefined || responses === null || responses.length === 0) return false;
 		if (responses.length === 1 && (responses[0].text === undefined || responses[0].text === "")) {
