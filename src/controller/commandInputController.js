@@ -229,6 +229,10 @@ const validateCommand = command => {
 			Command.questlog(command.operand);
 			save = true;
 			break;
+		case "stats":
+			Command.stats();
+			save = true;
+			break;
 		default:
 			log(`${command.action} ${command.operand} !this command is yet to be implemented!`);
 			save = true;

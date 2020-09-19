@@ -9,14 +9,12 @@ import { MobStatus } from "./stats";
 
 const adventureCommandList = ['/roll', '/help', '/save', 'inventory', 'stats', 'path', 'look', 'investigate', 'talkto', 'pickup', 'attack', 'loot', 'cast', 'drop', 'use', 'questlog'].sort();
 const dialogCommandList = ['bye', 'response'].sort();
-const combatCommandList = [];
+const combatCommandList = ['stats'];
 export const CommandMap = new Map();
 
 CommandMap.set(GameMode.ADVENTURE, adventureCommandList);
 CommandMap.set(GameMode.DIALOG, dialogCommandList);
 CommandMap.set(GameMode.COMBAT, combatCommandList);
-
-
 
 export class Command {
 
@@ -223,6 +221,25 @@ export class Command {
 			log(`You finish your conversation and walk away...`);
 		}
 	}
+
+	static stats() {
+		const stats = Game.getPlayer().getStats();
+		log("-----PLAYER Stats----");
+		log(`Status: ${stats.getStatus()}`);
+		stats.getResourceList().forEach(resource => {
+			log(`${resource.getType().toUpperCase()}: ${resource.getCurrentValue()}/${resource.getMaxValue()}`);
+		});
+		let outString = "Buffs: ";
+		stats.getBuffSet().forEach(buff => outString += `${buff} `);
+		log(outString);
+		outString = "Debuffs: ";
+		stats.getDebuffSet().forEach(debuff => outString += `${debuff} `);
+		log(outString);
+		log(`Armour: ${stats.getArmourClass()}`);
+		log(`Attack Bonus: ${stats.getAttackBonus()}`);
+		log(`Initiative Bonus: ${stats.getInitiativeBonus()}`);
+	}
+
 
 	static async roll(rollString) {
 		let { total, dice } = Dice.rollFromString(rollString);
