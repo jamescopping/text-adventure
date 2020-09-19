@@ -88,7 +88,7 @@ export class Combat {
             if (combatIndex === -1) {
                 outString += "PLAYER";
             } else if (this.enemies[combatIndex].stats.getStatus() === MobStatus.ALIVE) {
-                outString += this.enemies[combatIndex].mobName;
+                outString += `${this.enemies[combatIndex].mobName}#${combatIndex}`;
             } else {
                 outString += "DEAD";
             }
@@ -113,7 +113,7 @@ export class Combat {
 
     async enemyTurn(combatIndex) {
         const enemy = this.enemies[combatIndex];
-        log(`${enemy.mobName}'s turn`);
+        log(`${enemy.mobName}#${combatIndex}'s turn`);
         await this.sleep(1000 + Dice.rollNDice(10, DiceType.D100).total);
 
         //figure out what the enemy can do.. 
@@ -123,7 +123,7 @@ export class Combat {
         const randomIndex = Dice.rollDice(weaponNameList.length) - 1;
         let weaponSelection = Story.getItem(weaponNameList[randomIndex]);
 
-        log(`${enemy.mobName} used ${weaponSelection.name}`);
+        log(`${enemy.mobName}#${combatIndex} used ${weaponSelection.name}`);
 
         let damageRoll = Dice.rollFromString(weaponSelection.damageDice).total;
         const damageType = weaponSelection.damageType;
@@ -204,7 +204,7 @@ export class Combat {
                 let outString = "Select Target | "
                 this.getValidTargets().forEach((targetIndex) => {
                     const target = this.enemies[targetIndex];
-                    outString += `<span class="combat-option" data="${targetIndex}">${target.mobName}</span> | `
+                    outString += `<span class="combat-option" data="${targetIndex}">${target.mobName}#${targetIndex}</span> | `
                 });
                 outString += backCombatOption;
                 log(outString);
@@ -254,21 +254,21 @@ export class Combat {
             //TODO get the targets AC to check against
             const targetAC = enemy.stats.getArmourClass();
             if (enemy !== undefined && (attackRoll >= targetAC || attackRoll === 20)) {
-                const enemyKilled = this.damageTarget(enemy, damageRoll, damageType);
+                const enemyKilled = this.damageTarget(enemy, targetIndex, damageRoll, damageType);
                 if (enemyKilled) {
-                    log(`${enemy.mobName} died`);
+                    log(`${enemy.mobName}#${targetIndex} died`);
                 }
             } else {
-                log(`Attack on ${enemy.mobName} missed`);
+                log(`Attack on ${enemy.mobName}#${targetIndex} missed`);
             }
         });
     }
 
-    damageTarget(target, damage, damageType) {
+    damageTarget(target, targetIndex, damage, damageType) {
         const targetHealth = target.stats.getResourceOfType(ResourceType.HEALTH);
         if (targetHealth.isEmpty()) return false;
         targetHealth.subtract(damage);
-        log(`${target.mobName} took ${damage} ${damageType} damage`);
+        log(`${target.mobName}#${targetIndex} took ${damage} ${damageType} damage`);
         if (targetHealth.isEmpty()) {
             target.stats.setStatus(MobStatus.DEAD);
             this.numberOfActiveMobs--;

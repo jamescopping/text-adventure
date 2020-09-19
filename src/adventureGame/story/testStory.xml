@@ -131,6 +131,10 @@
 					<mobName>small_goblin</mobName>
 					<status>alive</status>
 				</sceneMob>
+				<sceneMob>
+					<mobName>small_goblin</mobName>
+					<status>alive</status>
+				</sceneMob>
 			</sceneMobs>
 		</scene>
 		<scene>
