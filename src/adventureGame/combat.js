@@ -152,11 +152,11 @@ export class Combat {
         let selectedOption = await playerSelectPromise.then(option => option.text);
         clearCombatOptionClass();
         switch (selectedOption.toLowerCase()) {
-            case "attack":
+            case "weapons":
                 await this.playerAttack();
                 break;
-            case "spell":
-            case "item":
+            case "spells":
+            case "items":
             // player use item, like a potion or ring or something
             case "flee":
                 if (Dice.rollDice(DiceType.D20) >= 10) {
