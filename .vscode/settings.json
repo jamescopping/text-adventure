@@ -1,5 +1,8 @@
 {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "eslint.format.enable": true
+    "eslint.format.enable": true,
+    "cSpell.words": [
+        "Debuffs"
+    ]
 }

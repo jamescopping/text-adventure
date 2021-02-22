@@ -148,8 +148,7 @@ export class Combat {
         log(`PLAYER's turn`);
         //output the options the player can select;
         log(playersTurnOptionsOutput);
-        let playerSelectPromise = new Promise(resolve => { this.playerCombatOptionSelected = resolve });
-        let selectedOption = await playerSelectPromise.then(option => option.text);
+        let selectedOption = await this.playerSelectPromise().then(option => option.text);
         clearCombatOptionClass();
         switch (selectedOption.toLowerCase()) {
             case "weapons":
@@ -177,8 +176,7 @@ export class Combat {
         });
         outString += backCombatOption;
         log(outString);
-        let playerSelectPromise = new Promise(resolve => { this.playerCombatOptionSelected = resolve });
-        return await playerSelectPromise.then(option => option.text);
+        return await this.playerSelectPromise().then(option => option.text);
     }
 
     async playerSelectTargets(attackType) {
@@ -208,8 +206,7 @@ export class Combat {
                 });
                 outString += backCombatOption;
                 log(outString);
-                let playerSelectPromise = new Promise(resolve => { this.playerCombatOptionSelected = resolve });
-                const option = await playerSelectPromise.then(option => option);
+                const option = await this.playerSelectPromise().then(option => option);
                 (option.text !== "back") ? targets.push(option.data) : targets.push(option.text);
                 break;
             case AttackType.MULTI:
@@ -297,4 +294,6 @@ export class Combat {
     playerCombatOptionSelected(option) { return option }
     anyActiveMobs() { return this.numberOfActiveMobs > 0 }
     sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
+
+    playerSelectPromise() { return new Promise(resolve => { this.playerCombatOptionSelected = resolve }); }
 }
