@@ -69,11 +69,7 @@ const specialKeyInput = event => {
 			}
 			break;
 		case "Enter":
-			if (isSuggestionSelected()) {
-				autocompleteFromSelection();
-			} else {
-				submitCommandInput();
-			}
+			isSuggestionSelected() ? autocompleteFromSelection() : submitCommandInput();
 			break;
 		case "ArrowUp":
 			commandInput.value = prevCommand.prev().toString();
