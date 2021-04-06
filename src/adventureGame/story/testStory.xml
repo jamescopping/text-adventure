@@ -268,6 +268,43 @@
 		</object>
 		<object>
 			<name>wooden_chest</name>
+			<fsm>
+				<stateList>
+					<state>locked</state>
+					<state>unlocked</state>
+				</stateList>
+				<transitionList>
+					<transition>
+						<id>1</id>
+						<change>locked>unlocked</change>
+						<description>The wooden_chest pops open with a click</description>
+					</transition>
+					<transition>
+						<id>2</id>
+						<change>unlocked>locked</change>
+						<description>The wooden_chest shuts with a dull thud</description>
+					</transition>
+				</transitionList>
+				<eventList>
+					<event>
+						<id>1</id>
+						<code>use wooden_key</code>
+						<description>You put the wooden_key in the lock of the wooden_chest and turn</description>
+					</event>
+					<event>
+						<id>2</id>
+						<code>use</code>
+						<description>You can't think of any way to use this</description>
+					</event>
+				</eventList>
+				<triggerList>
+					<trigger>
+						<id>1</id>
+						<catchEvent>1</catchEvent>
+						<fireTransition>1,2</fireTransition>
+					</trigger>
+				</triggerList>
+			</fsm>
 		</object>
 	</objects>
 
