@@ -31,6 +31,44 @@ export class Command {
 		return { action: string.split(" ")[0], operand: string.split(" ")[1] };
 	}
 
+
+
+	static lookForItems(sceneItems) {
+		let count = 0;
+		sceneItems.forEach(itemObj => {
+			let outString = "";
+			if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
+			outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
+			log(outString);
+			count++;
+		});
+		return count;
+	}
+
+	static lookForObjects(sceneObjects) {
+		let count = 0;
+		sceneObjects.forEach(sceneObj => {
+			let outString = "";
+			outString += `(${sceneObj.objectName}) ${Story.getObject(sceneObj.objectName).description}`;
+			log(outString);
+			count++;
+		});
+		return count;
+	}
+
+	static lookForMobs(sceneMobs) {
+		let count = 0;
+		sceneMobs.forEach(mob => {
+			if (mob.stats.getStatus() === MobStatus.ALIVE) {
+				let outString = "";
+				outString += `/**${mob.mobName}*\\ ${Story.getMob(mob.mobName).description}`;
+				log(outString);
+				count++;
+			}
+		});
+		return count;
+	}
+
 	static look(lookFor) {
 		const currentScene = Game.getCurrentScene();
 		log(`You look around the ${currentScene.getName()} and you find...`);
@@ -39,35 +77,18 @@ export class Command {
 
 		switch (lookFor.toLowerCase()) {
 			case "items":
-				const sceneItems = currentScene.getItems();
-				sceneItems.forEach(itemObj => {
-					let outString = "";
-					if (itemObj["quantity"] > 1) outString += `${itemObj["quantity"]} x `;
-					outString += `[*${itemObj["itemName"]}*] ${itemObj["description"]}`;
-					log(outString);
-					logCount++;
-				});
+				logCount = this.lookForItems(currentScene.getItems());
 				break;
 			case "objects":
-				const sceneObjects = currentScene.getObjects();
-				sceneObjects.forEach(obj => {
-					let outString = "";
-					outString += `(${obj.objectName}) ${Story.getObject(obj.objectName).description}`;
-					log(outString);
-					logCount++;
-				});
+				logCount = this.lookForObjects(currentScene.getObjects());
 				break;
 			case "mobs":
-				const sceneMobs = currentScene.getMobs();
-				sceneMobs.forEach(mob => {
-					if (mob.stats.getStatus() === MobStatus.ALIVE) {
-						let outString = "";
-						outString += `/**${mob.mobName}*\\ ${Story.getMob(mob.mobName).description}`;
-						log(outString);
-						logCount++;
-					}
-				});
+				logCount = this.lookForMobs(currentScene.getMobs());
 				break;
+			case "":
+				logCount += this.lookForItems(currentScene.getItems());
+				logCount += this.lookForObjects(currentScene.getObjects());
+				logCount += this.lookForMobs(currentScene.getMobs());
 		}
 
 		if (logCount === 0) log("nothing...");

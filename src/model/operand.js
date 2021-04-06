@@ -48,7 +48,7 @@ export const operand = {
 				this.setList([...Game.getDialog().getResponses().keys()]);
 				break;
 			case OperandList.LOOK:
-				this.setList(["items", "objects", "mobs"]);
+				this.setList(["items", "objects", "mobs", ""]);
 				break;
 			default:
 				this.setList([]);
