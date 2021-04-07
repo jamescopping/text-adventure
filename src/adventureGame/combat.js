@@ -35,6 +35,8 @@ const SpellType = {
     DEBUFF: "debuff"
 }
 
+const disableCombat = true;
+
 export class Combat {
     constructor() {
         this.reset();
@@ -55,6 +57,7 @@ export class Combat {
         log("Combat started!");
         this.enemies = Game.getCurrentScene().getMobs().filter(mobObj => mobObj.stats.getStatus() === MobStatus.ALIVE && mobObj.type === "enemy");
         if (this.enemies.length === 0) return false;
+        if (disableCombat) this.enemies = [];
         this.rollRoundOrder();
         await this.loop();
     }

@@ -73,7 +73,18 @@ export class Scene {
 		if (storyScene.name !== "" || storyScene.name !== undefined) {
 			this.name = storyScene.hasOwnProperty("name") ? storyScene.name : "";
 			this.description = storyScene.hasOwnProperty("description") ? storyScene.description : "";
-			this.objects = storyScene.hasOwnProperty("sceneObjects") ? storyScene.sceneObjects.map(element => element["objectName"]) : [];
+			this.objects = [];
+			if (storyScene.hasOwnProperty("sceneObjects")) {
+				storyScene.sceneObjects.forEach(element => {
+					const storyObject = Story.getObject(element["objectName"]);
+					let object = {};
+					console.log(storyObject);
+					object.objectName = element["objectName"];
+					object.description = storyObject["description"];
+					object.fsm = storyObject["fsm"];
+					this.objects.push(object);
+				});
+			}
 
 			this.mobs = [];
 			if (storyScene.hasOwnProperty("sceneMobs")) {

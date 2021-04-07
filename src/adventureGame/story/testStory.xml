@@ -265,9 +265,11 @@
 	<objects>
 		<object>
 			<name>tree_stump</name>
+			<description>large cut down tree stump</description>
 		</object>
 		<object>
 			<name>wooden_chest</name>
+			<description>wooden chest with a small lock</description>
 			<fsm>
 				<stateList>
 					<state>locked</state>

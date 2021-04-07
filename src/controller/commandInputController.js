@@ -125,7 +125,7 @@ const handleTextCommandInput = value => {
 							operand.setType(OperandList.INVENTORY);
 							break;
 						case "use":
-							operand.setType(OperandList.INVENTORY);
+							operand.setType(OperandList.USE);
 							break;
 						case "attack":
 							operand.setType(OperandList.MOB);
@@ -227,6 +227,10 @@ const validateCommand = command => {
 			break;
 		case "stats":
 			Command.stats();
+			save = true;
+			break;
+		case "use":
+			Command.use();
 			save = true;
 			break;
 		default:

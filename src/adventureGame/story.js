@@ -25,6 +25,8 @@ export class Story {
 		}
 
 		xml = null;
+
+		console.log(Story.objectMap);
 	}
 
 	static getScene(sceneName) { return Story.sceneMap.get(sceneName) }

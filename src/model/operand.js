@@ -12,7 +12,8 @@ export const OperandList = {
 	INVENTORY: "inventory",
 	KNOWN_SPELL: "known_spell",
 	RESPONSE: "response",
-	LOOK: "look"
+	LOOK: "look",
+	USE: "use"
 }
 
 export const operand = {
@@ -32,7 +33,7 @@ export const operand = {
 				this.setList(Game.getPlayer().getInventory().getList().map(itemObj => itemObj["itemName"]));
 				break;
 			case OperandList.MOB:
-				this.setList([...(Game.getCurrentScene().getMobs())]);
+				this.setList(Game.getCurrentScene().getMobs().map(mobName => mobName["mobName"]));
 				break;
 			case OperandList.OBJECT:
 				this.setList([...(Game.getCurrentScene().getObjects())]);
@@ -49,6 +50,10 @@ export const operand = {
 				break;
 			case OperandList.LOOK:
 				this.setList(["items", "objects", "mobs", ""]);
+				break;
+			case OperandList.USE:
+				this.setList([...(Game.getCurrentScene().getObjects())]);
+				this.setList(Game.getPlayer().getInventory().getList().map(itemObj => itemObj["itemName"]));
 				break;
 			default:
 				this.setList([]);

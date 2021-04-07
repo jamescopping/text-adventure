@@ -49,6 +49,7 @@ export class Command {
 		let count = 0;
 		sceneObjects.forEach(sceneObj => {
 			let outString = "";
+			console.log(sceneObj);
 			outString += `(${sceneObj.objectName}) ${Story.getObject(sceneObj.objectName).description}`;
 			log(outString);
 			count++;
@@ -241,6 +242,16 @@ export class Command {
 			Game.changeGameMode(GameMode.ADVENTURE);
 			log(`You finish your conversation and walk away...`);
 		}
+	}
+
+	static use(itemName, objectName) {
+		if (itemName = "") {//handle using the object}
+
+
+		}
+
+		let objectFSM = Story.getObject(objectName).fsm;
+
 	}
 
 	static stats() {
