@@ -74,14 +74,18 @@ export class Scene {
 			this.name = storyScene.hasOwnProperty("name") ? storyScene.name : "";
 			this.description = storyScene.hasOwnProperty("description") ? storyScene.description : "";
 			this.objects = [];
+
 			if (storyScene.hasOwnProperty("sceneObjects")) {
 				storyScene.sceneObjects.forEach(element => {
 					const storyObject = Story.getObject(element["objectName"]);
 					let object = {};
-					console.log(storyObject);
 					object.objectName = element["objectName"];
 					object.description = storyObject["description"];
 					object.fsm = storyObject["fsm"];
+
+					if (object.fsm !== undefined) {
+						object.fsm.state = object.fsm.stateList[0];
+					}
 					this.objects.push(object);
 				});
 			}

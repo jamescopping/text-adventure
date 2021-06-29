@@ -21,16 +21,16 @@ export class Command {
 	constructor(string) {
 		let split = Command.splitCommand(string);
 		this.action = split.action;
-		this.operand = (split.operand === undefined) ? "" : split.operand;
+		this.operand = split.operand;
 	}
 
-	toString() { return `${this.action} ${(this.operand === "") ? "" : this.operand}`; }
+	toString() { return `${this.action} ${(this.operand.length === 0) ? "" : this.operand.join(" ")}`; }
 
 	static splitCommand(string) {
 		string = string.toLowerCase();
-		return { action: string.split(" ")[0], operand: string.split(" ")[1] };
+		let firstSpaceIndex = string.indexOf(" ");
+		return { action: string.substring(0, firstSpaceIndex), operand: string.substring(firstSpaceIndex + 1).split(" ") };
 	}
-
 
 
 	static lookForItems(sceneItems) {
@@ -49,7 +49,6 @@ export class Command {
 		let count = 0;
 		sceneObjects.forEach(sceneObj => {
 			let outString = "";
-			console.log(sceneObj);
 			outString += `(${sceneObj.objectName}) ${Story.getObject(sceneObj.objectName).description}`;
 			log(outString);
 			count++;
@@ -120,7 +119,6 @@ export class Command {
 	static pickup(itemName) {
 		if (itemName !== "") {
 			let sceneItem = Game.getCurrentScene().pickupItem(itemName);
-			console.log(sceneItem);
 			if (sceneItem !== null) {
 				Game.getPlayer().pickupItem(sceneItem);
 				PlayerEvent.broadcastPlayerEvent(new PlayerEvent(PlayerAction.PICKUP, sceneItem["itemName"], sceneItem["quantity"]));
@@ -250,7 +248,24 @@ export class Command {
 
 		}
 
-		let objectFSM = Story.getObject(objectName).fsm;
+		const objectFSM = Story.getObject(objectName)["fsm"];
+
+		// check the fsm event list for a common code
+		const inputCode = `use ${itemName}`;
+
+		for (let i = 0; i < objectFSM.eventList.length; i++) {
+			console.log(objectFSM.eventList);
+		}
+
+
+
+		//if there is one then look for the id in the trigger list
+
+		//attempt to fire the transitions in order and then clos out the loop
+
+		//broadcast the trigger that has been fired
+		//so that other fms can listen to that
+
 
 	}
 
@@ -286,7 +301,6 @@ export class Command {
 	static help(commandName = "") {
 		if (commandName === "" || commandName === undefined) {
 			CommandMap.forEach(list => {
-				console.log(list);
 				list.forEach(command => log(command));
 			});
 

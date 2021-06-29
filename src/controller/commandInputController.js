@@ -105,7 +105,7 @@ const handleTextCommandInput = value => {
 			if (CommandMap.get(Game.getGameMode()).includes(command.action)) {
 				if (command.action === "/help") {
 					operand.setType(OperandList.COMMAND);
-					suggestion.populateList(operand.getList(), command.operand);
+					suggestion.populateList(operand.getList(), command.operand[command.operand.length - 1]);
 				} else if (command.action === "/roll") {
 					suggestion.getList().push("!Usage: [number]d[dice type]");
 				} else if (command.action === "questlog") {
@@ -125,7 +125,12 @@ const handleTextCommandInput = value => {
 							operand.setType(OperandList.INVENTORY);
 							break;
 						case "use":
-							operand.setType(OperandList.USE);
+							console.log(command.operand);
+							if (command.operand.length > 1) {
+								operand.setType(OperandList.OBJECT);
+							} else {
+								operand.setType(OperandList.INVENTORY);
+							}
 							break;
 						case "attack":
 							operand.setType(OperandList.MOB);
@@ -146,7 +151,7 @@ const handleTextCommandInput = value => {
 							operand.setType(OperandList.LOOK);
 							break;
 					}
-					suggestion.populateList(operand.getList(), command.operand);
+					suggestion.populateList(operand.getList(), command.operand[command.operand.length - 1]);
 				}
 			}
 		} else {
@@ -166,8 +171,9 @@ export const autocompleteFromSelection = () => {
 	if (!hasSpace(commandInput.value)) {
 		commandInput.value = autocompleteText;
 	} else {
+		console.log(autocompleteText);
 		let command = new Command(commandInput.value);
-		command.operand = autocompleteText;
+		command.operand[command.operand.length - 1] = autocompleteText;
 		commandInput.value = command.toString();
 	}
 	handleTextCommandInput(commandInput.value);
@@ -180,11 +186,11 @@ const validateCommand = command => {
 			triggerAlert("alert-danger", "<strong>Warning! </strong> You have to enter something in the input box!");
 			break;
 		case "/help":
-			Command.help(command.operand);
+			Command.help(command.operand[0]);
 			save = true;
 			break;
 		case "/roll":
-			Command.roll(command.operand);
+			Command.roll(command.operand[0]);
 			save = true;
 			break;
 		case "/save":
@@ -192,37 +198,37 @@ const validateCommand = command => {
 			save = true;
 			break;
 		case "look":
-			Command.look(command.operand);
+			Command.look(command.operand[0]);
 			save = true;
 			break;
 		case "path":
-			Command.path(command.operand);
+			Command.path(command.operand[0]);
 			save = true;
 			break;
 		case "pickup":
-			if (Command.pickup(command.operand)) save = true;
+			if (Command.pickup(command.operand[0])) save = true;
 			break;
 		case "drop":
-			if (Command.drop(command.operand)) save = true;
+			if (Command.drop(command.operand[0])) save = true;
 			break;
 		case "investigate":
-			Command.investigate(command.operand);
+			Command.investigate(command.operand[0]);
 			save = true;
 			break;
 		case "inventory":
 			if (Command.inventory()) save = true;
 			break;
 		case "talkto":
-			if (Command.talkto(command.operand)) save = true;
+			if (Command.talkto(command.operand[0])) save = true;
 			break;
 		case "bye":
 			if (Command.bye()) save = true;
 			break;
 		case "response":
-			if (Command.response(command.operand)) save = true;
+			if (Command.response(command.operand[0])) save = true;
 			break;
 		case "questlog":
-			Command.questlog(command.operand);
+			Command.questlog(command.operand[0]);
 			save = true;
 			break;
 		case "stats":
@@ -230,11 +236,11 @@ const validateCommand = command => {
 			save = true;
 			break;
 		case "use":
-			Command.use();
+			Command.use(command.operand[0], command.operand[1]);
 			save = true;
 			break;
 		default:
-			log(`${command.action} ${command.operand} !this command is yet to be implemented!`);
+			log(`${command.action} ${command.operand[0]} !this command is yet to be implemented!`);
 			save = true;
 			break;
 	}

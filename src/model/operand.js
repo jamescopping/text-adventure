@@ -36,7 +36,7 @@ export const operand = {
 				this.setList(Game.getCurrentScene().getMobs().map(mobName => mobName["mobName"]));
 				break;
 			case OperandList.OBJECT:
-				this.setList([...(Game.getCurrentScene().getObjects())]);
+				this.setList([...(Game.getCurrentScene().getObjects().map(objectName => objectName["objectName"]))]);
 				break;
 			case OperandList.PATH:
 				this.setList(Object.keys(Game.getCurrentScene().getPaths()));
@@ -50,10 +50,6 @@ export const operand = {
 				break;
 			case OperandList.LOOK:
 				this.setList(["items", "objects", "mobs", ""]);
-				break;
-			case OperandList.USE:
-				this.setList([...(Game.getCurrentScene().getObjects())]);
-				this.setList(Game.getPlayer().getInventory().getList().map(itemObj => itemObj["itemName"]));
 				break;
 			default:
 				this.setList([]);
